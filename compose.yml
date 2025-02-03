@@ -16,3 +16,48 @@ services:
       - ./extensions:/directus/extensions
     env_files:
       - directus.env
+
+  gateway:
+    image: canals/php:8.3
+    ports:
+      - '8000:80'
+    volumes:
+      - ./gateway/public:/var/www/html
+      - ./gateway:/var/www
+      - ./sql:/var/sql
+    working_dir: /var/www
+
+  auth:
+    image: canals/php:8.3
+    ports:
+      - '8001:80'
+    volumes:
+      - ./auth:/var/www/html
+      - ./auth:/var/php
+      - ./sql:/var/sql
+    working_dir: /var/www
+
+  game:
+    image: canals/php:8.3
+    ports:
+      - '8000:80'
+    volumes:
+      - ./game/public:/var/www/html
+      - ./game:/var/www
+      - ./sql:/var/sql
+    working_dir: /var/www
+
+  auth.db:
+    image: 'postgres:latest'
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./app/sql:/var/sql'
+
+  game.db:
+    image: 'postgres:latest'
+    ports:
+      - '5431:5432'
+    volumes:
+      - ./app/sql:/var/sql'
+
