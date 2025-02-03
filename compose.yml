@@ -1,0 +1,8 @@
+services:
+  front:
+    image: node:latest
+    volumes:
+      - ./front:/app
+    ports:
+      - $PORT_FRONT:3000
+    
