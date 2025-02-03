@@ -5,4 +5,58 @@ services:
       - ./front:/app
     ports:
       - $PORT_FRONT:3000
-    
+  
+  directus:
+    image: directus/directus
+    ports:
+      - $PORT_DIRECTUS:8055
+    volumes:
+      - ./database:/directus/database
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+    env_file: directus.env
+
+  gateway:
+    image: canals/php:8.3
+    ports:
+      - $PORT_GATEWAY:80
+    volumes:
+      - ./gateway/public:/var/www/html
+      - ./gateway:/var/www
+      - ./sql:/var/sql
+    working_dir: /var/www
+
+  auth:
+    image: canals/php:8.3
+    ports:
+      - $PORT_AUTH:80
+    volumes:
+      - ./auth:/var/www/html
+      - ./auth:/var/php
+      - ./sql:/var/sql
+    working_dir: /var/www
+
+  game:
+    image: canals/php:8.3
+    ports:
+      - $PORT_GAME:80
+    volumes:
+      - ./game/public:/var/www/html
+      - ./game:/var/www
+      - ./sql:/var/sql
+    working_dir: /var/www
+
+  auth.db:
+    image: 'postgres:latest'
+    # ports:
+    #   - $PORT_AUTH_DB:5432
+    volumes:
+      - ./app/sql:/var/sql'
+
+  game.db:
+    image: 'postgres:latest'
+    # ports:
+    #   - $PORT_GAME_DB:5432
+    volumes:
+      - ./app/sql:/var/sql'
+
