@@ -35,11 +35,11 @@ class Partie
      * @var Collection<int, CoupJoue>
      */
     #[ORM\OneToMany(targetEntity: CoupJoue::class, mappedBy: 'partie')]
-    private Collection $id_image;
+    private Collection $coups_joue;
 
     public function __construct()
     {
-        $this->id_image = new ArrayCollection();
+        $this->coups_joue = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,13 +119,13 @@ class Partie
      */
     public function getIdImage(): Collection
     {
-        return $this->id_image;
+        return $this->coups_joue;
     }
 
     public function addIdImage(CoupJoue $idImage): static
     {
-        if (!$this->id_image->contains($idImage)) {
-            $this->id_image->add($idImage);
+        if (!$this->coups_joue->contains($idImage)) {
+            $this->coups_joue->add($idImage);
             $idImage->setPartie($this);
         }
 
@@ -134,7 +134,7 @@ class Partie
 
     public function removeIdImage(CoupJoue $idImage): static
     {
-        if ($this->id_image->removeElement($idImage)) {
+        if ($this->coups_joue->removeElement($idImage)) {
             // set the owning side to null (unless already changed)
             if ($idImage->getPartie() === $this) {
                 $idImage->setPartie(null);

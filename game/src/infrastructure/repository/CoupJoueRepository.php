@@ -3,19 +3,15 @@
 namespace Geoquizz\Game\infrastructure\repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Geoquizz\Game\infrastructure\entities\CoupJoue;
 
 /**
  * @extends ServiceEntityRepository<CoupJoue>
  */
-class CoupJoueRepository extends ServiceEntityRepository
+class CoupJoueRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, CoupJoue::class);
-    }
-
     //    /**
     //     * @return CoupJoue[] Returns an array of CoupJoue objects
     //     */
