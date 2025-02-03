@@ -23,7 +23,6 @@ export default {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(this.carte)
 
-    // Обработка клика по карте, если выбор ещё не подтверждён
     this.carte.on('click', e => {
       if (this.confirme) return
       const { lat, lng } = e.latlng
@@ -32,7 +31,6 @@ export default {
       } else {
         this.marqueurEstimation = L.marker([lat, lng]).addTo(this.carte)
       }
-      // Передаём координаты родительскому компоненту (формат: { lat, lon })
       this.$emit('marqueur-place', { lat, lon: lng })
     })
 
@@ -46,14 +44,12 @@ export default {
   },
   methods: {
     afficherResultats(coordCible, coordEstimation) {
-      // Удаляем предыдущий маркер cible и линию, если они существуют
       if (this.marqueurCible) {
         this.carte.removeLayer(this.marqueurCible)
       }
       if (this.ligne) {
         this.carte.removeLayer(this.ligne)
       }
-      // Определяем красную иконку для маркера cible
       const iconeRouge = L.icon({
         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
@@ -62,9 +58,7 @@ export default {
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       })
-      // Добавляем маркер cible (красный) на карте
       this.marqueurCible = L.marker([coordCible.lat, coordCible.lon], { icon: iconeRouge }).addTo(this.carte)
-      // Рисуем линию (цвет: красный) между estimation и cible
       this.ligne = L.polyline(
         [[coordEstimation.lat, coordEstimation.lon], [coordCible.lat, coordCible.lon]],
         { color: 'red' }
@@ -72,7 +66,7 @@ export default {
     },
     calculerDistance(coordCible, coordEstimation) {
       const toRad = valeur => (valeur * Math.PI) / 180
-      const R = 6371000 // Радиус Земли в метрах
+      const R = 6371000 
       const dLat = toRad(coordCible.lat - coordEstimation.lat)
       const dLon = toRad(coordCible.lon - coordEstimation.lon)
       const lat1 = toRad(coordEstimation.lat)
