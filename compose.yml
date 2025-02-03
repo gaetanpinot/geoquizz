@@ -14,13 +14,12 @@ services:
       - ./database:/directus/database
       - ./uploads:/directus/uploads
       - ./extensions:/directus/extensions
-    env_files:
-      - directus.env
+    env_file: directus.env
 
   gateway:
     image: canals/php:8.3
     ports:
-      - '8000:80'
+      - $PORT_GATEWAY:80
     volumes:
       - ./gateway/public:/var/www/html
       - ./gateway:/var/www
@@ -30,7 +29,7 @@ services:
   auth:
     image: canals/php:8.3
     ports:
-      - '8001:80'
+      - $PORT_AUTH:80
     volumes:
       - ./auth:/var/www/html
       - ./auth:/var/php
@@ -40,7 +39,7 @@ services:
   game:
     image: canals/php:8.3
     ports:
-      - '8000:80'
+      - $PORT_GAME:80
     volumes:
       - ./game/public:/var/www/html
       - ./game:/var/www
@@ -49,15 +48,15 @@ services:
 
   auth.db:
     image: 'postgres:latest'
-    ports:
-      - '5432:5432'
+    # ports:
+    #   - $PORT_AUTH_DB:5432
     volumes:
       - ./app/sql:/var/sql'
 
   game.db:
     image: 'postgres:latest'
-    ports:
-      - '5431:5432'
+    # ports:
+    #   - $PORT_GAME_DB:5432
     volumes:
       - ./app/sql:/var/sql'
 
