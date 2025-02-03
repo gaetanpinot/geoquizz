@@ -20,7 +20,6 @@
     },
     methods: {
       seConnecter() {
-        // Здесь реализуйте логику входа
         console.log('Connexion:', this.email, this.motDePasse)
       }
     }

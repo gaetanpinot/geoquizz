@@ -8,7 +8,6 @@
         <img :src="imageCible" alt="Image de la cible" v-if="imageCible" />
       </div>
   
-      <!-- Компонент карты с ref="gameMap" -->
       <GameMap 
         :coordCible="coordCible" 
         :confirme="confirme"
@@ -16,7 +15,6 @@
         ref="gameMap"
       />
   
-      <!-- Компонент контролов -->
       <GameControls 
         :marqueurEstimation="marqueurEstimation"
         :confirme="confirme"
@@ -27,7 +25,6 @@
         @terminer="terminerJeu"
       />
   
-      <!-- Компонент результата, отображается только если distance вычислена -->
       <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
     </div>
   </template>
@@ -46,7 +43,7 @@ import GameResult from '@/components/Game/GameResult.vue';
         totalManches: 10,
         imageCible: '',
         coordCible: null,
-        // Здесь будем сохранять координаты, полученные из события (формат: { lat, lon })
+
         marqueurEstimation: null,
         confirme: false,
         distance: null,
@@ -63,26 +60,26 @@ import GameResult from '@/components/Game/GameResult.vue';
           this.imageCible = donnees.imageUrl
           this.coordCible = donnees.targetCoords
         } catch (erreur) {
-          // Если данные не получены – используем значения по умолчанию (Nancy)
+          
           this.coordCible = { lat: 48.692054, lon: 6.184417 }
           this.imageCible = "https://via.placeholder.com/300x200?text=Image+Cible+Nancy"
         }
       },
       mettreAJourEstimation(coord) {
-        // Обновляем координаты, полученные от подкомпонента GameMap
+
         this.marqueurEstimation = coord
       },
       confirmerEstimation() {
         if (!this.marqueurEstimation) return
         this.confirme = true
-        // Вызов метода отображения результата (маркер cible + линия) из GameMap
+     
         this.$refs.gameMap.afficherResultats(this.coordCible, this.marqueurEstimation)
-        // Вычисляем расстояние с помощью метода calculerDistance из GameMap
+      
         this.distance = this.$refs.gameMap.calculerDistance(this.coordCible, this.marqueurEstimation)
         
-        // Система оценивания: максимальное количество очков (например, 1000) уменьшается в зависимости от расстояния
+        
         const maxPoints = 1000
-        const maxDistance = 1000000 // 1 000 000 м (примерно 1000 км)
+        const maxDistance = 1000000 
         const ratio = Math.min(this.distance / maxDistance, 1)
         this.pointsManche = Math.round(maxPoints * (1 - ratio))
       },
@@ -97,7 +94,6 @@ import GameResult from '@/components/Game/GameResult.vue';
       },
       terminerJeu() {
         this.scoreGlobal += this.pointsManche
-        // Дополнительная логика завершения игры может быть добавлена здесь
       }
     },
     mounted() {
