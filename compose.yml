@@ -5,4 +5,14 @@ services:
       - ./front:/app
     ports:
       - $PORT_FRONT:3000
-    
+  
+  directus:
+    image: directus/directus
+    ports:
+      - $PORT_DIRECTUS:8055
+    volumes:
+      - ./database:/directus/database
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+    env_files:
+      - directus.env
