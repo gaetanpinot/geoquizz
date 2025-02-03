@@ -1,42 +1,47 @@
 <template>
-    <div class="jeu">
-      <h2>Manche {{ manche }} / {{ totalManches }}</h2>
-      <p>Score global : {{ scoreGlobal }}</p>
-  
-      <div class="info-cible">
-        <h3>Déterminez l'emplacement en vous basant sur l'image :</h3>
-        <img :src="imageCible" alt="Image de la cible" v-if="imageCible" />
-      </div>
-  
+    <section>
+      <header>
+        <div class="info-cible">
+          <h2>Manche {{ manche }} / {{ totalManches }}</h2>
+          <p>Score global : {{ scoreGlobal }}</p>
+
+          <h3>Déterminez l'emplacement en vous basant sur l'image :</h3>
+          <!--<img :src="imageCible" alt="Image de la cible" v-if="imageCible" />-->
+          <GameControls
+            :marqueurEstimation="marqueurEstimation"
+            :confirme="confirme"
+            :manche="manche"
+            :totalManches="totalManches"
+            @confirmer="confirmerEstimation"
+            @suivant="mancheSuivante"
+            @terminer="terminerJeu"
+          />
+
+          <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
+          <div class="timer">
+            <div class="time"></div>
+          </div>
+        </div>
+        <GameMap
+          :coordCible="coordCible"
+          :confirme="confirme"
+          @marqueur-place="mettreAJourEstimation"
+          ref="gameMap"
+        />
+      </header>
+    <div class="place-image" src="https://visitgrandest.com/wp-content/uploads/2020/12/CampusArtem000.jpg">
+
       <!-- Компонент карты с ref="gameMap" -->
-      <GameMap 
-        :coordCible="coordCible" 
-        :confirme="confirme"
-        @marqueur-place="mettreAJourEstimation"
-        ref="gameMap"
-      />
-  
-      <!-- Компонент контролов -->
-      <GameControls 
-        :marqueurEstimation="marqueurEstimation"
-        :confirme="confirme"
-        :manche="manche"
-        :totalManches="totalManches"
-        @confirmer="confirmerEstimation"
-        @suivant="mancheSuivante"
-        @terminer="terminerJeu"
-      />
-  
-      <!-- Компонент результата, отображается только если distance вычислена -->
-      <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
+
     </div>
+    </section>
   </template>
-  
+
   <script>
 import GameMap from '@/components/Game/GameMap.vue';
 import GameControls from '@/components/Game/GameControls.vue';
 import GameResult from '@/components/Game/GameResult.vue';
-  
+
   export default {
     name: 'Game',
     components: { GameMap, GameControls, GameResult },
@@ -79,7 +84,7 @@ import GameResult from '@/components/Game/GameResult.vue';
         this.$refs.gameMap.afficherResultats(this.coordCible, this.marqueurEstimation)
         // Вычисляем расстояние с помощью метода calculerDistance из GameMap
         this.distance = this.$refs.gameMap.calculerDistance(this.coordCible, this.marqueurEstimation)
-        
+
         // Система оценивания: максимальное количество очков (например, 1000) уменьшается в зависимости от расстояния
         const maxPoints = 1000
         const maxDistance = 1000000 // 1 000 000 м (примерно 1000 км)
@@ -105,10 +110,65 @@ import GameResult from '@/components/Game/GameResult.vue';
     }
   }
   </script>
-  
+
   <style scoped>
   .jeu {
     text-align: center;
   }
+
+  .place-image {
+    height: calc(100vh - 70px);
+    width: 60%;
+    background-image: url(https://visitgrandest.com/wp-content/uploads/2020/12/CampusArtem000.jpg);
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 50px 100px;
+  }
+
+  .info-cible {
+    background-color: rgba(24, 24, 24, 0.84);
+    padding: 20px 40px;
+    color: white;
+    text-align: center;
+    position: relative;
+    width: 100%;
+  }
+
+  .timer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 6px;
+    bottom: 0;
+    background: black;
+  }
+
+  .timer .time {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 67%;
+    bottom: 0;
+    background: darkorange;
+  }
+
+  header {
+    width: 40%;
+    background: #242424;
+    height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    border-right: 2px solid #181818;
+  }
+
+  section {
+    display: flex;
+  }
   </style>
-  

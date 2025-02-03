@@ -35,6 +35,14 @@ export default {
       // Передаём координаты родительскому компоненту (формат: { lat, lon })
       this.$emit('marqueur-place', { lat, lon: lng })
     })
+
+    /*this.carte.getContainer().addEventListener('mouseenter', () => {
+      this.carte.getContainer().style.zoom = "1.5";
+    })
+
+    this.carte.getContainer().addEventListener('mouseleave', () => {
+      this.carte.getContainer().style.zoom = "0"; // Increase zoom level
+    })*/
   },
   methods: {
     afficherResultats(coordCible, coordEstimation) {
@@ -95,8 +103,9 @@ export default {
 
 <style scoped>
 .carte {
+  position: relative;
+  height: 300px;
   width: 100%;
-  height: 70vh;
-  margin-bottom: 20px;
+  transition: 0.3s;
 }
 </style>
