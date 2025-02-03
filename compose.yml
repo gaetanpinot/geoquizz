@@ -1,3 +1,7 @@
+networks:
+  geoquizz.net:
+    driver: bridge
+
 services:
   front:
     image: node:latest
@@ -5,4 +9,57 @@ services:
       - ./front:/app
     ports:
       - $PORT_FRONT:3000
-    
+  gateway:
+    image: canals/php:8.2-cli
+    ports:
+      - '8000:80'
+    volumes:
+      - ./app:/var/php
+      - ./sql:/var/sql
+    working_dir: /var/php
+    networks:
+      - geoquizz.net
+    command: php -S 0.0.0.0:80 -t /var/php/public
+
+  auth:
+    image: canals/php:8.2-cli
+    ports:
+      - '8001:80'
+    volumes:
+      - ./app:/var/php
+      - ./sql:/var/sql
+    working_dir: /var/php
+    networks:
+      - geoquizz.net
+    command: php -S 0.0.0.0:80 -t /var/php/public
+
+  game:
+    image: canals/php:8.2-cli
+    ports:
+      - '8000:80'
+    volumes:
+      - ./app:/var/php
+      - ./sql:/var/sql
+    working_dir: /var/php
+    networks:
+      - geoquizz.net
+    command: php -S 0.0.0.0:80 -t /var/php/public
+
+  auth.db:
+    image: 'postgres:latest'
+    ports:
+      - '5432:5432'
+    networks:
+      - geoquizz.net
+    volumes:
+      - ./app/sql:/var/sql'
+
+  game.db:
+    image: 'postgres:latest'
+    ports:
+      - '5431:5432'
+    networks:
+      - geoquizz.net
+    volumes:
+      - ./app/sql:/var/sql'
+
