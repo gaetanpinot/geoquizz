@@ -3,7 +3,6 @@
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\ORMSetup;
 use Geoquizz\Game\core\services\PartieService;
 use Geoquizz\Game\core\services\interfaces\PartieServiceInterface;

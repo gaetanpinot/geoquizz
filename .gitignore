@@ -26,3 +26,4 @@ vendor/
 /vendors/*
 *.env
 .php-cs-fixer.cache
+.idea/

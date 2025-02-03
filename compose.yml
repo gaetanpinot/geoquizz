@@ -31,8 +31,8 @@ services:
     ports:
       - $PORT_AUTH:80
     volumes:
-      - ./auth:/var/www/html
-      - ./auth:/var/php
+      - ./auth/public:/var/www/html
+      - ./auth:/var/www
       - ./sql:/var/sql
     working_dir: /var/www
     env_file: db.env
