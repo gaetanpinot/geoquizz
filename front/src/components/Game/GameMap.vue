@@ -34,13 +34,13 @@ export default {
       this.$emit('marqueur-place', { lat, lon: lng })
     })
 
-    /*this.carte.getContainer().addEventListener('mouseenter', () => {
-      this.carte.getContainer().style.zoom = "1.5";
+    this.carte.getContainer().addEventListener('mouseenter', () => {
+      this.carte.getContainer().style.transform = "scale(1.5)";
     })
 
     this.carte.getContainer().addEventListener('mouseleave', () => {
-      this.carte.getContainer().style.zoom = "0"; // Increase zoom level
-    })*/
+      this.carte.getContainer().style.transform = "scale(1)";
+    })
   },
   methods: {
     afficherResultats(coordCible, coordEstimation) {
@@ -66,7 +66,7 @@ export default {
     },
     calculerDistance(coordCible, coordEstimation) {
       const toRad = valeur => (valeur * Math.PI) / 180
-      const R = 6371000 
+      const R = 6371000
       const dLat = toRad(coordCible.lat - coordEstimation.lat)
       const dLon = toRad(coordCible.lon - coordEstimation.lon)
       const lat1 = toRad(coordEstimation.lat)
