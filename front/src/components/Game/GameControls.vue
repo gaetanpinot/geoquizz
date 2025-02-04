@@ -17,6 +17,7 @@ export default {
 .controles {
   text-align: center;
   margin-bottom: 20px;
+  position: relative;
 }
 .controles button {
   margin: 0 10px;

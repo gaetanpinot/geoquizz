@@ -1,5 +1,17 @@
 <template>
-  <div id="carte" class="carte"></div>
+  <div id="carte-block" class="petit">
+    <div id="top">
+      <div id="zoom"  @click="taille">
+        <div class="zoom_in">
+          <img src="/src/assets/zoom_in.svg" alt="marqueur" />
+        </div>
+        <div class="zoom_out">
+          <img src="/src/assets/zoom_out.svg" alt="marqueur" />
+        </div>
+      </div>
+    </div>
+    <div id="carte" class="carte"></div>
+  </div>
 </template>
 
 <script>
@@ -35,6 +47,23 @@ export default {
     })
   },
   methods: {
+    taille() {
+        const carteBlock = document.querySelector('#carte-block');
+        const zoomIn = document.querySelector('.zoom_in');
+        const zoomOut = document.querySelector('.zoom_out');
+
+        if (carteBlock.classList.contains('petit')) {
+          carteBlock.classList.remove('petit');
+          carteBlock.classList.add('grand');
+          zoomOut.style.display = 'block';
+          zoomIn.style.display = 'none';
+        } else {
+          carteBlock.classList.remove('grand');
+          carteBlock.classList.add('petit');
+          zoomOut.style.display = 'none';
+          zoomIn.style.display = 'block';
+        }
+      },
     afficherResultats(coordCible, coordEstimation) {
       if (this.marqueurCible) {
         this.carte.removeLayer(this.marqueurCible)
@@ -58,7 +87,7 @@ export default {
     },
     calculerDistance(coordCible, coordEstimation) {
       const toRad = valeur => (valeur * Math.PI) / 180
-      const R = 6371000 
+      const R = 6371000
       const dLat = toRad(coordCible.lat - coordEstimation.lat)
       const dLon = toRad(coordCible.lon - coordEstimation.lon)
       const lat1 = toRad(coordEstimation.lat)
@@ -88,9 +117,52 @@ export default {
 </script>
 
 <style scoped>
+#carte-block {
+  position: relative;
+  float: right;
+  bottom: 0;
+  transition: all 0.3s ease; /* Pour une animation fluide */
+}
+
 .carte {
+  margin-bottom: 20px;
+  height: 100%;
+  width: 100%;
+}
+
+.petit {
+  width: 250px;
+  height: 250px;
+}
+
+.grand {
   width: 100%;
   height: 70vh;
-  margin-bottom: 20px;
 }
+
+#top {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  z-index: 1000;
+  background-color: yellowgreen;
+  justify-content: flex-end;
+}
+
+#zoom img {
+  width: 25px;
+  height: 25px;
+  margin: 2px 10px;
+}
+
+.zoom_in {
+  cursor: zoom-in;
+}
+
+.zoom_out {
+  cursor: zoom-out;
+  display: none;
+}
+
 </style>
