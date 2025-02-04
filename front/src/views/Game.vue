@@ -1,35 +1,37 @@
 <template>
-    <div class="jeu">
-      <h2>Manche {{ manche }} / {{ totalManches }}</h2>
-      <p>Score global : {{ scoreGlobal }}</p>
+    <section>
+      <header>
+        <div class="info-cible">
+          <h2>Manche {{ manche }} / {{ totalManches }}</h2>
+          <p>Score global : {{ scoreGlobal }}</p>
+          <h3>Déterminez l'emplacement de l'image à droite :</h3>
+          <GameControls
+            :marqueurEstimation="marqueurEstimation"
+            :confirme="confirme"
+            :manche="manche"
+            :totalManches="totalManches"
+            @confirmer="confirmerEstimation"
+            @suivant="mancheSuivante"
+            @terminer="terminerJeu"
+          />
+          <div class="timer-bg">
+            <div class="timer"></div>
+          </div>
+          <!-- Компонент результата, отображается только если distance вычислена -->
+          <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
+        </div>
+        <GameMap
+          :coordCible="coordCible"
+          :confirme="confirme"
+          @marqueur-place="mettreAJourEstimation"
+          ref="gameMap"
+        />
+      </header>
 
-      <div class="info-cible">
-        <h3>Déterminez l'emplacement en vous basant sur l'image :</h3>
-        <img :src="imageCible" alt="Image de la cible" v-if="imageCible" />
+      <div class="game" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/3/3c/Vue_de_nuit_de_la_Place_Stanislas_%C3%A0_Nancy.jpg)">
+
       </div>
-
-      <!-- Компонент карты с ref="gameMap" -->
-      <GameMap
-        :coordCible="coordCible"
-        :confirme="confirme"
-        @marqueur-place="mettreAJourEstimation"
-        ref="gameMap"
-      />
-
-      <!-- Компонент контролов -->
-      <GameControls
-        :marqueurEstimation="marqueurEstimation"
-        :confirme="confirme"
-        :manche="manche"
-        :totalManches="totalManches"
-        @confirmer="confirmerEstimation"
-        @suivant="mancheSuivante"
-        @terminer="terminerJeu"
-      />
-
-      <!-- Компонент результата, отображается только если distance вычислена -->
-      <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
-    </div>
+    </section>
   </template>
 
   <script>
@@ -107,7 +109,51 @@ import GameResult from '@/components/Game/GameResult.vue';
   </script>
 
   <style scoped>
-  .jeu {
-    text-align: center;
+
+  header {
+    background: #181818;
+    width: 30%;
+    height: calc(100vh - 70px);
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+    border-right: 3px solid #181818;
   }
+
+  section {
+    display: flex;
+  }
+
+  .game {
+    width: 70%;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .info-cible {
+    color: white;
+    background: #242424;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  .timer-bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: black;
+  }
+
+  .timer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 66%;
+    top: 0;
+    background: darkorange;
+  }
+
   </style>
