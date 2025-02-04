@@ -1,0 +1,23 @@
+meta {
+  name: logint
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3001/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "user@mail.com",
+    "password" : "user"
+  }
+}
+
+script:post-response {
+  bru.setVar("access-token",res.headers['access-token']);
+  
+}

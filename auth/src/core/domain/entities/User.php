@@ -2,19 +2,22 @@
 
 namespace Geoquizz\Auth\core\domain\entities;
 
-class User extends Entity{
-    protected string $email, $password;
-    protected  int $role;
-    public const  PATIENT = 0;
-    public const  PERSONNEL_MEDICALE = 5;
-    public const  PRATICIENS = 10;
+class User extends Entity
+{
+    protected string $email;
+    protected string $mot_de_passe;
+    protected string $nom;
+    protected string $prenom;
 
-    public function __construct(string $id,string $email, string $password, int $role)
+
+    public function __construct(string $id, string $email, string $password, string $nom, string $prenom)
     {
-        $this->id=$id;
-        $this->email=$email;
-        $this->password=$password;
-        $this->role=$role;
+        $this->id = $id;
+        $this->email = $email;
+        $this->mot_de_passe = $password;
+        $this->nom = $nom;
+        $this->prenom = $prenom;
     }
+
 
 }

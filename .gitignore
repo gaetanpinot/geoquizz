@@ -27,3 +27,5 @@ vendor/
 *.env
 .php-cs-fixer.cache
 .idea/
+var/
+.phpactor.json

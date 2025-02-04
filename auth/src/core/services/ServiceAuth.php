@@ -2,7 +2,6 @@
 
 namespace Geoquizz\Auth\core\services;
 
-use DI\Container;
 use Geoquizz\Auth\core\dto\AuthDTO;
 use Geoquizz\Auth\core\dto\CredentialsDTO;
 use Geoquizz\Auth\core\repositoryInterfaces\AuthRepositoryInterface;
@@ -11,10 +10,11 @@ use Geoquizz\Auth\infrastructure\repositories\RepositoryEntityNotFoundException;
 class ServiceAuth implements ServiceAuthInterface
 {
     protected AuthRepositoryInterface $repositoryAuth;
-    public function __construct(Container $co)
+    public function __construct(AuthRepositoryInterface $repositoryAuth)
     {
-        $this->repositoryAuth = $co->get(AuthRepositoryInterface::class);
+        $this->repositoryAuth = $repositoryAuth;
     }
+
     public function createUser(CredentialsDTO $credentials, int $role): string
     {
     }
@@ -26,11 +26,10 @@ class ServiceAuth implements ServiceAuthInterface
     {
         try {
             $user = $this->repositoryAuth->getUserByMail($credentials->email);
-            if(!password_verify($credentials->password, $user->password)) {
-
+            if(!password_verify($credentials->password, $user->mot_de_passe)) {
                 throw new ServiceAuthBadPasswordException("Mauvais mot de passe");
             }
-            return new AuthDTO($user->id, $user->role);
+            return new AuthDTO($user->id, $user->email);
         } catch(RepositoryEntityNotFoundException $e) {
             throw new ServiceAuthUserNotFoundException("Utilisateur $credentials->id non trouvé");
         }
