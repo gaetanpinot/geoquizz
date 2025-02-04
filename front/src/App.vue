@@ -2,6 +2,7 @@
   <div id="app">
     <nav>
       <router-link to="/">Home</router-link> |
+      <router-link to="/">Profile</router-link> |
       <router-link to="/Connexion">Connexion</router-link> |
       <router-link to="/game">Play Game</router-link>
     </nav>
