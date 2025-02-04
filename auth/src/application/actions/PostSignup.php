@@ -33,7 +33,7 @@ class PostSignup extends AbstractAction
 
             $credentials = new CredentialsDTO('', $dataSignUp['password'], $dataSignUp['email'], $dataSignUp['nom'], $dataSignUp['prenom']);
             $auth = $this->authProvider->register($credentials);
-            return JsonRenderer::render($rs, 201, [])->withHeader('Authorization', $auth->atoken);
+            return JsonRenderer::render($rs, 201, [])->withHeader('access-token', $auth->atoken);
         } catch(NestedValidationException $e) {
             throw new HttpBadRequestException($rq, $e->getMessage());
         } catch(ServiceOperationInvalideException $e) {

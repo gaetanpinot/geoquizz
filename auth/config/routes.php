@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Geoquizz\Auth\application\actions\GetUtilisateur;
+use Geoquizz\Auth\application\actions\GetUtilisateurById;
 use Geoquizz\Auth\application\actions\PostSignup;
 use Geoquizz\Auth\application\actions\ValidateTokenAction;
 use Geoquizz\Auth\application\actions\PostSignIn;
@@ -22,6 +24,10 @@ return function (\Slim\App $app): \Slim\App {
     $app->post('/signup[/]', PostSignup::class)->setName('signup');
 
     $app->get('/validateToken[/]', ValidateTokenAction::class)->setName('ValidateToken');
+
+    $app->get('/utilisateur/{id}', GetUtilisateurById::class)->setName('getUtilisateur');
+
+    $app->get('/utilisateur[/]', GetUtilisateur::class)->setName('getUtilisateurs');
 
     $app->options('/{routes:.+}', function ($request, $response, $args) {
         return $response;

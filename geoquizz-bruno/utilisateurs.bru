@@ -1,0 +1,15 @@
+meta {
+  name: utilisateurs
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://localhost:3001/utilisateur?ids=["e6047a2b-5c07-3568-9a7f-8751c9a1de3f", "d5e48c3a-7b15-3150-a8f2-fee0583dc1d9"]
+  body: none
+  auth: none
+}
+
+params:query {
+  ids: ["e6047a2b-5c07-3568-9a7f-8751c9a1de3f", "d5e48c3a-7b15-3150-a8f2-fee0583dc1d9"]
+}

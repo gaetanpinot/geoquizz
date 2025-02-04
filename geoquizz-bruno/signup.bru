@@ -4,8 +4,22 @@ meta {
   seq: 5
 }
 
-get {
+post {
   url: http://localhost:3001/signup
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "email":"gag@freqae.fr",
+    "password": "1234",
+    "nom":"gee",
+    "prenom":"fr"
+  }
+}
+
+script:post-response {
+  bru.setVar("access-token",res.headers['access-token']);
+  
 }

@@ -29,7 +29,6 @@ class PostSignIn extends AbstractAction
 
         $jsonSignIn = $rq->getParsedBody();
 
-
         $rdvInputValidator = Validator::key('email', Validator::email()->notEmpty())
             ->key('password', Validator::stringType()->notEmpty());
 

@@ -10,4 +10,5 @@ interface AuthRepositoryInterface
     public function getUserByMail(string $email): User;
     public function createUser(User $user) ;
     public function deleteUser(string $id): void;
+    public function getUsers(array $ids): array;
 }
