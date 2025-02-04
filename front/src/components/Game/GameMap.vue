@@ -20,7 +20,7 @@ export default {
   mounted() {
     this.carte = L.map('carte').setView([46.603354, 1.888334], 6)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
+      attribution: ''
     }).addTo(this.carte)
 
     this.carte.on('click', e => {
@@ -34,13 +34,13 @@ export default {
       this.$emit('marqueur-place', { lat, lon: lng })
     })
 
-    this.carte.getContainer().addEventListener('mouseenter', () => {
+    /*this.carte.getContainer().addEventListener('mouseenter', () => {
       this.carte.getContainer().style.transform = "scale(1.5)";
     })
 
     this.carte.getContainer().addEventListener('mouseleave', () => {
       this.carte.getContainer().style.transform = "scale(1)";
-    })
+    })*/
   },
   methods: {
     afficherResultats(coordCible, coordEstimation) {

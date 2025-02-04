@@ -67,8 +67,7 @@ import GameResult from '@/components/Game/GameResult.vue';
           this.imageCible = donnees.imageUrl
           this.coordCible = donnees.targetCoords
         } catch {
-          this.coordCible.lon = 20;
-          this.coordCible.lat = 20;
+          this.coordCible = { lat: 48.692054, lon: 6.184417 }
         }
       },
       mettreAJourEstimation(coord) {
@@ -155,7 +154,6 @@ import GameResult from '@/components/Game/GameResult.vue';
     width: 66%;
     top: 0;
     background: darkorange;
-    transition: width 1s;
   }
 
   </style>
