@@ -45,6 +45,14 @@ export default {
       }
       this.$emit('marqueur-place', { lat, lon: lng })
     })
+
+    this.carte.getContainer().addEventListener('mouseenter', () => {
+      this.carte.getContainer().style.transform = "scale(1.5)";
+    })
+
+    this.carte.getContainer().addEventListener('mouseleave', () => {
+      this.carte.getContainer().style.transform = "scale(1)";
+    })
   },
   methods: {
     taille() {
@@ -125,35 +133,10 @@ export default {
 }
 
 .carte {
-  margin-bottom: 20px;
-  height: 100%;
+  position: relative;
+  height: 300px;
   width: 100%;
-}
-
-.petit {
-  width: 250px;
-  height: 250px;
-}
-
-.grand {
-  width: 100%;
-  height: 70vh;
-}
-
-#top {
-  display: flex;
-  position: absolute;
-  width: 100%;
-  height: 30px;
-  z-index: 1000;
-  background-color: yellowgreen;
-  justify-content: flex-end;
-}
-
-#zoom img {
-  width: 25px;
-  height: 25px;
-  margin: 2px 10px;
+  transition: 0.3s;
 }
 
 .zoom_in {

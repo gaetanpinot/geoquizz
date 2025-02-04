@@ -16,7 +16,7 @@ return function (\Slim\App $app): \Slim\App {
         return JsonRenderer::render($response, 200, ["message" => "Api geoquizz auth"]);
     });
 
-    $app->post('/signin[/]', PostSignIn::class)->setName('signIn');
+    $app->post('/login[/]', PostSignIn::class)->setName('signIn');
 
     $app->get('/validateToken[/]', ValidateTokenAction::class)->setName('ValidateToken');
 

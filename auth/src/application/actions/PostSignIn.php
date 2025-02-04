@@ -4,6 +4,7 @@ namespace Geoquizz\Auth\application\actions;
 
 use DI\Container;
 use Error;
+use Geoquizz\Auth\providers\auth\AuthnProviderInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Exceptions\NestedValidationException;
@@ -14,15 +15,13 @@ use Slim\Exception\HttpNotFoundException;
 use Geoquizz\Auth\application\renderer\JsonRenderer;
 use Geoquizz\Auth\core\dto\CredentialsDTO;
 use Geoquizz\Auth\core\services\ServiceAuthUserNotFoundException;
-use Geoquizz\Auth\core\services\rdv\ServiceRDVInvalidDataException;
-use Geoquizz\Auth\providers\auth\AuthnProviderInterface;
 
 class PostSignIn extends AbstractAction
 {
-    public function __construct(Container $co)
+    protected AuthnProviderInterface $authProvider;
+    public function __construct(AuthnProviderInterface $authProvider)
     {
-        parent::__construct($co);
-
+        $this->authProvider = $authProvider;
     }
 
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
@@ -41,7 +40,6 @@ class PostSignIn extends AbstractAction
 
             $authDto = $this->authProvider->signin(new CredentialsDTO('', $jsonSignIn['password'], $jsonSignIn['email']));
             $rs = $rs->withHeader('access_token', $authDto->atoken);
-            $this->loger->info("Sign in de l'utilisateur " .$jsonSignIn['email']);
             return JsonRenderer::render($rs, 201, []);
 
             return $rs;
@@ -53,6 +51,7 @@ class PostSignIn extends AbstractAction
             throw new HttpInternalServerErrorException($rq, $e->getMessage());
             //            throw new HttpInternalServerErrorException($rq, "Erreur serveur");
         } catch (Error $e) {
+            echo $e->getTraceAsString();
             throw new HttpInternalServerErrorException($rq, $e->getMessage());
         }
 

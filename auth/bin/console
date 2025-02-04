@@ -2,7 +2,7 @@
 <?php
 
 
-use Geoquizz\Game\Kernel;
+use Geoquizz\Auth\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 if (!is_dir(dirname(__DIR__).'/vendor')) {
