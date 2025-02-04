@@ -1,5 +1,6 @@
 # CakePHP 3
 
+vendor/
 /vendor/*
 /config/app.php
 
@@ -24,3 +25,5 @@
 /app/Config/database.php
 /vendors/*
 *.env
+.php-cs-fixer.cache
+.idea/
