@@ -8,6 +8,6 @@ interface AuthRepositoryInterface
 {
     public function getUser(string $id): User;
     public function getUserByMail(string $email): User;
-    public function createUser(User $user): User;
+    public function createUser(User $user) ;
     public function deleteUser(string $id): void;
 }

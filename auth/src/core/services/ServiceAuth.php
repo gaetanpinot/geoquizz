@@ -2,9 +2,11 @@
 
 namespace Geoquizz\Auth\core\services;
 
+use Geoquizz\Auth\core\domain\entities\User;
 use Geoquizz\Auth\core\dto\AuthDTO;
 use Geoquizz\Auth\core\dto\CredentialsDTO;
 use Geoquizz\Auth\core\repositoryInterfaces\AuthRepositoryInterface;
+use Geoquizz\Auth\infrastructure\repositories\RepositoryEntityAlreadyExistException;
 use Geoquizz\Auth\infrastructure\repositories\RepositoryEntityNotFoundException;
 
 class ServiceAuth implements ServiceAuthInterface
@@ -15,8 +17,14 @@ class ServiceAuth implements ServiceAuthInterface
         $this->repositoryAuth = $repositoryAuth;
     }
 
-    public function createUser(CredentialsDTO $credentials, int $role): string
+    public function createUser(CredentialsDTO $credentials)
     {
+        $user = new User($credentials->id, $credentials->email, password_hash($credentials->password, PASSWORD_DEFAULT), $credentials->nom, $credentials->prenom);
+        try {
+            $this->repositoryAuth->createUser($user);
+        } catch(RepositoryEntityAlreadyExistException $e) {
+            throw new ServiceOperationInvalideException($e->getMessage());
+        }
     }
 
     /*

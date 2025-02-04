@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Geoquizz\Auth\application\actions\PostSignup;
 use Geoquizz\Auth\application\actions\ValidateTokenAction;
 use Geoquizz\Auth\application\actions\PostSignIn;
 use Geoquizz\Auth\application\renderer\JsonRenderer;
@@ -18,11 +19,14 @@ return function (\Slim\App $app): \Slim\App {
 
     $app->post('/login[/]', PostSignIn::class)->setName('signIn');
 
+    $app->post('/signup[/]', PostSignup::class)->setName('signup');
+
     $app->get('/validateToken[/]', ValidateTokenAction::class)->setName('ValidateToken');
 
     $app->options('/{routes:.+}', function ($request, $response, $args) {
         return $response;
     });
+
     $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
         throw new HttpNotFoundException($request);
     });
