@@ -31,10 +31,13 @@ services:
     ports:
       - $PORT_AUTH:80
     volumes:
-      - ./auth:/var/www/html
-      - ./auth:/var/php
+      - ./auth/public:/var/www/html
+      - ./auth:/var/www
       - ./sql:/var/sql
     working_dir: /var/www
+    env_file: 
+      - db.env
+      - auth.env
 
   game:
     image: canals/php:8.3
@@ -45,18 +48,21 @@ services:
       - ./game:/var/www
       - ./sql:/var/sql
     working_dir: /var/www
+    env_file: db.env
 
   auth.db:
     image: 'postgres:latest'
     # ports:
     #   - $PORT_AUTH_DB:5432
     volumes:
-      - ./app/sql:/var/sql'
+      - ./sql:/var/sql'
+    env_file: db.env
 
   game.db:
     image: 'postgres:latest'
     # ports:
     #   - $PORT_GAME_DB:5432
     volumes:
-      - ./app/sql:/var/sql'
+      - ./sql:/var/sql'
+    env_file: db.env
 
