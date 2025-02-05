@@ -3,6 +3,8 @@
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use Geoquizz\Game\core\authz\AuthzPartieService;
+use Geoquizz\Game\core\authz\AuthzPartieServiceInterface;
 use Geoquizz\Game\core\services\CoupJoueService;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
 use Geoquizz\Game\core\services\interfaces\SerieServiceInterface;
@@ -19,6 +21,7 @@ use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
 use Geoquizz\Game\infrastructure\repository\PartieRepository;
 use Geoquizz\Game\infrastructure\repository\SerieRepository;
+use Geoquizz\Game\middlewares\AuthzPartie;
 use Geoquizz\Game\middlewares\CorsMiddleware;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Psr\Container\ContainerInterface;
@@ -82,14 +85,14 @@ return [
 
     InfraNotifInterface::class => DI\get(NotifAMQP::class),
 
-NotifAMQP::class => function (ContainerInterface $c) {
-    return new NotifAMQP(
-        $c->get(AMQPStreamConnection::class),
-        $c->get('exchange.name'),
-        $c->get('queue.name'),
-        $c->get('routing.key')
-    );
-},
+    NotifAMQP::class => function (ContainerInterface $c) {
+        return new NotifAMQP(
+            $c->get(AMQPStreamConnection::class),
+            $c->get('exchange.name'),
+            $c->get('queue.name'),
+            $c->get('routing.key')
+        );
+    },
 
 
     CorsMiddleware::class => DI\autowire(),
@@ -104,4 +107,11 @@ NotifAMQP::class => function (ContainerInterface $c) {
     },
 
     CorsMiddleware::class => DI\autowire(),
+
+    AuthzPartie::class => DI\autowire(),
+    AuthzPartieServiceInterface::class => DI\get(AuthzPartieService::class),
+    AuthzPartieService::class => DI\autowire(),
+
+
+
 ];
