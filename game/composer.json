@@ -15,6 +15,7 @@
         "php-amqplib/php-amqplib": "*",
         "php-di/php-di": "*",
         "php-di/slim-bridge": "*",
+        "respect/validation": "^2.4",
         "slim/psr7": "*",
         "slim/slim": "*",
         "symfony/console": "7.2.*",

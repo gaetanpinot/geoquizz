@@ -18,12 +18,12 @@ doctrine:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
         mappings:
-            Geoquizz\Game:
+            Geoquizz\Auth:
                 type: attribute
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/infrastructure/entities'
-                prefix: 'Geoquizz\Game\infrastructure\entities'
-                alias: Geoquizz\Game
+                prefix: 'Geoquizz\Auth\infrastructure\entities'
+                alias: Geoquizz\Auth
         controller_resolver:
             auto_mapping: false
 

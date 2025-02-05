@@ -8,7 +8,7 @@
       </form>
     </div>
   </template>
-  
+
   <script>
   export default {
     name: 'Login',
@@ -25,13 +25,14 @@
     }
   }
   </script>
-  
+
   <style scoped>
   .login {
     text-align: center;
   }
   .login form {
     display: inline-block;
+    width: 100%;
   }
   .login input {
     display: block;
@@ -39,5 +40,32 @@
     padding: 8px;
     width: 200px;
   }
+  .login button[type="submit"] {
+    padding: 8px 16px;
+    font-size: 1em;
+    background: none;
+    color: white;
+    border: 0;
+    border-radius: 20px;
+    border: 2px solid darkorange;
+    color: orange;
+    margin-top: 12px;
+  }
+  .login button[type="submit"]:hover {
+    background: darkorange;
+    transition: 0.3s;
+    color: black;
+  }
+  .login input[type="email"],
+  .login input[type="password"] {
+    width: 80%;
+    border: 2px solid darkorange;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px auto;
+
+  }
+  .login input:focus {
+    outline: none;
+  }
   </style>
-  

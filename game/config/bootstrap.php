@@ -1,8 +1,6 @@
 <?php
 
 use DI\ContainerBuilder;
-
-use Geoquizz\Game\application\actions\TestAction;
 use Geoquizz\Game\middlewares\CorsMiddleware;
 use Slim\Factory\AppFactory;
 

@@ -11,3 +11,4 @@ return [
     GetAllPartiesAction::class => Di\autowire(),
     PostPartieAction::class => Di\autowire(),
 ];
+

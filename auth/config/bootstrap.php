@@ -1,6 +1,7 @@
 <?php
 
 use DI\ContainerBuilder;
+use Geoquizz\Auth\CorsMiddleware;
 use Slim\Factory\AppFactory;
 
 $builder = new ContainerBuilder();
@@ -14,6 +15,7 @@ $app = AppFactory::createFromContainer($c);
 
 
 $app->addBodyParsingMiddleware();
+/*$app->addMiddleware($c->get(CorsMiddleware::class));*/
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, false, false);
 

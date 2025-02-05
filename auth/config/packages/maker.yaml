@@ -1,3 +1,3 @@
 when@dev:
     maker:
-        root_namespace: 'Geoquizz\Game'
+        root_namespace: 'Geoquizz\Auth'

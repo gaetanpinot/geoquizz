@@ -35,7 +35,9 @@ services:
       - ./auth:/var/www
       - ./sql:/var/sql
     working_dir: /var/www
-    env_file: db.env
+    env_file: 
+      - db.env
+      - auth.env
 
   game:
     image: canals/php:8.3

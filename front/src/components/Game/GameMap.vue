@@ -1,5 +1,5 @@
 <template>
-  <div id="carte" class="carte"></div>
+    <div id="carte" class="carte"></div>
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default {
   mounted() {
     this.carte = L.map('carte').setView([46.603354, 1.888334], 6)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
+      attribution: ''
     }).addTo(this.carte)
 
     // Pose du marqueur d'estimation lors d'un clic sur la carte (si non confirmé)
@@ -32,8 +32,16 @@ export default {
       } else {
         this.marqueurEstimation = L.marker([lat, lng]).addTo(this.carte);
       }
-      this.$emit('marqueur-place', { lat, lon: lng });
-    });
+      this.$emit('marqueur-place', { lat, lon: lng })
+    })
+
+    /*this.carte.getContainer().addEventListener('mouseenter', () => {
+      this.carte.getContainer().style.transform = "scale(1.5)";
+    })
+
+    this.carte.getContainer().addEventListener('mouseleave', () => {
+      this.carte.getContainer().style.transform = "scale(1)";
+    })*/
   },
   methods: {
     afficherResultats(coordCible, coordEstimation) {
@@ -62,12 +70,12 @@ export default {
       ).addTo(this.carte);
     },
     calculerDistance(coordCible, coordEstimation) {
-      const toRad = valeur => (valeur * Math.PI) / 180;
-      const R = 6371000; // Rayon de la Terre en mètres
-      const dLat = toRad(coordCible.lat - coordEstimation.lat);
-      const dLon = toRad(coordCible.lon - coordEstimation.lon);
-      const lat1 = toRad(coordEstimation.lat);
-      const lat2 = toRad(coordCible.lat);
+      const toRad = valeur => (valeur * Math.PI) / 180
+      const R = 6371000
+      const dLat = toRad(coordCible.lat - coordEstimation.lat)
+      const dLon = toRad(coordCible.lon - coordEstimation.lon)
+      const lat1 = toRad(coordEstimation.lat)
+      const lat2 = toRad(coordCible.lat)
       const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(lat1) * Math.cos(lat2) *
                 Math.sin(dLon / 2) * Math.sin(dLon / 2);
@@ -93,9 +101,26 @@ export default {
 </script>
 
 <style scoped>
-.carte {
-  width: 100%;
-  height: 70vh;
-  margin-bottom: 20px;
+#carte-block {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transition: all 0.3s ease;
+  z-index: 1000;
 }
+
+.carte {
+  height: 300px;
+  width: 100%;
+  transition: transform 0.3s ease;
+  transform-origin: bottom left;
+  border: 2px solid darkorange;
+  border-radius: 10px 10px 10px 0px;
+  overflow: hidden;
+}
+
+.carte:hover {
+  transform: scale(1.5);
+}
+
 </style>
