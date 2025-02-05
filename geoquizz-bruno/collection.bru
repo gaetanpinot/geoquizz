@@ -1,3 +1,11 @@
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{access-token}}
+}
+
 script:pre-request {
   //header d'authorization, permet de ne pas avoir a checker auth inherit dans chaque requete
   //req.setHeader('Authorization', "Bearer "+ bru.getVar('access-token'));

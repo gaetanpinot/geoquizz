@@ -18,6 +18,6 @@ body:json {
 }
 
 script:post-response {
-  bru.setVar("access-token",res.headers['access-token']);
+  bru.setVar("access-token",res.body.data.access_token)
   
 }

@@ -12,7 +12,7 @@ post {
 
 body:json {
   {
-    "email":"gag@freqae.fr",
+    "email":"agag@freqae.fr",
     "password": "1234",
     "nom":"gee",
     "prenom":"fr"
@@ -20,6 +20,6 @@ body:json {
 }
 
 script:post-response {
-  bru.setVar("access-token",res.headers['access-token']);
+  bru.setVar("access-token",res.body.access_token);
   
 }
