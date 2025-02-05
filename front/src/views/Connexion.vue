@@ -1,6 +1,6 @@
 <template>
   <div class="connexion">
-    <div class="switch">
+    <div v-if="isConnected" class="switch">
       <button
         :class="{ active: vueActive === 'Login' }"
         @click="switchView('Login')">
@@ -13,15 +13,20 @@
       </button>
     </div>
 
+    <div v-else>
+      <button @click="logout" id="Logout">Déconnexion</button>
+    </div>
+
     <transition name="fade-slide" mode="out-in">
-      <component :is="vueActive" key="vueActive"></component>
+      <component v-if="isConnected" :is="vueActive" key="vueActive"></component>
     </transition>
   </div>
 </template>
 
 
 
-  <script>
+
+<script>
 import Login from '@/components/Connexion/Login.vue';
 import Signup from '@/components/Connexion/Signup.vue';
 
@@ -30,7 +35,8 @@ export default {
   components: { Login, Signup },
   data() {
     return {
-      vueActive: 'Login'
+      vueActive: 'Login',
+      isConnected: false
     };
   },
   mounted() {
@@ -38,14 +44,26 @@ export default {
     if (vueFromQuery === 'Signup' || vueFromQuery === 'Login') {
       this.vueActive = vueFromQuery;
     }
+    if (!localStorage.getItem('token')) {
+      this.isConnected = true;
+    }else {
+      this.isConnected = false;
+    }
   },
   methods: {
     switchView(view) {
       this.vueActive = view;
+    },
+    logout() {
+      localStorage.removeItem('token');
+      this.isLoggedIn = false; // Mettre à jour l'état de connexion
+      this.vueActive = 'Login'; // Revenir à la vue de connexion
+      this.$router.push({ name: 'Home' }); // Redirection (facultative)
     }
   }
 };
 </script>
+
 
 
 
@@ -59,14 +77,14 @@ export default {
   width: 400px;
   height: 400px;
   margin: 40px auto;
-
 }
+
 .switch {
   text-align: center;
   margin: 20px auto;
 }
 
-.switch button {
+ button {
   margin: 0 10px;
   padding: 8px 16px;
   font-size: 1em;
@@ -78,18 +96,35 @@ export default {
   transition: all 0.3s ease;
 }
 
-.switch button:hover {
+ button:hover {
   background: darkorange;
   color: black;
 }
 
-.switch button.active {
+ button.active {
   background: darkorange;
   color: black;
   font-weight: bold;
   transform: scale(1.2);
 }
-
+#Logout{
+  margin: 0 10px;
+  padding: 16px 32px;
+  font-size: 1em;
+  border: 2px solid red;
+  border-radius: 32px;
+  background: red;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: large;
+  font-weight: bold;
+  margin-top: 120px;
+}
+#Logout:hover {
+  background: white;
+  color: red;
+}
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.25s ease;

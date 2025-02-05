@@ -4,12 +4,13 @@ import Game from '@/views/Game.vue'
 import Connexion from '@/views/Connexion.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    { path: '/', name: 'Home', component: Home },
-    { path: '/Connexion', name: 'Connexion', component: Connexion },
-    { path: '/game', name: 'Game', component: Game }
-  ],
+    history: createWebHistory(
+        import.meta.env.BASE_URL),
+    routes: [
+        { path: '/', name: 'Home', component: Home },
+        { path: '/Connexion', name: 'Connexion', component: Connexion },
+        { path: '/game', name: 'Game', component: Game }
+    ],
 })
 
 export default router
