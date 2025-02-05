@@ -10,5 +10,5 @@ use Geoquizz\Game\core\dto\JouerCoupDTO;
 interface CoupJoueRepositoryInterface
 {
     public function coupsInit(int $idPartie, array $idsPoints): void;
-    public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO;
+    public function joueCoup(JouerCoupDTO $jouerCoupDTO);
 }

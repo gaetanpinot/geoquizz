@@ -13,13 +13,10 @@ class PointRepository implements PointRepositoryInterface
     {
         $this->guzzle = $guzzle;
     }
-
-    public function getIdImage($idPoint){
+    public function getPoint($idPoint){
         $response = $this->guzzle->get('/items/point/'.$idPoint);
         $data = json_decode($response->getBody(), true);
 
-        return $data['data']['image'];
+        return $data['data'];
     }
-
-
 }
