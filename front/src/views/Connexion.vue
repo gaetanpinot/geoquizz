@@ -1,6 +1,6 @@
 <template>
-  <div class="connexion">
-    <div v-if="isConnected" class="switch">
+  <div v-if="isConnected" class="connexion">
+    <div  class="switch">
       <button
         :class="{ active: vueActive === 'Login' }"
         @click="switchView('Login')">
@@ -13,18 +13,14 @@
       </button>
     </div>
 
-    <div v-else>
-      <button @click="logout" id="Logout">Déconnexion</button>
-    </div>
-
     <transition name="fade-slide" mode="out-in">
       <component v-if="isConnected" :is="vueActive" key="vueActive"></component>
     </transition>
   </div>
+  <div v-else class="deconnexion">
+    <button @click="logout" id="Logout">Déconnexion</button>
+  </div>
 </template>
-
-
-
 
 <script>
 import Login from '@/components/Connexion/Login.vue';
@@ -56,16 +52,13 @@ export default {
     },
     logout() {
       localStorage.removeItem('token');
-      this.isLoggedIn = false; // Mettre à jour l'état de connexion
-      this.vueActive = 'Login'; // Revenir à la vue de connexion
-      this.$router.push({ name: 'Home' }); // Redirection (facultative)
+      this.isLoggedIn = false;
+      this.vueActive = 'Login';
+      this.$router.push({ name: 'Home' });
     }
   }
 };
 </script>
-
-
-
 
 <style scoped>
 .connexion {
@@ -76,6 +69,17 @@ export default {
   background: white;
   width: 400px;
   height: 400px;
+  margin: 40px auto;
+}
+
+.deconnexion{
+  text-align: center;
+  border: 2px solid red;
+  border-radius: 20px;
+  padding: 20px;
+  background: white;
+  width: 400px;
+  height: 250px;
   margin: 40px auto;
 }
 
@@ -107,6 +111,7 @@ export default {
   font-weight: bold;
   transform: scale(1.2);
 }
+
 #Logout{
   margin: 0 10px;
   padding: 16px 32px;
@@ -119,12 +124,14 @@ export default {
   transition: all 0.3s ease;
   font-size: large;
   font-weight: bold;
-  margin-top: 120px;
+  margin-top: 70px;
 }
+
 #Logout:hover {
   background: white;
   color: red;
 }
+
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.25s ease;

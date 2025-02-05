@@ -97,16 +97,25 @@ export default {
 
 <style scoped>
 #carte-block {
-  position: relative;
-  float: right;
-  bottom: 0;
-  transition: all 0.3s ease; /* Pour une animation fluide */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transition: all 0.3s ease;
+  z-index: 1000;
 }
 
 .carte {
-  position: relative;
   height: 300px;
   width: 100%;
-  transition: 0.3s;
+  transition: transform 0.3s ease;
+  transform-origin: bottom left;
+  border: 2px solid darkorange;
+  border-radius: 10px 10px 10px 0px;
+  overflow: hidden;
 }
+
+.carte:hover {
+  transform: scale(1.5);
+}
+
 </style>
