@@ -21,7 +21,9 @@ class MailerSymfony implements MailerInterface
             ->from($senderEmail)
             ->to($targetMail)
             ->subject($subject)
-            ->text($body);
+            ->text($body)
+        ->html($body)
+        ;
         $this->mailer->send($mail);
     }
 }

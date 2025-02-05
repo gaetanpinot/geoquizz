@@ -28,12 +28,10 @@ class Consumer
     }
     public function __invoke(AMQPMessage $msg): void
     {
-        $msgDecode = json_decode($msg->getBody(), true);
-        $event = isset($msgDecode['event']) ? $msgDecode['event'] : "Pas d'évenement spécifié";
         $this->mailer->send(
-            'info@toubeelib',
-            'client@toubeelib',
-            $event,
+            'info@geoquizz',
+            'client@geoquizz',
+            'CREATION DE PARTIE',
             $msg->getBody(),
         );
         $msg->getChannel()->basic_ack($msg->getDeliveryTag());

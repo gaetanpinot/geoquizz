@@ -75,6 +75,7 @@ class PartieService implements PartieServiceInterface
 
         $serie = $this->serieRepository->findById($partieDTO->id_serie);
         $this->coupJoueRepository->coupsInit($partie->getId(), $serie->getPointSerie());
+        $this->notif->notifCreationPartie($partie);
 
         return new PartieDTO($partie);
     }
