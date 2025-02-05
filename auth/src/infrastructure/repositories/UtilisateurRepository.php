@@ -2,6 +2,8 @@
 
 namespace Geoquizz\Auth\infrastructure\repositories;
 
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityRepository;
 use Geoquizz\Auth\core\domain\entities\User;
 use Geoquizz\Auth\core\repositoryInterfaces\AuthRepositoryInterface;
@@ -31,11 +33,37 @@ class UtilisateurRepository extends EntityRepository implements AuthRepositoryIn
 
     }
 
-    public function createUser(User $user): User
+    public function createUser(User $user)
     {
+        $dbUser = new Utilisateur();
+        $dbUser->setEmail($user->email);
+        $dbUser->setMotDePasse($user->mot_de_passe);
+        $dbUser->setNom($user->nom);
+        $dbUser->setPrenom($user->prenom);
+        try {
+            $this->getEntityManager()->persist($dbUser);
+            $this->get->flush();
+        } catch(UniqueConstraintViolationException $e) {
+            throw new RepositoryEntityAlreadyExistException("Utilisateur $user->email déjà existant");
+        }
     }
 
     public function deleteUser(string $id): void
     {
+    }
+
+    public function getUsers(array $ids): array
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->where('u.id in (:ids)')
+        ->setParameter('ids', $ids, ArrayParameterType::STRING);
+
+        $users = $qb->getQuery()->getResult();
+        if($users === null || count($users) == 0) {
+            return [];
+        }
+        return array_map(function ($user) {
+            return $user->toEntity();
+        }, $users);
     }
 }

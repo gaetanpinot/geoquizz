@@ -4,6 +4,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
+use Geoquizz\Auth\CorsMiddleware;
 use Geoquizz\Auth\core\repositoryInterfaces\AuthRepositoryInterface;
 use Geoquizz\Auth\core\services\ServiceAuth;
 use Geoquizz\Auth\core\services\ServiceAuthInterface;

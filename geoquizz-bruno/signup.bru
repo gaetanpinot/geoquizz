@@ -1,0 +1,25 @@
+meta {
+  name: signup
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:3001/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email":"gag@freqae.fr",
+    "password": "1234",
+    "nom":"gee",
+    "prenom":"fr"
+  }
+}
+
+script:post-response {
+  bru.setVar("access-token",res.headers['access-token']);
+  
+}

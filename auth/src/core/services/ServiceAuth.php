@@ -2,9 +2,12 @@
 
 namespace Geoquizz\Auth\core\services;
 
+use Geoquizz\Auth\core\domain\entities\User;
 use Geoquizz\Auth\core\dto\AuthDTO;
 use Geoquizz\Auth\core\dto\CredentialsDTO;
+use Geoquizz\Auth\core\dto\UtilisateurDTO;
 use Geoquizz\Auth\core\repositoryInterfaces\AuthRepositoryInterface;
+use Geoquizz\Auth\infrastructure\repositories\RepositoryEntityAlreadyExistException;
 use Geoquizz\Auth\infrastructure\repositories\RepositoryEntityNotFoundException;
 
 class ServiceAuth implements ServiceAuthInterface
@@ -15,8 +18,14 @@ class ServiceAuth implements ServiceAuthInterface
         $this->repositoryAuth = $repositoryAuth;
     }
 
-    public function createUser(CredentialsDTO $credentials, int $role): string
+    public function createUser(CredentialsDTO $credentials): void
     {
+        $user = new User($credentials->id, $credentials->email, password_hash($credentials->password, PASSWORD_DEFAULT), $credentials->nom, $credentials->prenom);
+        try {
+            $this->repositoryAuth->createUser($user);
+        } catch(RepositoryEntityAlreadyExistException $e) {
+            throw new ServiceOperationInvalideException($e->getMessage());
+        }
     }
 
     /*
@@ -33,6 +42,25 @@ class ServiceAuth implements ServiceAuthInterface
         } catch(RepositoryEntityNotFoundException $e) {
             throw new ServiceAuthUserNotFoundException("Utilisateur $credentials->id non trouvé");
         }
+    }
+
+    public function getUserById(string $id): UtilisateurDTO
+    {
+
+        try {
+            $user = $this->repositoryAuth->getUser($id);
+            return new UtilisateurDTO($user);
+        } catch(RepositoryEntityNotFoundException $e) {
+            throw new ServiceAuthUserNotFoundException("Utilisateur $id non trouvé");
+        }
+    }
+
+    public function getUsersById(array $ids): array
+    {
+        $users = $this->repositoryAuth->getUsers($ids);
+        return array_map(function ($user) {
+            return new UtilisateurDTO($user);
+        }, $users);
     }
 
 }
