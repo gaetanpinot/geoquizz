@@ -28,8 +28,8 @@ docker compose exec auth php bin/console doctrine:fixture:load
 	- [x] Mise en place de directus
 	- [x] Création des collections
 - [ ] Gateway
-	- [ ] Authentification
-	- [ ] Gestion des photos et séries
+	- [x] Authentification
+	- [x] Gestion des photos et séries
 	- [ ] Gestion des parties
 - [x] Micro service d'authentification
 	- [x] Login
