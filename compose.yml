@@ -48,7 +48,9 @@ services:
       - ./game:/var/www
       - ./sql:/var/sql
     working_dir: /var/www
-    env_file: db.env
+    env_file: 
+      - db.env
+      - ./amqp.env
 
   auth.db:
     image: 'postgres:latest'
@@ -66,3 +68,36 @@ services:
       - ./sql:/var/sql'
     env_file: db.env
 
+  queue:
+    image: rabbitmq:4-management
+    ports:
+      - $PORT_QUEUE:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=toto
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 8s
+      timeout: 30s
+      retries: 3
+
+  mailer:
+    image: canals/php:8.3
+    volumes:
+      - ./mailer:/var/www/html
+    working_dir: /var/www/html
+    env_file: 
+      - ./mailer.env
+      - ./amqp.env
+    command: php mailer.php
+    depends_on:
+      queue:
+        condition: service_healthy
+
+  mailcatcher:
+    build:
+      context: ./build
+      dockerfile: mailcatcher.Dockerfile
+    ports:
+      - $PORT_MAILCATCHER:1080
+      - 1025:1025

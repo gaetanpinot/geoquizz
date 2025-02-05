@@ -3,14 +3,12 @@
 namespace Geoquizz\Game\application\actions;
 
 use Geoquizz\Game\application\renderer\JsonRenderer;
-use Geoquizz\Game\core\dto\CommencerJeuDTO;
+use Geoquizz\Game\core\dto\JouerCoupDTO;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
-use Geoquizz\Game\core\services\PartieService;
-use Geoquizz\Game\infrastructure\entities\CoupJoue;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class PostCommencerPartieAction extends AbstractAction
+class PostConfirmePointAction extends AbstractAction
 {
     protected CoupJoueServiceInterface $coupJoueService;
 
@@ -21,19 +19,19 @@ class PostCommencerPartieAction extends AbstractAction
 
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
-        //decode jwt and comapre user id + get partie id from body
+        //decode jwt get user uuid
 
-        //tmp val
-        $uuidUser = "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11";
-
-//        $data = $rq->getParsedBody();
-//        $idPartie = $data['id_partie'];
         //get id from url
         $idPartie = $args['id'];
 
+        $data = $rq->getParsedBody();
+        $lat = $data['lat'];
+        $lon = $data['lon'];
+//        $idCoup = $data['id_coup'];
 
-        $res = $this->coupJoueService->commencerPartie(new CommencerJeuDTO($idPartie, $uuidUser));
-
+        $dto = new JouerCoupDTO($idPartie,  $lat, $lon);
+        $res = $this->coupJoueService->joueCoup($dto);
         return JsonRenderer::render($rs, 200, $res);
+
     }
 }
