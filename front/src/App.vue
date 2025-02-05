@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <nav>
-      <h1>GEOQUIZZ</h1>
+      <router-link to="/"><h1>GEOQUIZZ</h1></router-link>
       <span>
-         <router-link to="/">Accueil</router-link>
-         <router-link to="/Connexion">Connexion</router-link>
-         <router-link to="/game"><button>Jouer</button></router-link>
+         <router-link to="/"><button>Accueil</button></router-link>
+         <router-link  to="/Connexion"><button id="Acount"></button></router-link>
+         <router-link to="/game"><button id="Game">Jouer</button></router-link>
       </span>
     </nav>
     <router-view />
@@ -14,7 +14,23 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      isConnected: false
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('token')) {
+      this.isConnected = true;
+      document.getElementById('Acount').innerText = 'Déconnexion';
+      localStorage.removeItem('token');
+    }else {
+      this.isConnected = false;
+      document.getElementById('Acount').innerText = 'Connexion';
+    }
+    console.log(this.isConnected);
+  }
 }
 </script>
 
@@ -23,6 +39,9 @@ export default {
   * {
     box-sizing: border-box;
     margin: 0;
+  }
+  html{
+    background: #f1f1f1;
   }
   nav {
     background: #181818;
@@ -52,8 +71,23 @@ export default {
     gap: 14px;
     align-items: center;
   }
-
   nav button {
+    padding: 6px 12px;
+    font-size: 14px;
+    background: none;
+    color: white;
+    border: 0;
+    border-radius: 20px;
+    border: 2px solid white;
+    color: white;
+  }
+  nav button:hover {
+    background: white;
+    transition: 0.3s;
+    color: darkorange;
+    border: 2px solid darkorange;
+  }
+  nav #Game {
     padding: 6px 12px;
     font-size: 14px;
     background: none;
@@ -64,9 +98,9 @@ export default {
     color: orange;
   }
 
-  nav button:hover {
+  nav #Game:hover {
     background: darkorange;
     transition: 0.3s;
-    color: black;
+    color: white;
   }
 </style>

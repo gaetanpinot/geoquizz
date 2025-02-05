@@ -1,3 +1,20 @@
+<<<<<<< HEAD
+<?php
+namespace Geoquizz\Auth\core\dto;
+
+class CredentialsDTO extends DTO{
+
+    public string $email,$id,$password;
+
+    public function __construct(string $id, string $password, string $email)
+    {
+        $this->password=$password;
+        $this->id=$id;
+        $this->email = $email;
+    }
+
+}
+=======
 <?php
 
 namespace Geoquizz\Auth\core\dto;
@@ -20,3 +37,4 @@ class CredentialsDTO extends DTO
     }
 
 }
+>>>>>>> 6390e9ad73178e583c0528e4f1f770b12bf9ab1f

@@ -26,7 +26,12 @@ export default {
         alert("Les mots de passe ne correspondent pas.");
         return;
       }
-      console.log('Inscription:', this.email, this.motDePasse);
+      this.$api.post("/signup", {
+        email: this.email,
+        password: this.motDePasse
+      }).then(res => {
+        console.log(res);
+      })
     }
   }
 }
@@ -35,14 +40,44 @@ export default {
 <style scoped>
 .signup {
   text-align: center;
+  margin-top: 20px;
 }
 .signup form {
   display: inline-block;
+  width: 100%;
 }
 .signup input {
   display: block;
   margin: 10px 0;
   padding: 8px;
   width: 200px;
+}
+.signup button[type="submit"] {
+  padding: 8px 16px;
+  font-size: 1em;
+  background: none;
+  color: white;
+  border: 0;
+  border-radius: 20px;
+  border: 2px solid darkorange;
+  color: orange;
+  margin-top: 12px;
+}
+.signup button[type="submit"]:hover {
+  background: darkorange;
+  transition: 0.3s;
+  color: black;
+}
+.signup input[type="email"],
+.signup input[type="password"] {
+  width: 80%;
+  border: 2px solid darkorange;
+  border-radius: 20px;
+  padding: 10px;
+  margin: 10px auto;
+
+}
+.signup input:focus {
+  outline: none;
 }
 </style>
