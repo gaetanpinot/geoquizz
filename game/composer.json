@@ -12,7 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
         "guzzlehttp/guzzle": "*",
-        "php-amqplib/php-amqplib": "*",
+        "php-amqplib/php-amqplib": "^3.7",
         "php-di/php-di": "*",
         "php-di/slim-bridge": "*",
         "respect/validation": "^2.4",

@@ -2,23 +2,24 @@
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\ORMSetup;
 use Geoquizz\Game\core\services\interfaces\SerieServiceInterface;
 use Geoquizz\Game\core\services\PartieService;
 use Geoquizz\Game\core\services\interfaces\PartieServiceInterface;
 use Geoquizz\Game\core\services\SerieService;
 use Geoquizz\Game\infrastructure\entities\Partie;
+use Geoquizz\Game\infrastructure\interfaces\InfraNotifInterface;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
+use Geoquizz\Game\infrastructure\notif\NotifAMQP;
 use Geoquizz\Game\infrastructure\repository\PartieRepository;
 use Geoquizz\Game\infrastructure\repository\SerieRepository;
 use Geoquizz\Game\middlewares\CorsMiddleware;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Psr\Container\ContainerInterface;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
+
 use function DI\get;
 
 return [
@@ -59,9 +60,27 @@ return [
 
     SerieRepositoryInterface::class => DI\get(SerieRepository::class),
 
+    InfraNotifInterface::class => DI\get(NotifAMQP::class),
+
+NotifAMQP::class => function (ContainerInterface $c) {
+    return new NotifAMQP(
+        $c->get(AMQPStreamConnection::class),
+        $c->get('exchange.name'),
+        $c->get('queue.name'),
+        $c->get('routing.key')
+    );
+},
 
 
     CorsMiddleware::class => DI\autowire(),
 
+    AMQPStreamConnection::class => function (ContainerInterface $c) {
+        return new AMQPStreamConnection(
+            $c->get('amqp.host'),
+            $c->get('amqp.port'),
+            $c->get('amqp.user'),
+            $c->get('amqp.password')
+        );
+    },
 
 ];
