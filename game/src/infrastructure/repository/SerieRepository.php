@@ -19,6 +19,18 @@ class SerieRepository implements SerieRepositoryInterface
         $this->guzzle = $guzzle;
     }
 
+    public function findById($id){
+        $response = $this->guzzle->get('/items/serie/'.$id);
+        $data = json_decode($response->getBody(), true);
+
+        return new Serie(
+            $data['data']['id'],
+            $data['data']['nom'],
+            $data['data']['difficulte'],
+            $data['data']['point_serie']
+        );
+    }
+
     public function findAll(): array
     {
         $response = $this->guzzle->get('/items/serie');

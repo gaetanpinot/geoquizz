@@ -5,12 +5,12 @@ namespace Geoquizz\Game\infrastructure\entities;
 class Serie
 {
 
-    protected $id;
-    protected $nom;
-    protected $difficulte;
-    protected $point_serie;
+    protected int $id;
+    protected string $nom;
+    protected int $difficulte;
+    protected array $point_serie;
 
-    public function __construct($id, $nom, $difficulte, $point_serie)
+    public function __construct(int $id, string $nom, int $difficulte, array $point_serie)
     {
         $this->id = $id;
         $this->nom = $nom;

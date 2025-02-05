@@ -4,7 +4,7 @@
       <router-link to="/"><h1>GEOQUIZZ</h1></router-link>
       <span>
          <router-link to="/"><button>Accueil</button></router-link>
-         <router-link  to="/Connexion"><button id="Acount"></button></router-link>
+         <router-link  to="/Connexion"><button id="Acount">{{ accountName }}</button></router-link>
          <router-link to="/game"><button id="Game">Jouer</button></router-link>
       </span>
     </nav>
@@ -20,16 +20,10 @@ export default {
       isConnected: false
     }
   },
-  mounted() {
-    if (localStorage.getItem('token')) {
-      this.isConnected = true;
-      document.getElementById('Acount').innerText = 'Déconnexion';
-      localStorage.removeItem('token');
-    }else {
-      this.isConnected = false;
-      document.getElementById('Acount').innerText = 'Déconnexion';
+  computed: {
+    accountName() {
+      return (localStorage.getItem('token') ? "Déconnexion" : "Connexion");
     }
-    console.log(this.isConnected);
   }
 }
 </script>
@@ -113,5 +107,9 @@ export default {
     background: darkorange;
     transition: 0.3s;
     color: white;
+  }
+
+  button {
+    cursor: pointer;
   }
 </style>

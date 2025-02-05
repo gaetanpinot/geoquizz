@@ -17,8 +17,9 @@
       <component v-if="isConnected" :is="vueActive" key="vueActive"></component>
     </transition>
   </div>
-  <div v-else class="deconnexion">
-    <button @click="logout" id="Logout">Déconnexion</button>
+  <div v-else class="deconnexion" style="height: auto;">
+    <p>Etes vous sur de vous déconnecter du site ?</p>
+    <button @click="logout" id="Logout">Oui je veux</button>
   </div>
 </template>
 
@@ -68,7 +69,7 @@ export default {
   padding: 20px;
   background: white;
   width: 400px;
-  height: 400px;
+  height: auto;
   margin: 40px auto;
 }
 
@@ -124,7 +125,7 @@ export default {
   transition: all 0.3s ease;
   font-size: large;
   font-weight: bold;
-  margin-top: 70px;
+  margin-top: 20px;
 }
 
 #Logout:hover {
