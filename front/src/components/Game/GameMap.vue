@@ -1,17 +1,5 @@
 <template>
-  <div id="carte-block" class="petit">
-    <div id="top">
-      <div id="zoom"  @click="taille">
-        <div class="zoom_in">
-          <img src="/src/assets/zoom_in.svg" alt="marqueur" />
-        </div>
-        <div class="zoom_out">
-          <img src="/src/assets/zoom_out.svg" alt="marqueur" />
-        </div>
-      </div>
-    </div>
     <div id="carte" class="carte"></div>
-  </div>
 </template>
 
 <script>
@@ -55,23 +43,6 @@ export default {
     })*/
   },
   methods: {
-    taille() {
-        const carteBlock = document.querySelector('#carte-block');
-        const zoomIn = document.querySelector('.zoom_in');
-        const zoomOut = document.querySelector('.zoom_out');
-
-        if (carteBlock.classList.contains('petit')) {
-          carteBlock.classList.remove('petit');
-          carteBlock.classList.add('grand');
-          zoomOut.style.display = 'block';
-          zoomIn.style.display = 'none';
-        } else {
-          carteBlock.classList.remove('grand');
-          carteBlock.classList.add('petit');
-          zoomOut.style.display = 'none';
-          zoomIn.style.display = 'block';
-        }
-      },
     afficherResultats(coordCible, coordEstimation) {
       if (this.marqueurCible) {
         this.carte.removeLayer(this.marqueurCible)
@@ -138,14 +109,4 @@ export default {
   width: 100%;
   transition: 0.3s;
 }
-
-.zoom_in {
-  cursor: zoom-in;
-}
-
-.zoom_out {
-  cursor: zoom-out;
-  display: none;
-}
-
 </style>

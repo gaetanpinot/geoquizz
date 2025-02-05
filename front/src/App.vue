@@ -24,6 +24,9 @@ export default {
     box-sizing: border-box;
     margin: 0;
   }
+  html{
+    background: #f1f1f1;
+  }
   nav {
     background: #181818;
     padding: 0 20px;
