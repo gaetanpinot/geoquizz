@@ -2,9 +2,8 @@
 
 namespace Geoquizz\Game\infrastructure\repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 
@@ -13,9 +12,25 @@ use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
  */
 class PartieRepository extends EntityRepository implements PartieInfraInterface
 {
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        parent::__construct($entityManager, $entityManager->getClassMetadata(Partie::class));
+    }
+
+    public function getAllParties(): array
+    {
+        return $this->findAll();
+    }
     public function getPartieById(int $id): Partie
     {
         return $this->find($id);
+    }
+    public function createPartie(Partie $partie): void
+    {
+        $em = $this->getEntityManager();
+        $em->persist($partie);
+        $em->flush();
     }
 
     //    /**

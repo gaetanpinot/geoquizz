@@ -4,7 +4,7 @@ namespace Geoquizz\Game\infrastructure\entities;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Geoquizz\Game\Repository\CoupJoueRepository;
+use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
 
 #[ORM\Entity(repositoryClass: CoupJoueRepository::class)]
 class CoupJoue
