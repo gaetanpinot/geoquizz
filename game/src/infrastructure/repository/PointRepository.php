@@ -27,11 +27,22 @@ class PointRepository implements PointRepositoryInterface
                 ]
             ]
         );
+    }
+
+    public function getPoint($idPoint)
+    {
+        $response = $this->guzzle->get(
+            '/items/point/'.$idPoint,
+            [
+            'headers' => [
+            'Authorization' => "Bearer $this->access_token",
+                ]
+            ]
+        );
         $data = json_decode($response->getBody(), true);
 
-        return $data['data']['image'];
+        return $data['data'];
     }
 
 
 }
-

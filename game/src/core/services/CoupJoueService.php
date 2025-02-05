@@ -29,14 +29,16 @@ class CoupJoueService implements CoupJoueServiceInterface
 //    }
 
     public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO{
-        $res = $this->coupsJoueRepository->joueCoup($jouerCoupDTO);
-        return $res;
+        $coupJoue = $this->coupsJoueRepository->joueCoup($jouerCoupDTO);
+
+        $point = $this->pointRepository->getPoint($coupJoue->getIdPoint());
+        return new CoupConfirmeResponseDTO($coupJoue->getId(), $point['lat'], $point['long'], 0);
     }
 
     public function nextCoup(int $idPartie): CoupNextResponseDTO{
         $res = $this->coupsJoueRepository->prochainCoup($idPartie);
 
-        $idImage = $this->pointRepository->getIdImage($res->getIdPoint());
+        $idImage = $this->pointRepository->getPoint($res->getIdPoint())['image'];
 
         return new CoupNextResponseDTO($res->getId(), $idImage);
     }

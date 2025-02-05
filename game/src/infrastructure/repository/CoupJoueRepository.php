@@ -45,7 +45,7 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
 //        return new CoupNextResponseDTO($coupJoue->getId(), $coupJoue->getIdPoint());
 //    }
 
-    public function joueCoup(JouerCoupDTO $jCoup): CoupConfirmeResponseDTO
+    public function joueCoup(JouerCoupDTO $jCoup)
     {
 
         $coupJoue = $this->getCoupByIdPartie($jCoup->getIdPartie());
@@ -56,7 +56,7 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         $coupJoue->setLat($jCoup->getLat());
         $coupJoue->setLong($jCoup->getLon());
         $this->getEntityManager()->flush();
-        return new CoupConfirmeResponseDTO($coupJoue->getId(), $coupJoue->getLat(), $coupJoue->getLong(), 0);
+        return $coupJoue;
     }
 
     public function prochainCoup(string $idPartie){
