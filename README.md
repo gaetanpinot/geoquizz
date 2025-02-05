@@ -24,19 +24,22 @@ docker compose exec auth php bin/console doctrine:fixture:load
 
 
 ## TODO:
-- [ ] Micro service de backoffice, gestion des photos et séries:
+- [x] Micro service de backoffice, gestion des photos et séries:
 	- [x] Mise en place de directus
 	- [x] Création des collections
-- [ ] Gateway
-	- [ ] Authentification
-	- [ ] Gestion des photos et séries
-	- [ ] Gestion des parties
+- [x] Gateway
+	- [x] Authentification
+	- [x] Gestion des photos et séries
+	- [x] Gestion des parties
 - [x] Micro service d'authentification
 	- [x] Login
 	- [x] Register
 	- [x] ValidateToken
-    - [x] Get info utilisateur
+	- [x] Get info utilisateur
 - [ ] Micro service du jeu	
 	- [ ] Création de la partie
+- [ ] Mailer
+	- [ ] queue rabbitmq
+	- [ ] service mailer
 
 

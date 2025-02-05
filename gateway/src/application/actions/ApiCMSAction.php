@@ -8,8 +8,4 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ApiCMSAction extends ActionGetApiGenerique
 {
-    public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
-    {
-
-    }
 }

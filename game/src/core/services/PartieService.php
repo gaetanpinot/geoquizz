@@ -8,6 +8,7 @@ use Geoquizz\Game\core\dto\PartieDTO;
 use Geoquizz\Game\core\services\interfaces\PartieServiceInterface;
 use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
+use Geoquizz\Game\infrastructure\interfaces\InfraNotifInterface;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
 use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
@@ -17,15 +18,21 @@ class PartieService implements PartieServiceInterface
 {
     protected PartieInfraInterface $partieRepository;
     protected CoupJoueRepositoryInterface $coupJoueRepository;
-
+    protected InfraNotifInterface $notif;
     protected SerieRepositoryInterface $serieRepository;
 
-    public function __construct(CoupJoueRepositoryInterface $coupJoueRepository, PartieInfraInterface $partieRepository, SerieRepositoryInterface $serieRepository)
-    {
+    public function __construct(
+        CoupJoueRepositoryInterface $coupJoueRepository,
+        PartieInfraInterface $partieRepository,
+        SerieRepositoryInterface $serieRepository,
+        InfraNotifInterface $notif
+    ) {
         $this->partieRepository = $partieRepository;
         $this->coupJoueRepository = $coupJoueRepository;
         $this->serieRepository = $serieRepository;
+        $this->notif = $notif;
     }
+
 
     public function getAllParties(): array
     {
@@ -43,7 +50,8 @@ class PartieService implements PartieServiceInterface
         return new PartieDTO($partie);
     }
 
-    public function getAllCoupsFromPartie($idPartie): array{
+    public function getAllCoupsFromPartie($idPartie): array
+    {
         $coups = $this->coupJoueRepository->getAllCoupsFromPartie($idPartie);
 
         $coupsDTO = [];
@@ -53,7 +61,7 @@ class PartieService implements PartieServiceInterface
         return $coupsDTO;
     }
 
-    public function createPartie(InputPartieDTO $partieDTO) : PartieDTO
+    public function createPartie(InputPartieDTO $partieDTO): PartieDTO
     {
         $partie = new Partie();
         $partie->setIdSerie($partieDTO->id_serie);
@@ -67,7 +75,9 @@ class PartieService implements PartieServiceInterface
 
         $serie = $this->serieRepository->findById($partieDTO->id_serie);
         $this->coupJoueRepository->coupsInit($partie->getId(), $serie->getPointSerie());
+        $this->notif->notifCreationPartie($partie);
 
         return new PartieDTO($partie);
     }
 }
+
