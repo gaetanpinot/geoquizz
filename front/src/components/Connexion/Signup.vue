@@ -26,7 +26,12 @@ export default {
         alert("Les mots de passe ne correspondent pas.");
         return;
       }
-      console.log('Inscription:', this.email, this.motDePasse);
+      this.$api.post("/signup", {
+        email: this.email,
+        password: this.motDePasse
+      }).then(res => {
+        console.log(res);
+      })
     }
   }
 }
