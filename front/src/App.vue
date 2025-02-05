@@ -27,7 +27,7 @@ export default {
       localStorage.removeItem('token');
     }else {
       this.isConnected = false;
-      document.getElementById('Acount').innerText = 'Connexion';
+      document.getElementById('Acount').innerText = 'Déconnexion';
     }
     console.log(this.isConnected);
   }
@@ -52,7 +52,18 @@ export default {
     justify-content: space-between;
     color: white;
   }
-
+  nav h1 {
+    font-size: 30px;
+    padding: 6px 12px;
+    border: 2px solid black;
+    border-radius: 20px;
+  }
+  nav h1:hover {
+    color: darkorange;
+    border: 2px solid darkorange;
+    border-radius: 20px;
+    transition: all 0.3s;
+  }
   nav a {
     color: white;
     text-decoration: none;

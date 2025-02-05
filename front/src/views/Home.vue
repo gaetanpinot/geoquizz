@@ -2,11 +2,11 @@
   <main>
    <div class="bg"></div>
     <div class="info">
-      <h1>📌 GEOQUIZZ</h1>
+      <h2>📌 GEOQUIZZ</h2>
       <p>Devinez l'endroit d'ou se situe l'image et gagnez des points en faissant appel a votre rapidité!</p>
       <span>
-        <button>S'inscrire</button>
-        <button class="create">Créer une partie</button>
+        <router-link  to="/Connexion"><button>S'inscrire / Se connecter</button></router-link>
+        <router-link to="/game"><button class="create">Créer une partie</button></router-link>
       </span>
     </div>
   </main>
@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   main {
     height: calc(100vh - 70px);
     position: relative;
@@ -41,25 +41,31 @@ export default {
     background-position: center;
     filter: brightness(0.5);
   }
-
-  main div.info {
+  h2{
+    font-size: 50px;
+  }
+  .info:hover h2 {
+    color: darkorange;
+  }
+  .info {
     position: relative;
     text-align: center;
     max-width: 700px;
     background: rgba(24, 24, 24, 0.85);
     padding: 50px 100px;
     border-radius: 20px;
+    box-shadow: 0 0 20px black;
+    transition: all 0.3s ease-in-out;
+  }
+  .info:hover {
+    transform: translatey(-20px);
   }
 
-  main h1 {
-    font-size: 50px;
-  }
-
-  main p {
+   p {
     font-size: 20px;
   }
 
-  main button {
+   button {
     margin-top: 16px;
     padding: 10px 20px;
     background: none;
@@ -71,12 +77,12 @@ export default {
     margin: 20px 10px;
   }
 
-  main button:hover {
+   button:hover {
     background: darkorange;
     color: black;
   }
 
-  main button.create {
+   button.create {
     border: 3px solid cadetblue;
     background: cadetblue;
     color: black;
