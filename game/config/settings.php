@@ -7,6 +7,8 @@ return [
     'queue.name' => getenv('QUEUE'),
     'routing.key' => getenv('ROUTING_KEY'),
 
+'auth.token.directus' => getenv('DIRECTUS_TOKEN'),
+
     //amqp config auth
     'amqp.host' => getenv('HOST'),
     'amqp.user' => getenv('USER'),

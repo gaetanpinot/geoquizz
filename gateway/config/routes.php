@@ -19,10 +19,13 @@ return function (\Slim\App $app): \Slim\App {
     $app->post('/login[/]', ApiAuthAction::class);
     $app->post('/signup[/]', ApiAuthAction::class);
 
+    $app->get('/series[/]', ApiGameAction::class);
+
     $app->group('/parties', function (RouteCollectorProxy $group) {
         $group->get('/{id}', ApiGameAction::class)->add(AuthnMiddleware::class);
         $group->map(['GET','POST','PUT','DELETE','PATCH'], '{routes:.+}', ApiGameAction::class);
     });
+
 
     $app->group('/items', function (RouteCollectorProxy $group) {
         $group->map(['GET','POST','PUT','DELETE','PATCH'], '{routes:.+}', ApiCMSAction::class);

@@ -30,6 +30,7 @@ use Psr\Container\ContainerInterface;
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
 
+use function DI\create;
 use function DI\get;
 
 return [
@@ -48,7 +49,7 @@ return [
     //REPOSITORIES
     SerieRepositoryInterface::class => DI\get(SerieRepository::class),
     SerieRepository::class => function (ContainerInterface $c) {
-        return new SerieRepository($c->get('guzzle.directus'));
+        return new SerieRepository($c->get('guzzle.directus'), $c->get('auth.token.directus'));
     },
 
     PartieInfraInterface::class => DI\get(PartieRepository::class),
@@ -61,10 +62,8 @@ return [
         return $c->get(EntityManager::class)->getRepository(CoupJoue::class);
     },
 
-    PointRepositoryInterface::class => DI\get(PointRepository::class),
-    PointRepository::class => function (ContainerInterface $c) {
-        return new PointRepository($c->get('guzzle.directus'));
-    },
+    PointRepositoryInterface::class => get(PointRepository::class),
+    PointRepository::class => create()->constructor(get('guzzle.directus'), get('auth.token.directus')),
 
     'guzzle.directus' => function () {
         return new Client([
@@ -85,6 +84,11 @@ return [
     EntityManager::class => DI\autowire()->constructor(get(Connection::class), get('doctrine.config')),
 
 
+    SerieServiceInterface::class => DI\get(SerieService::class),
+    SerieService::class => DI\autowire(),
+
+    SerieRepositoryInterface::class => DI\get(SerieRepository::class),
+
     InfraNotifInterface::class => DI\get(NotifAMQP::class),
 
     NotifAMQP::class => function (ContainerInterface $c) {
@@ -95,6 +99,10 @@ return [
             $c->get('routing.key')
         );
     },
+
+
+    CorsMiddleware::class => DI\autowire(),
+
     AMQPStreamConnection::class => function (ContainerInterface $c) {
         return new AMQPStreamConnection(
             $c->get('amqp.host'),
@@ -109,5 +117,7 @@ return [
     AuthzPartie::class => DI\autowire(),
     AuthzPartieServiceInterface::class => DI\get(AuthzPartieService::class),
     AuthzPartieService::class => DI\autowire(),
+
+
 
 ];
