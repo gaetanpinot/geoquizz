@@ -11,6 +11,9 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 export default {
   name: 'Signup',
   data() {
@@ -23,14 +26,25 @@ export default {
   methods: {
     sInscrire() {
       if (this.motDePasse !== this.motDePasseConfirmation) {
-        alert("Les mots de passe ne correspondent pas.");
+        toast("Les mots de passe ne correspondent pas.", {
+          autoClose: 1000,
+          type: "error"
+        });
         return;
       }
       this.$api.post("/signup", {
         email: this.email,
         password: this.motDePasse
       }).then(res => {
-        console.log(res);
+        if (res.status === 201) {
+          localStorage.setItem("token", res.data.data.access_token);
+          this.$router.go("/");
+        } else {
+          toast("Adresse email déjà existante.", {
+            autoClose: 1000,
+            type: "error"
+          });
+        }
       })
     }
   }

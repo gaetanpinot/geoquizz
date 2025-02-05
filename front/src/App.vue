@@ -114,4 +114,8 @@ export default {
     transition: 0.3s;
     color: white;
   }
+
+  button {
+    cursor: pointer;
+  }
 </style>
