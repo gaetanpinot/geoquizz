@@ -15,11 +15,13 @@ use Geoquizz\Game\infrastructure\entities\CoupJoue;
 use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\interfaces\InfraNotifInterface;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
+use Geoquizz\Game\infrastructure\interfaces\PointRepositoryInterface;
 use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
 use Geoquizz\Game\infrastructure\notif\NotifAMQP;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
 use Geoquizz\Game\infrastructure\repository\PartieRepository;
+use Geoquizz\Game\infrastructure\repository\PointRepository;
 use Geoquizz\Game\infrastructure\repository\SerieRepository;
 use Geoquizz\Game\middlewares\AuthzPartie;
 use Geoquizz\Game\middlewares\CorsMiddleware;
@@ -59,6 +61,11 @@ return [
         return $c->get(EntityManager::class)->getRepository(CoupJoue::class);
     },
 
+    PointRepositoryInterface::class => DI\get(PointRepository::class),
+    PointRepository::class => function (ContainerInterface $c) {
+        return new PointRepository($c->get('guzzle.directus'));
+    },
+
     'guzzle.directus' => function () {
         return new Client([
             'base_uri' => 'http://directus:8055',
@@ -78,11 +85,6 @@ return [
     EntityManager::class => DI\autowire()->constructor(get(Connection::class), get('doctrine.config')),
 
 
-    SerieServiceInterface::class => DI\get(SerieService::class),
-    SerieService::class => DI\autowire(),
-
-    SerieRepositoryInterface::class => DI\get(SerieRepository::class),
-
     InfraNotifInterface::class => DI\get(NotifAMQP::class),
 
     NotifAMQP::class => function (ContainerInterface $c) {
@@ -93,10 +95,6 @@ return [
             $c->get('routing.key')
         );
     },
-
-
-    CorsMiddleware::class => DI\autowire(),
-
     AMQPStreamConnection::class => function (ContainerInterface $c) {
         return new AMQPStreamConnection(
             $c->get('amqp.host'),
@@ -111,7 +109,5 @@ return [
     AuthzPartie::class => DI\autowire(),
     AuthzPartieServiceInterface::class => DI\get(AuthzPartieService::class),
     AuthzPartieService::class => DI\autowire(),
-
-
 
 ];

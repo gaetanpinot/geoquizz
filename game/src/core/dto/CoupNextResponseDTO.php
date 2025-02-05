@@ -5,12 +5,12 @@ namespace Geoquizz\Game\core\dto;
 class CoupNextResponseDTO extends DTO
 {
     protected int $idCoup;
-    protected string $idPoint;
+    protected string $idImage;
 
-    public function __construct(int $idCoup,string $idPoint)
+    public function __construct(int $idCoup,string $idImage)
     {
         $this->idCoup = $idCoup;
-        $this->idPoint = $idPoint;
+        $this->idImage = $idImage;
     }
 
     public function getIdCoup(): int
@@ -18,19 +18,8 @@ class CoupNextResponseDTO extends DTO
         return $this->idCoup;
     }
 
-    public function getIdPhoto(): string
+    public function getIdImage(): string
     {
-        return $this->idPoint;
+        return $this->idImage;
     }
-
-    public function setIdCoup(int $idCoup): void
-    {
-        $this->idCoup = $idCoup;
-    }
-
-    public function setIdPhoto(string $idPoint): void
-    {
-        $this->idPoint = $idPoint;
-    }
-
 }

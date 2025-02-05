@@ -4,11 +4,11 @@ namespace Geoquizz\Game\core\dto;
 
 class CoupConfirmeResponseDTO extends DTO
 {
-    private int $idCoup;
-    private float $lat;
-    private float $lon;
+    protected int $idCoup;
+    protected float $lat;
+    protected float $lon;
 
-    private int $score;
+    protected int $score;
 
     public function __construct(int $idCoup, float $lat, float $lon, int $score)
     {
