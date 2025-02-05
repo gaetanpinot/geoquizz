@@ -42,7 +42,7 @@ class UtilisateurRepository extends EntityRepository implements AuthRepositoryIn
         $dbUser->setPrenom($user->prenom);
         try {
             $this->getEntityManager()->persist($dbUser);
-            $this->get->flush();
+            $this->getEntityManager()->flush();
         } catch(UniqueConstraintViolationException $e) {
             throw new RepositoryEntityAlreadyExistException("Utilisateur $user->email déjà existant");
         }

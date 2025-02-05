@@ -56,7 +56,8 @@
         "symfony/polyfill-php81": "*",
         "symfony/polyfill-php82": "*"
     },
-    "scripts": {},
+    "scripts": {
+    },
     "conflict": {
         "symfony/symfony": "*"
     },

@@ -1,14 +1,11 @@
 <?php
 
 declare(strict_types=1);
-
-use Geoquizz\Auth\application\actions\GetUtilisateur;
-use Geoquizz\Auth\application\actions\GetUtilisateurById;
-use Geoquizz\Auth\application\actions\PostSignup;
-use Geoquizz\Auth\application\actions\ValidateTokenAction;
-use Geoquizz\Auth\application\actions\PostSignIn;
-use Geoquizz\Auth\application\renderer\JsonRenderer;
+use Geoquizz\Gateway\application\actions\ApiAuthAction;
+use Geoquizz\Gateway\application\actions\ApiCMSAction;
+use Geoquizz\Gateway\application\actions\ApiGameAction;
 use Slim\Exception\HttpNotFoundException;
+use Geoquizz\Gateway\application\renderer\JsonRenderer;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (\Slim\App $app): \Slim\App {
@@ -16,22 +13,22 @@ return function (\Slim\App $app): \Slim\App {
 
     $app->get("[/]", function ($request, $response) {
 
-        return JsonRenderer::render($response, 200, ["message" => "Api geoquizz auth"]);
+        return JsonRenderer::render($response, 200, ["message" => "Api geoquizz gateway"]);
     });
 
-    $app->post('/login[/]', PostSignIn::class)->setName('signIn');
+    $app->post('/login[/]', ApiAuthAction::class);
+    $app->post('/signup[/]', ApiAuthAction::class);
 
-    $app->post('/signup[/]', PostSignup::class)->setName('signup');
-
-    $app->get('/validateToken[/]', ValidateTokenAction::class)->setName('ValidateToken');
-
-    $app->get('/utilisateur/{id}', GetUtilisateurById::class)->setName('getUtilisateur');
-
-    $app->get('/utilisateur[/]', GetUtilisateur::class)->setName('getUtilisateurs');
-
-    $app->options('/{routes:.+}', function ($request, $response, $args) {
-        return $response;
+    $app->group('/partie', function (RouteCollectorProxy $group) {
+        $group->map(['GET','POST','PUT','DELETE','PATCH'], '{routes:.+}', ApiGameAction::class);
     });
+
+    $app->group('/items', function (RouteCollectorProxy $group) {
+        $group->map(['GET','POST','PUT','DELETE','PATCH'], '{routes:.+}', ApiCMSAction::class);
+    });
+
+    $app->get('/assets/{id}', ApiCMSAction::class);
+
 
     $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
         throw new HttpNotFoundException($request);
