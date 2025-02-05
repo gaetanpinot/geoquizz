@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 import apiPlugin from './plugins/api';
 
 const apiConfig = {
-  baseURL: 'http://localhost:3001'
+  baseURL: 'http://localhost:4000'
 };
 
 import App from './App.vue'

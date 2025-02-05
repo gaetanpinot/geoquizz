@@ -33,6 +33,7 @@ class PostCommencerPartieAction extends AbstractAction
 
 
         $res = $this->coupJoueService->commencerPartie(new CommencerJeuDTO($idPartie, $uuidUser));
-        return JsonRenderer::render($rs, 200, ['partie' => $res]);
+
+        return JsonRenderer::render($rs, 200, $res);
     }
 }
