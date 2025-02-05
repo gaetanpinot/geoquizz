@@ -47,6 +47,4 @@ class SerieRepository implements SerieRepositoryInterface
         }
         return $series;
     }
-
-
 }

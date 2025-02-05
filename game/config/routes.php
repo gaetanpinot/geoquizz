@@ -37,7 +37,7 @@ return function (\Slim\App $app): \Slim\App {
 
         $group->post("[/]", PostPartieAction::class);
 
-        $group->post("/{id}/commencer", PostCommencerPartieAction::class);
+//        $group->post("/{id}/commencer", PostCommencerPartieAction::class);
 
         $group->post("/{id}/confirmer", PostConfirmePointAction::class);
     });

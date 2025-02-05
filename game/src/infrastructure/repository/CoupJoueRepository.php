@@ -33,17 +33,17 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         $em->flush();
     }
 
-    public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupNextResponseDTO{
-        $em = $this->getEntityManager();
-
-        //sort all coups by id, get the first one (findOne) with lat = null
-        $coupJoue = $em->getRepository(CoupJoue::class)->findOneBy(['partie' => $commencerJeuDTO->getIdPartie(), 'lat' => null], ['id' => 'ASC']);
-        if($coupJoue == null){
-            throw new \Exception("Partie terminée");
-        }
-        $em->flush();
-        return new CoupNextResponseDTO($coupJoue->getId(), $coupJoue->getIdPoint());
-    }
+//    public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupNextResponseDTO{
+//        $em = $this->getEntityManager();
+//
+//        //sort all coups by id, get the first one (findOne) with lat = null
+//        $coupJoue = $em->getRepository(CoupJoue::class)->findOneBy(['partie' => $commencerJeuDTO->getIdPartie(), 'lat' => null], ['id' => 'ASC']);
+//        if($coupJoue == null){
+//            throw new \Exception("Partie terminée");
+//        }
+////        $em->flush();
+//        return new CoupNextResponseDTO($coupJoue->getId(), $coupJoue->getIdPoint());
+//    }
 
     public function joueCoup(JouerCoupDTO $jCoup): CoupConfirmeResponseDTO
     {
@@ -73,7 +73,6 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         //return array of CoupsJoue
         return $coups;
     }
-
 
     private function getCoupByIdPartie($idPartie) : object
     {

@@ -35,6 +35,6 @@ class PostPartieAction extends AbstractAction
 
         $res = $this->partieService->createPartie($partieDto);
 
-        return JsonRenderer::render($rs, 201, ['partie' => $res]);
+        return JsonRenderer::render($rs, 201, $res);
     }
 }

@@ -4,6 +4,7 @@ namespace Geoquizz\Game\infrastructure\repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Geoquizz\Game\core\dto\NewPartieDTO;
 use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 
@@ -26,11 +27,12 @@ class PartieRepository extends EntityRepository implements PartieInfraInterface
     {
         return $this->find($id);
     }
-    public function createPartie(Partie $partie): void
+    public function createPartie(Partie $partie): Partie
     {
         $em = $this->getEntityManager();
         $em->persist($partie);
         $em->flush();
+        return $partie;
     }
 
     //    /**

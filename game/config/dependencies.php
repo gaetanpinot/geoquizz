@@ -75,24 +75,16 @@ return [
     EntityManager::class => DI\autowire()->constructor(get(Connection::class), get('doctrine.config')),
 
 
-    SerieServiceInterface::class => DI\get(SerieService::class),
-    SerieService::class => DI\autowire(),
-
-    SerieRepositoryInterface::class => DI\get(SerieRepository::class),
-
     InfraNotifInterface::class => DI\get(NotifAMQP::class),
 
-NotifAMQP::class => function (ContainerInterface $c) {
-    return new NotifAMQP(
-        $c->get(AMQPStreamConnection::class),
-        $c->get('exchange.name'),
-        $c->get('queue.name'),
-        $c->get('routing.key')
-    );
-},
-
-
-    CorsMiddleware::class => DI\autowire(),
+    NotifAMQP::class => function (ContainerInterface $c) {
+        return new NotifAMQP(
+            $c->get(AMQPStreamConnection::class),
+            $c->get('exchange.name'),
+            $c->get('queue.name'),
+            $c->get('routing.key')
+        );
+    },
 
     AMQPStreamConnection::class => function (ContainerInterface $c) {
         return new AMQPStreamConnection(

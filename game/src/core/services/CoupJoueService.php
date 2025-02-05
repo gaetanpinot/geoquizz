@@ -7,22 +7,23 @@ use Geoquizz\Game\core\dto\CoupConfirmeResponseDTO;
 use Geoquizz\Game\core\dto\CoupNextResponseDTO;
 use Geoquizz\Game\core\dto\JouerCoupDTO;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
+use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
 
 class CoupJoueService implements CoupJoueServiceInterface
 {
-    protected CoupJoueRepository $coupsJoueRepository;
+    protected CoupJoueRepositoryInterface $coupsJoueRepository;
 
-    public function __construct(CoupJoueRepository $coupsJoueRepository)
+    public function __construct(CoupJoueRepositoryInterface $coupsJoueRepository)
     {
         $this->coupsJoueRepository = $coupsJoueRepository;
     }
 
-    public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupNextResponseDTO{
-
-        $res = $this->coupsJoueRepository->commencerPartie($commencerJeuDTO);
-        return $res;
-    }
+//    public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupNextResponseDTO{
+//
+//        $res = $this->coupsJoueRepository->commencerPartie($commencerJeuDTO);
+//        return $res;
+//    }
 
     public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO{
 
