@@ -2,19 +2,29 @@
 
 namespace Geoquizz\Game\core\services;
 
+use Geoquizz\Game\core\dto\CoupDTO;
 use Geoquizz\Game\core\dto\InputPartieDTO;
 use Geoquizz\Game\core\dto\PartieDTO;
 use Geoquizz\Game\core\services\interfaces\PartieServiceInterface;
 use Geoquizz\Game\infrastructure\entities\Partie;
+use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
+use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
+use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
+use Psr\Container\ContainerInterface;
 
 class PartieService implements PartieServiceInterface
 {
     protected PartieInfraInterface $partieRepository;
+    protected CoupJoueRepositoryInterface $coupJoueRepository;
 
-    public function __construct(PartieInfraInterface $partieRepository)
+    protected SerieRepositoryInterface $serieRepository;
+
+    public function __construct(CoupJoueRepositoryInterface $coupJoueRepository, PartieInfraInterface $partieRepository, SerieRepositoryInterface $serieRepository)
     {
         $this->partieRepository = $partieRepository;
+        $this->coupJoueRepository = $coupJoueRepository;
+        $this->serieRepository = $serieRepository;
     }
 
     public function getAllParties(): array
@@ -33,6 +43,16 @@ class PartieService implements PartieServiceInterface
         return new PartieDTO($partie);
     }
 
+    public function getAllCoupsFromPartie($idPartie): array{
+        $coups = $this->coupJoueRepository->getAllCoupsFromPartie($idPartie);
+
+        $coupsDTO = [];
+        foreach ($coups as $coup) {
+            $coupsDTO[] = new CoupDTO($coup);
+        }
+        return $coupsDTO;
+    }
+
     public function createPartie(InputPartieDTO $partieDTO) : PartieDTO
     {
         $partie = new Partie();
@@ -43,6 +63,10 @@ class PartieService implements PartieServiceInterface
         $partie->setScore($partieDTO->score);
 
         $this->partieRepository->createPartie($partie);
+
+
+        $serie = $this->serieRepository->findById($partieDTO->id_serie);
+        $this->coupJoueRepository->coupsInit($partie->getId(), $serie->getPointSerie());
 
         return new PartieDTO($partie);
     }

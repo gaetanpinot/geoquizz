@@ -7,19 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
 
 #[ORM\Entity(repositoryClass: CoupJoueRepository::class)]
+#[ORM\Table(name: 'coup_joue')]
 class CoupJoue
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id_image')]
+    #[ORM\ManyToOne(inversedBy: 'id_point')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Partie $partie = null;
 
     #[ORM\Column]
-    private ?int $id_image = null;
+    private ?int $id_point = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_joue = null;
@@ -47,14 +48,14 @@ class CoupJoue
         return $this;
     }
 
-    public function getIdImage(): ?int
+    public function getIdPoint(): ?int
     {
-        return $this->id_image;
+        return $this->id_point;
     }
 
-    public function setIdImage(int $id_image): static
+    public function setIdPoint(string $id_point): static
     {
-        $this->id_image = $id_image;
+        $this->id_point = $id_point;
 
         return $this;
     }
