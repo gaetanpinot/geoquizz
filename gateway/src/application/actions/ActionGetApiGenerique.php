@@ -52,7 +52,7 @@ class ActionGetApiGenerique
                 $rq->getMethod(),
                 $this->url. $uri,
                 [
-                   'timeout' => 5,
+                   'timeout' => 25,
                    'headers' => $headers,
                    'json' => $rq->getParsedBody(),
                     'query' => $rq->getQueryParams(),
@@ -63,8 +63,10 @@ class ActionGetApiGenerique
             //slim met sur certaine requete(liste praticiens) ce header et ça casse tout
             return $responseToubeelib->withoutHeader('Transfer-Encoding');
         } catch (ConnectException | ServerException $e) {
-            return $e->getResponse();
 
+            echo $e->getMessage();
+
+            return $rs;
         } catch (ClientException $e) {
             return $e->getResponse();
 

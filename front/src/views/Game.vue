@@ -10,11 +10,12 @@
             :confirme="confirme"
             :manche="manche"
             :totalManches="totalManches"
+            :disabled="marqueurEstimation == null"
             @confirmer="confirmerEstimation"
             @suivant="mancheSuivante"
             @terminer="terminerJeu"
           />
-          <div class="timer-bg">
+          <div v-if="!freeze" class="timer-bg">
             <div class="timer" :style="{ width: (time / maxTime) * 100  + '%'}"></div>
           </div>
           <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
@@ -55,6 +56,7 @@ import GameResult from '@/components/Game/GameResult.vue';
         maxTime: 30,
         time: 30,
         timeInterval: null,
+        freeze: false,
         currentImageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/3c/Vue_de_nuit_de_la_Place_Stanislas_%C3%A0_Nancy.jpg"
       }
     },
@@ -83,6 +85,7 @@ import GameResult from '@/components/Game/GameResult.vue';
         const maxDistance = 1000000
         const ratio = Math.min(this.distance / maxDistance, 1)
         this.pointsManche = Math.round(maxPoints * (1 - ratio))
+        this.freeze = true;
       },
       mancheSuivante() {
         this.scoreGlobal += this.pointsManche
@@ -91,6 +94,9 @@ import GameResult from '@/components/Game/GameResult.vue';
           this.confirme = false
           this.recupererDonneesCible()
           this.$refs.gameMap.reinitialiserCarte()
+          this.time = this.maxTime;
+          this.freeze = false;
+          this.marqueurEstimation = null;
         }
       },
       terminerJeu() {
@@ -100,7 +106,9 @@ import GameResult from '@/components/Game/GameResult.vue';
     mounted() {
       this.recupererDonneesCible();
       this.timeInterval = setInterval(() => {
-        this.time--;
+        if(!this.freeze) {
+          this.time--;
+        }
         if (this.time <= 0)
           clearInterval(this.timeInterval);
       }, 1000);

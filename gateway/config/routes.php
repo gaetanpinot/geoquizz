@@ -12,7 +12,6 @@ return function (\Slim\App $app): \Slim\App {
 
 
     $app->get("[/]", function ($request, $response) {
-
         return JsonRenderer::render($response, 200, ["message" => "Api geoquizz gateway"]);
     });
 
@@ -29,6 +28,9 @@ return function (\Slim\App $app): \Slim\App {
 
     $app->get('/assets/{id}', ApiCMSAction::class);
 
+    $app->options('/{routes:.+}', function ($request, $response, $args) {
+        return $response;
+    });
 
     $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
         throw new HttpNotFoundException($request);
