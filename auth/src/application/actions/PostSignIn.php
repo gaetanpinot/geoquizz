@@ -38,8 +38,8 @@ class PostSignIn extends AbstractAction
             //formatage
 
             $authDto = $this->authProvider->signin(new CredentialsDTO('', $jsonSignIn['password'], $jsonSignIn['email']));
-            $rs = $rs->withHeader('access_token', $authDto->atoken);
-            return JsonRenderer::render($rs, 201, []);
+            /*$rs = $rs->withHeader('access_token', $authDto->atoken);*/
+            return JsonRenderer::render($rs, 201, ['data' => ['access_token' => $authDto->atoken]]);
 
             return $rs;
         } catch (NestedValidationException $e) {
