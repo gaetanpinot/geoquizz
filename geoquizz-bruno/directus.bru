@@ -1,0 +1,19 @@
+meta {
+  name: directus
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{directus}}/items/serie/?fields=*.*
+  body: none
+  auth: bearer
+}
+
+params:query {
+  fields: *.*
+}
+
+auth:bearer {
+  token: {{access-token-directus}}
+}
