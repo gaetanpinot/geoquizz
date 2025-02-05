@@ -23,13 +23,15 @@ class PostConfirmePointAction extends AbstractAction
 
         //get id from url
         $idPartie = $args['id'];
+
         $data = $rq->getParsedBody();
         $lat = $data['lat'];
         $lon = $data['lon'];
+//        $idCoup = $data['id_coup'];
 
-        $dto = new JouerCoupDTO($idPartie, $lat, $lon);
-        $res = $this->coupJoueService->confirmePoint($dto);
-        return JsonRenderer::render($rs, 200, ['coup' => $res]);
+        $dto = new JouerCoupDTO($idPartie,  $lat, $lon);
+        $res = $this->coupJoueService->joueCoup($dto);
+        return JsonRenderer::render($rs, 200, $res);
 
     }
 }

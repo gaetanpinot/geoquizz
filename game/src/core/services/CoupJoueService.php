@@ -19,11 +19,12 @@ class CoupJoueService implements CoupJoueServiceInterface
     }
 
     public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupNextResponseDTO{
+
         $res = $this->coupsJoueRepository->commencerPartie($commencerJeuDTO);
         return $res;
     }
 
-    public function confirmePoint(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO{
+    public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO{
 
         $res = $this->coupsJoueRepository->joueCoup($jouerCoupDTO);
         return $res;

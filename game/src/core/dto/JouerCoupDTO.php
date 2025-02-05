@@ -4,20 +4,20 @@ namespace Geoquizz\Game\core\dto;
 
 class JouerCoupDTO extends DTO
 {
-    private int $idCoup;
+    private int $idPartie;
     private float $lat;
     private float $lon;
 
-    public function __construct(int $idCoup, float $lat, float $lon)
+    public function __construct(int $idPartie, float $lat, float $lon)
     {
-        $this->idCoup = $idCoup;
+        $this->idPartie = $idPartie;
         $this->lat = $lat;
         $this->lon = $lon;
     }
 
-    public function getIdCoup(): int
+    public function getIdPartie(): int
     {
-        return $this->idCoup;
+        return $this->idPartie;
     }
 
     public function getLat(): float
@@ -29,5 +29,4 @@ class JouerCoupDTO extends DTO
     {
         return $this->lon;
     }
-
 }
