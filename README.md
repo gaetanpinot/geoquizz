@@ -38,8 +38,8 @@ docker compose exec auth php bin/console doctrine:fixture:load
 	- [x] Get info utilisateur
 - [ ] Micro service du jeu	
 	- [ ] Création de la partie
-- [ ] Mailer
-	- [ ] queue rabbitmq
-	- [ ] service mailer
+- [x] Mailer
+	- [x] queue rabbitmq
+	- [x] service mailer
 
 

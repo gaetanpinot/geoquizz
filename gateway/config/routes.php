@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Geoquizz\Gateway\application\actions\ApiAuthAction;
 use Geoquizz\Gateway\application\actions\ApiCMSAction;
 use Geoquizz\Gateway\application\actions\ApiGameAction;
+use Geoquizz\Gateway\application\middlewares\AuthnMiddleware;
 use Slim\Exception\HttpNotFoundException;
 use Geoquizz\Gateway\application\renderer\JsonRenderer;
 use Slim\Routing\RouteCollectorProxy;
@@ -18,7 +19,8 @@ return function (\Slim\App $app): \Slim\App {
     $app->post('/login[/]', ApiAuthAction::class);
     $app->post('/signup[/]', ApiAuthAction::class);
 
-    $app->group('/partie', function (RouteCollectorProxy $group) {
+    $app->group('/parties', function (RouteCollectorProxy $group) {
+        $group->get('/{id}', ApiGameAction::class)->add(AuthnMiddleware::class);
         $group->map(['GET','POST','PUT','DELETE','PATCH'], '{routes:.+}', ApiGameAction::class);
     });
 
