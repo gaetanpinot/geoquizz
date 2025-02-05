@@ -40,7 +40,7 @@ import GameResult from '@/components/Game/GameResult.vue';
 
   export default {
     name: 'Game',
-    components: { GameMap, GameControls, GameResult },
+    components: {GameMap, GameControls, GameResult},
     data() {
       return {
         manche: 1,
@@ -67,7 +67,7 @@ import GameResult from '@/components/Game/GameResult.vue';
           this.imageCible = donnees.imageUrl
           this.coordCible = donnees.targetCoords
         } catch {
-          this.coordCible = { lat: 48.692054, lon: 6.184417 }
+          this.coordCible = {lat: 48.692054, lon: 6.184417}
         }
       },
       mettreAJourEstimation(coord) {
@@ -101,7 +101,7 @@ import GameResult from '@/components/Game/GameResult.vue';
       this.recupererDonneesCible();
       this.timeInterval = setInterval(() => {
         this.time--;
-        if(this.time <= 0)
+        if (this.time <= 0)
           clearInterval(this.timeInterval);
       }, 1000);
     }

@@ -13,12 +13,10 @@ $c = $builder->build();
 
 $app = AppFactory::createFromContainer($c);
 
-
 $app->addBodyParsingMiddleware();
 /*$app->addMiddleware($c->get(CorsMiddleware::class));*/
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, false, false);
-;
 
 
 $app = (require_once __DIR__ . '/routes.php')($app);

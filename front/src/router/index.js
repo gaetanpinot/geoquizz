@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Game from '@/views/Game.vue'
 import Connexion from '@/views/Connexion.vue'
+import GameList from '@/views/GameList.vue'
 
 const router = createRouter({
     history: createWebHistory(

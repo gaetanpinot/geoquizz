@@ -21,6 +21,17 @@
     methods: {
       seConnecter() {
         console.log('Connexion:', this.email, this.motDePasse)
+        this.$api.post("/login", {
+          email: this.email,
+          password: this.motDePasse
+        }).then(res => {
+          if (res.status === 200) {
+            localStorage.setItem("token", res.data.token);
+            this.$router.go();
+          } else {
+
+          }
+        })
       }
     }
   }

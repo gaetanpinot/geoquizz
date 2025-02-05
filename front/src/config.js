@@ -1,0 +1,1 @@
+export const BASE_GAME_API = 'http://localhost:3002';  

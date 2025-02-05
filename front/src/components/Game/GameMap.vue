@@ -23,13 +23,14 @@ export default {
       attribution: ''
     }).addTo(this.carte)
 
+    // Pose du marqueur d'estimation lors d'un clic sur la carte (si non confirmé)
     this.carte.on('click', e => {
-      if (this.confirme) return
-      const { lat, lng } = e.latlng
+      if (this.confirme) return;
+      const { lat, lng } = e.latlng;
       if (this.marqueurEstimation) {
-        this.marqueurEstimation.setLatLng([lat, lng])
+        this.marqueurEstimation.setLatLng([lat, lng]);
       } else {
-        this.marqueurEstimation = L.marker([lat, lng]).addTo(this.carte)
+        this.marqueurEstimation = L.marker([lat, lng]).addTo(this.carte);
       }
       this.$emit('marqueur-place', { lat, lon: lng })
     })
@@ -44,12 +45,14 @@ export default {
   },
   methods: {
     afficherResultats(coordCible, coordEstimation) {
+      // Suppression des anciens marqueurs et de la ligne, le cas échéant
       if (this.marqueurCible) {
-        this.carte.removeLayer(this.marqueurCible)
+        this.carte.removeLayer(this.marqueurCible);
       }
       if (this.ligne) {
-        this.carte.removeLayer(this.ligne)
+        this.carte.removeLayer(this.ligne);
       }
+      // Définir une icône rouge pour la cible
       const iconeRouge = L.icon({
         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
@@ -57,12 +60,14 @@ export default {
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
-      })
-      this.marqueurCible = L.marker([coordCible.lat, coordCible.lon], { icon: iconeRouge }).addTo(this.carte)
+      });
+      // Placer le marqueur de la cible
+      this.marqueurCible = L.marker([coordCible.lat, coordCible.lon], { icon: iconeRouge }).addTo(this.carte);
+      // Tracer une ligne entre l'estimation et la cible
       this.ligne = L.polyline(
         [[coordEstimation.lat, coordEstimation.lon], [coordCible.lat, coordCible.lon]],
         { color: 'red' }
-      ).addTo(this.carte)
+      ).addTo(this.carte);
     },
     calculerDistance(coordCible, coordEstimation) {
       const toRad = valeur => (valeur * Math.PI) / 180
@@ -73,22 +78,22 @@ export default {
       const lat2 = toRad(coordCible.lat)
       const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(lat1) * Math.cos(lat2) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2)
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-      return R * c
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
     },
     reinitialiserCarte() {
       if (this.marqueurEstimation) {
-        this.carte.removeLayer(this.marqueurEstimation)
-        this.marqueurEstimation = null
+        this.carte.removeLayer(this.marqueurEstimation);
+        this.marqueurEstimation = null;
       }
       if (this.marqueurCible) {
-        this.carte.removeLayer(this.marqueurCible)
-        this.marqueurCible = null
+        this.carte.removeLayer(this.marqueurCible);
+        this.marqueurCible = null;
       }
       if (this.ligne) {
-        this.carte.removeLayer(this.ligne)
-        this.ligne = null
+        this.carte.removeLayer(this.ligne);
+        this.ligne = null;
       }
     }
   }
