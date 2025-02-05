@@ -49,14 +49,7 @@ export default {
   nav h1 {
     font-size: 30px;
     padding: 6px 12px;
-    border: 2px solid black;
     border-radius: 20px;
-  }
-  nav h1:hover {
-    color: darkorange;
-    border: 2px solid darkorange;
-    border-radius: 20px;
-    transition: all 0.3s;
   }
   nav a {
     color: white;
@@ -83,15 +76,9 @@ export default {
     color: white;
     border: 0;
     border-radius: 20px;
-    border: 2px solid white;
     color: white;
   }
-  nav button:hover {
-    background: white;
-    transition: 0.3s;
-    color: darkorange;
-    border: 2px solid darkorange;
-  }
+
   nav #Game {
     padding: 6px 12px;
     font-size: 14px;

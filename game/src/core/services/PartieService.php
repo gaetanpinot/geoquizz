@@ -4,6 +4,7 @@ namespace Geoquizz\Game\core\services;
 
 use Geoquizz\Game\core\dto\CoupDTO;
 use Geoquizz\Game\core\dto\InputPartieDTO;
+use Geoquizz\Game\core\dto\NewPartieDTO;
 use Geoquizz\Game\core\dto\PartieDTO;
 use Geoquizz\Game\core\services\interfaces\PartieServiceInterface;
 use Geoquizz\Game\infrastructure\entities\Partie;
@@ -61,7 +62,7 @@ class PartieService implements PartieServiceInterface
         return $coupsDTO;
     }
 
-    public function createPartie(InputPartieDTO $partieDTO): PartieDTO
+    public function createPartie(InputPartieDTO $partieDTO): NewPartieDTO
     {
         $partie = new Partie();
         $partie->setIdSerie($partieDTO->id_serie);
@@ -77,7 +78,7 @@ class PartieService implements PartieServiceInterface
         $this->coupJoueRepository->coupsInit($partie->getId(), $serie->getPointSerie());
         $this->notif->notifCreationPartie($partie);
 
-        return new PartieDTO($partie);
+        return new NewPartieDTO($partie->getId());
     }
 }
 

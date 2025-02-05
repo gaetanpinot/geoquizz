@@ -11,6 +11,7 @@ use Geoquizz\Game\application\actions\GetProchainCoupAction;
 use Geoquizz\Game\application\actions\PostConfirmePointAction;
 use Geoquizz\Game\application\actions\PostPartieAction;
 use Geoquizz\Game\application\renderer\JsonRenderer;
+use Geoquizz\Game\middlewares\AuthzPartie;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
 
@@ -29,15 +30,13 @@ return function (\Slim\App $app): \Slim\App {
     $app->group("/parties", function (RouteCollectorProxy $group) {
         $group->get("[/]", GetAllPartiesAction::class);
 
-        $group->get("/{id}[/]", GetPartieAction::class);
+        $group->get("/{id}[/]", GetPartieAction::class)->add(AuthzPartie::class);
 
         $group->get("/{id}/next", GetProchainCoupAction::class);
 
         $group->get("/{id}/coups", GetCoupsPartieAction::class);
 
         $group->post("[/]", PostPartieAction::class);
-
-//        $group->post("/{id}/commencer", PostCommencerPartieAction::class);
 
         $group->post("/{id}/confirmer", PostConfirmePointAction::class);
     });
@@ -50,5 +49,4 @@ return function (\Slim\App $app): \Slim\App {
     });
 
     return $app;
-
 };

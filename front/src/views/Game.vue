@@ -10,11 +10,12 @@
             :confirme="confirme"
             :manche="manche"
             :totalManches="totalManches"
+            :disabled="marqueurEstimation == null"
             @confirmer="confirmerEstimation"
             @suivant="mancheSuivante"
             @terminer="terminerJeu"
           />
-          <div class="timer-bg">
+          <div v-if="!freeze" class="timer-bg">
             <div class="timer" :style="{ width: (time / maxTime) * 100  + '%'}"></div>
           </div>
           <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
@@ -37,12 +38,13 @@
 import GameMap from '@/components/Game/GameMap.vue';
 import GameControls from '@/components/Game/GameControls.vue';
 import GameResult from '@/components/Game/GameResult.vue';
-
+import {GATEWAY_API} from "@/config.js";
   export default {
     name: 'Game',
     components: {GameMap, GameControls, GameResult},
     data() {
       return {
+        ID_PARTIE: -1,
         manche: 1,
         totalManches: 10,
         imageCible: '',
@@ -55,17 +57,22 @@ import GameResult from '@/components/Game/GameResult.vue';
         maxTime: 30,
         time: 30,
         timeInterval: null,
-        currentImageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/3c/Vue_de_nuit_de_la_Place_Stanislas_%C3%A0_Nancy.jpg"
+        freeze: false,
+        currentImageUrl: ""
       }
     },
     methods: {
       async recupererDonneesCible() {
         try {
-          const reponse = await fetch('https://example.com/api/target')
-          if (!reponse.ok) throw new Error("Erreur de récupération")
+          this.$api.get("/parties/" + ID_PARTIE + "/next")
+          if (!reponse.ok)
+            throw new Error("Erreur de récupération")
           const donnees = await reponse.json()
-          this.imageCible = donnees.imageUrl
-          this.coordCible = donnees.targetCoords
+          this.currentImageUrl = `${GATEWAY_API}/assets/${donnees.urlImage}`;
+          this.coordCible = {
+            lat: donnees.lat,
+            lon: donnees.lon
+          }
         } catch {
           this.coordCible = {lat: 48.692054, lon: 6.184417}
         }
@@ -83,6 +90,7 @@ import GameResult from '@/components/Game/GameResult.vue';
         const maxDistance = 1000000
         const ratio = Math.min(this.distance / maxDistance, 1)
         this.pointsManche = Math.round(maxPoints * (1 - ratio))
+        this.freeze = true;
       },
       mancheSuivante() {
         this.scoreGlobal += this.pointsManche
@@ -91,6 +99,9 @@ import GameResult from '@/components/Game/GameResult.vue';
           this.confirme = false
           this.recupererDonneesCible()
           this.$refs.gameMap.reinitialiserCarte()
+          this.time = this.maxTime;
+          this.freeze = false;
+          this.marqueurEstimation = null;
         }
       },
       terminerJeu() {
@@ -98,9 +109,17 @@ import GameResult from '@/components/Game/GameResult.vue';
       }
     },
     mounted() {
-      this.recupererDonneesCible();
+      this.$api.post("/parties").then(res => {
+        console.log(res);
+        if(res.status == 201) {
+          this.ID_PARTIE = res.data.data.id;
+          this.recupererDonneesCible();
+        }
+      })
       this.timeInterval = setInterval(() => {
-        this.time--;
+        if(!this.freeze) {
+          this.time--;
+        }
         if (this.time <= 0)
           clearInterval(this.timeInterval);
       }, 1000);
@@ -128,6 +147,7 @@ import GameResult from '@/components/Game/GameResult.vue';
     width: 70%;
     background-size: cover;
     background-position: center;
+    background-color: #242424;
   }
 
   .info-cible {

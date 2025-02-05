@@ -64,7 +64,7 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         if($coupJoue == null){
             throw new \Exception("Partie terminée");
         }
-        return new CoupNextResponseDTO($coupJoue->getId(), $coupJoue->getIdPoint());
+        return $coupJoue;
     }
 
     public function getAllCoupsFromPartie($idPartie){

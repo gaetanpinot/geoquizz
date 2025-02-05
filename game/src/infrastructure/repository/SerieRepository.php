@@ -7,9 +7,6 @@ use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
 use DI\Container;
 use GuzzleHttp\Client;
 
-/**
- * @extends ServiceEntityRepository<Serie>
- */
 class SerieRepository implements SerieRepositoryInterface
 {
     private Client $guzzle;

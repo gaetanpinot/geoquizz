@@ -3,6 +3,8 @@
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use Geoquizz\Game\core\authz\AuthzPartieService;
+use Geoquizz\Game\core\authz\AuthzPartieServiceInterface;
 use Geoquizz\Game\core\services\CoupJoueService;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
 use Geoquizz\Game\core\services\interfaces\SerieServiceInterface;
@@ -13,12 +15,15 @@ use Geoquizz\Game\infrastructure\entities\CoupJoue;
 use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\interfaces\InfraNotifInterface;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
+use Geoquizz\Game\infrastructure\interfaces\PointRepositoryInterface;
 use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
 use Geoquizz\Game\infrastructure\notif\NotifAMQP;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
 use Geoquizz\Game\infrastructure\repository\PartieRepository;
+use Geoquizz\Game\infrastructure\repository\PointRepository;
 use Geoquizz\Game\infrastructure\repository\SerieRepository;
+use Geoquizz\Game\middlewares\AuthzPartie;
 use Geoquizz\Game\middlewares\CorsMiddleware;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Psr\Container\ContainerInterface;
@@ -56,6 +61,11 @@ return [
         return $c->get(EntityManager::class)->getRepository(CoupJoue::class);
     },
 
+    PointRepositoryInterface::class => DI\get(PointRepository::class),
+    PointRepository::class => function (ContainerInterface $c) {
+        return new PointRepository($c->get('guzzle.directus'));
+    },
+
     'guzzle.directus' => function () {
         return new Client([
             'base_uri' => 'http://directus:8055',
@@ -85,7 +95,6 @@ return [
             $c->get('routing.key')
         );
     },
-
     AMQPStreamConnection::class => function (ContainerInterface $c) {
         return new AMQPStreamConnection(
             $c->get('amqp.host'),
@@ -96,4 +105,9 @@ return [
     },
 
     CorsMiddleware::class => DI\autowire(),
+
+    AuthzPartie::class => DI\autowire(),
+    AuthzPartieServiceInterface::class => DI\get(AuthzPartieService::class),
+    AuthzPartieService::class => DI\autowire(),
+
 ];
