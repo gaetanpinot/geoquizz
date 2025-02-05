@@ -29,8 +29,11 @@
           password: this.motDePasse
         }).then(res => {
           if (res.status === 201) {
+            console.log(res.data.data.access_token)
             localStorage.setItem("token", res.data.data.access_token);
-            this.$router.go("/");
+            setTimeout(() => {
+              this.$router.push("/");
+            }, 500);
           } else {
             toast("Email ou mot de passe incorrect.", {
               autoClose: 1000,

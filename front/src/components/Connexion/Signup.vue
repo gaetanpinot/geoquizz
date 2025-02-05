@@ -3,6 +3,8 @@
     <h2>Inscription</h2>
     <form @submit.prevent="sInscrire">
       <input v-model="email" type="email" placeholder="Email" required>
+      <input v-model="nom" type="text" placeholder="Nom" required>
+      <input v-model="prenom" type="text" placeholder="Prénom" required>
       <input v-model="motDePasse" type="password" placeholder="Mot de passe" required>
       <input v-model="motDePasseConfirmation" type="password" placeholder="Confirmer le mot de passe" required>
       <button type="submit">S'inscrire</button>
@@ -20,7 +22,9 @@ export default {
     return {
       email: '',
       motDePasse: '',
-      motDePasseConfirmation: ''
+      motDePasseConfirmation: '',
+      nom: '',
+      prenom: ''
     }
   },
   methods: {
@@ -34,11 +38,15 @@ export default {
       }
       this.$api.post("/signup", {
         email: this.email,
-        password: this.motDePasse
+        password: this.motDePasse,
+        nom: this.nom,
+        prenom: this.prenom
       }).then(res => {
         if (res.status === 201) {
           localStorage.setItem("token", res.data.data.access_token);
-          this.$router.go("/");
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 500);
         } else {
           toast("Adresse email déjà existante.", {
             autoClose: 1000,
@@ -82,8 +90,7 @@ export default {
   transition: 0.3s;
   color: black;
 }
-.signup input[type="email"],
-.signup input[type="password"] {
+.signup input {
   width: 80%;
   border: 2px solid darkorange;
   border-radius: 20px;
