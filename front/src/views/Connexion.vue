@@ -1,4 +1,5 @@
 <template>
+   <div class="bg"></div>
   <div v-if="isConnected" class="connexion">
     <div  class="switch">
       <button
@@ -62,34 +63,47 @@ export default {
 </script>
 
 <style scoped>
-.connexion {
+
+  .bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-image: url(https://a.travel-assets.com/findyours-php/viewfinder/images/res70/107000/107029-Place-Stanislas.jpg);
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.5);
+    z-index: -1;
+  }
+
+.connexion, .deconnexion {
   text-align: center;
-  border: 2px solid darkorange;
   border-radius: 20px;
   padding: 20px;
-  background: white;
+  background: rgba(24, 24, 24, 0.85);
   width: 400px;
   height: auto;
-  margin: 40px auto;
+  margin: 60px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.deconnexion{
-  text-align: center;
+.deconnexion {
   border: 2px solid red;
-  border-radius: 20px;
-  padding: 20px;
-  background: white;
-  width: 400px;
-  height: 250px;
-  margin: 40px auto;
+  height: auto;
 }
 
 .switch {
   text-align: center;
   margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
- button {
+button {
   margin: 0 10px;
   padding: 8px 16px;
   font-size: 1em;
@@ -99,22 +113,23 @@ export default {
   color: darkorange;
   cursor: pointer;
   transition: all 0.3s ease;
+  min-width: 120px;
 }
 
- button:hover {
+button:hover {
   background: darkorange;
   color: black;
 }
 
- button.active {
+button.active {
   background: darkorange;
   color: black;
   font-weight: bold;
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
-#Logout{
-  margin: 0 10px;
+#Logout {
+  margin: 20px auto;
   padding: 16px 32px;
   font-size: 1em;
   border: 2px solid red;
@@ -125,7 +140,9 @@ export default {
   transition: all 0.3s ease;
   font-size: large;
   font-weight: bold;
-  margin-top: 20px;
+  display: block;
+  width: 80%;
+  max-width: 300px;
 }
 
 #Logout:hover {
@@ -133,6 +150,7 @@ export default {
   color: red;
 }
 
+/* Transition Animations */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.25s ease;
@@ -157,4 +175,45 @@ export default {
   opacity: 0;
   transform: translateY(-20px);
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .connexion, .deconnexion {
+    width: 90%;
+    padding: 15px;
+    margin: 20px auto;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 0.9em;
+    margin: 5px;
+    min-width: 100px;
+  }
+
+  #Logout {
+    padding: 12px 24px;
+    font-size: 1em;
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .connexion, .deconnexion {
+    width: 95%;
+    padding: 10px;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 0.85em;
+    min-width: 80px;
+  }
+
+  #Logout {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+}
+
 </style>
