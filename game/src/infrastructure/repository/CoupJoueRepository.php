@@ -14,13 +14,13 @@ use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
  */
 class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryInterface
 {
-    public function coupsInit(int $idPartie, array $idsPoints): void
+    public function coupsInit(int $idPartie, array $idsPoints, int $nbCoupsTotal): void
     {
         //create 10 coupjoue with idpartie + random image from serie(idserie)
         $em = $this->getEntityManager();
         $partie = $em->getRepository(Partie::class)->find($idPartie);
         shuffle($idsPoints);
-        $points = array_slice($idsPoints, 0, 10);
+        $points = array_slice($idsPoints, 0, $nbCoupsTotal);
         foreach ($points as $point) {
             $coupJoue = new CoupJoue();
             $coupJoue->setPartie($partie);
@@ -65,16 +65,18 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         return $coups;
     }
 
-    public function modifCoupDateJoue(int $idPartie):void
+    public function modifCoupDateJoue(int $idPartie)
     {
+        $dateTime = new \DateTime();
+
         $coup = $this->getCoupByIdPartie($idPartie);
         if($coup->getDateJoue() != null) {
-            return;
+            return $coup->getDateJoue();
         }
 
-        $dateTime = new \DateTime();
         $coup->setDateJoue($dateTime);
         $this->getEntityManager()->flush();
+        return $dateTime;
     }
 
     private function getCoupByIdPartie(int $idPartie): ?object

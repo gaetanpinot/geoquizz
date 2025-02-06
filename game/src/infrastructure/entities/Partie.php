@@ -29,6 +29,9 @@ class Partie
     private ?int $difficulte = null;
 
     #[ORM\Column]
+    private ?int $nbCoupsTotal = null;
+
+    #[ORM\Column]
     private ?int $score = null;
 
     /**
@@ -50,6 +53,18 @@ class Partie
     public function setId(string $id): static
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getNbCoupsTotal(): ?int
+    {
+        return $this->nbCoupsTotal;
+    }
+
+    public function setNbCoupsTotal(int $nbCoupsTotal): static
+    {
+        $this->nbCoupsTotal = $nbCoupsTotal;
 
         return $this;
     }
