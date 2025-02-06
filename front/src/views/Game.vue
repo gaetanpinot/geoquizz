@@ -106,54 +106,124 @@ import GameResult from '@/components/Game/GameResult.vue';
       }, 1000);
     }
   }
-  </script>
+</script>
 
-  <style scoped>
-
-  header {
+<style scoped>
+header {
     background: #181818;
     width: 30%;
-    height: calc(100vh - 70px);
+    height: 100vh;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     border-right: 3px solid #181818;
+    transition: all 0.3s ease;
+    font-size: larger;
   }
 
-  section {
-    display: flex;
+section {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+.game {
+  width: 70%;
+  background-size: cover;
+  background-position: center;
+  transition: all 0.3s ease;
+}
+
+.info-cible {
+  color: white;
+  background: #242424;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.timer-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: black;
+}
+
+.timer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 66%;
+  top: 0;
+  background: darkorange;
+  transition: width 0.3s ease;
+}
+
+/* Responsive Design */
+
+/* Tablettes */
+@media (max-width: 1024px) {
+  header {
+    width: 40%;
+    height: calc(100vh - 70px);
   }
 
   .game {
-    width: 70%;
-    background-size: cover;
-    background-position: center;
+    width: 60%;
   }
 
   .info-cible {
-    color: white;
-    background: #242424;
-    padding: 20px;
-    text-align: center;
-    position: relative;
+    padding: 10px 40px;
+  }
+}
+
+/* Smartphones */
+@media (max-width: 768px) {
+  section {
+    flex-direction: column;
+    overflow: hidden;
+    height: 80%;
+    min-height: fit-content;
+  }
+
+  header {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 3px solid #181818;
+  }
+
+  .game {
+    width: 100%;
+    height: calc(100vh - 200px);
+  }
+
+  .info-cible {
+    padding: 10px 40px;
   }
 
   .timer-bg {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 12px;
-    background: black;
+    height: 8px;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+  .info-cible h2,
+  .info-cible h3,
+  .info-cible p {
+    font-size: 0.9em;
   }
 
-  .timer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 66%;
-    top: 0;
-    background: darkorange;
+  .game {
+    height: calc(100vh - 180px);
   }
+
+  .timer-bg {
+    height: 6px;
+  }
+}
 
   </style>
