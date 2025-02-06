@@ -1,7 +1,7 @@
 <template>
 
   <div id="carte-block" :class="{ fullscreen: isFullscreen }">
-    <button v-if="isMobile && isFullscreen" class="back-button" @click="exitFullscreen">Fermer  </button>
+    <button v-if="isMobile && isFullscreen" class="back-button" @click="exitFullscreen">Fermer </button>
     <button v-if="isMobile && !isFullscreen" class="expand-button" @click="enterFullscreen">Ouvrir la carte</button>
     <div id="carte" class="carte"></div>
   </div>
@@ -30,6 +30,7 @@ export default {
       attribution: ''
     }).addTo(this.carte)
 
+
     this.carte.on('click', e => {
       if (this.confirme || window.innerWidth < 768) return;
       const { lat, lng } = e.latlng;
@@ -41,6 +42,10 @@ export default {
       this.$emit('marqueur-place', { lat, lon: lng })
     })
 
+    const obs = new ResizeObserver(() => {
+      this.carte.invalidateSize();
+    });
+    obs.observe(document.getElementById('carte-block'));
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
   },
@@ -71,6 +76,54 @@ export default {
       this.isFullscreen = false;
       this.handleResize();
       this.carte.invalidateSize();
+    },
+    afficherResultats(coordCible, coordEstimation) {
+      if (this.marqueurCible) {
+        this.carte.removeLayer(this.marqueurCible)
+      }
+      if (this.ligne) {
+        this.carte.removeLayer(this.ligne)
+      }
+      const iconeRouge = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      })
+      this.marqueurCible = L.marker([coordCible.lat, coordCible.lon], { icon: iconeRouge }).addTo(this.carte)
+      this.ligne = L.polyline(
+        [[coordEstimation.lat, coordEstimation.lon], [coordCible.lat, coordCible.lon]],
+        { color: 'red' }
+      ).addTo(this.carte)
+    },
+    calculerDistance(coordCible, coordEstimation) {
+      const toRad = valeur => (valeur * Math.PI) / 180
+      const R = 6371000
+      const dLat = toRad(coordCible.lat - coordEstimation.lat)
+      const dLon = toRad(coordCible.lon - coordEstimation.lon)
+      const lat1 = toRad(coordEstimation.lat)
+      const lat2 = toRad(coordCible.lat)
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1) * Math.cos(lat2) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2)
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+      return R * c
+    },
+    reinitialiserCarte() {
+      if (this.marqueurEstimation) {
+        this.carte.removeLayer(this.marqueurEstimation)
+        this.marqueurEstimation = null
+      }
+      if (this.marqueurCible) {
+        this.carte.removeLayer(this.marqueurCible)
+        this.marqueurCible = null
+      }
+      if (this.ligne) {
+        this.carte.removeLayer(this.ligne)
+        this.ligne = null
+      }
     }
   }
 }
@@ -78,16 +131,15 @@ export default {
 
 <style scoped>
 #carte-block {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
+  position: relative;
+
   transition: all 0.3s ease;
   z-index: 1000;
 }
 
 .carte {
-  height: 300px;
-  width: 300px;
+  height: 400px;
+  width: 100%;
   transition: all 0.5s ease;
   transform-origin: bottom left;
   border: 2px solid darkorange;
@@ -95,7 +147,7 @@ export default {
   overflow: hidden;
 }
 
-@media (min-width: 769px) {
+/*@media (min-width: 769px) {
   .carte:hover {
     width: 80vw;
     height: calc(100vh - 70px);
@@ -111,10 +163,10 @@ export default {
     border: 2px solid darkorange;
     border-radius: 10px;
     overflow: hidden;
-    pointer-events: none; 
+    pointer-events: none;
     visibility: hidden;
   }
-}
+}*/
 
 #carte-block.fullscreen {
   position: fixed;
@@ -131,11 +183,12 @@ export default {
   height: 100vh;
   width: 100%;
   border-radius: 0;
-  pointer-events: auto; 
+  pointer-events: auto;
   visibility: visible;
 }
 
 @media (max-width: 768px) {
+
   .expand-button,
   .back-button {
     display: block;
@@ -166,5 +219,4 @@ export default {
     background: orangered;
   }
 }
-
 </style>

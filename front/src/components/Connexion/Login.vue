@@ -88,4 +88,8 @@
   .login input:focus {
     outline: none;
   }
+
+  h2 {
+    color: white;
+  }
   </style>

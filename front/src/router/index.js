@@ -21,6 +21,7 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
 
   if (to.meta.requiresAuth && !token) {
+    next("/");
     toast("Veuillez vous connecter pour créer une partie.", {
       autoClose: 1000,
       type: "error"
