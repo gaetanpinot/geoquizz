@@ -1,7 +1,7 @@
 <template>
 
   <div id="carte-block" :class="{ fullscreen: isFullscreen }">
-    <button v-if="isMobile && isFullscreen" class="back-button" @click="exitFullscreen">Fermer  </button>
+    <button v-if="isMobile && isFullscreen" class="back-button" @click="exitFullscreen">Fermer </button>
     <button v-if="isMobile && !isFullscreen" class="expand-button" @click="enterFullscreen">Ouvrir la carte</button>
     <div id="carte" class="carte"></div>
   </div>
@@ -30,6 +30,7 @@ export default {
       attribution: ''
     }).addTo(this.carte)
 
+
     this.carte.on('click', e => {
       if (this.confirme || window.innerWidth < 768) return;
       const { lat, lng } = e.latlng;
@@ -41,6 +42,10 @@ export default {
       this.$emit('marqueur-place', { lat, lon: lng })
     })
 
+    const obs = new ResizeObserver(() => {
+      this.carte.invalidateSize();
+    });
+    obs.observe(document.getElementById('carte-block'));
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
   },
@@ -111,7 +116,7 @@ export default {
     border: 2px solid darkorange;
     border-radius: 10px;
     overflow: hidden;
-    pointer-events: none; 
+    pointer-events: none;
     visibility: hidden;
   }
 }
@@ -131,11 +136,12 @@ export default {
   height: 100vh;
   width: 100%;
   border-radius: 0;
-  pointer-events: auto; 
+  pointer-events: auto;
   visibility: visible;
 }
 
 @media (max-width: 768px) {
+
   .expand-button,
   .back-button {
     display: block;
@@ -166,5 +172,4 @@ export default {
     background: orangered;
   }
 }
-
 </style>
