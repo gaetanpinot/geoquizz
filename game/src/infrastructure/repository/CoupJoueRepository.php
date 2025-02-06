@@ -8,17 +8,26 @@ use Geoquizz\Game\infrastructure\entities\CoupJoue;
 use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\exceptions\InfraPartieTermineException;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
+use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 
 /**
  * @extends ServiceEntityRepository<CoupJoue>
  */
 class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryInterface
 {
+    protected PartieInfraInterface $partieRepository;
+
+
+    public function setPartieInfra(PartieInfraInterface $partieRepository): void
+    {
+        $this->partieRepository = $partieRepository;
+    }
+
     public function coupsInit(int $idPartie, array $idsPoints): void
     {
         //create 10 coupjoue with idpartie + random image from serie(idserie)
         $em = $this->getEntityManager();
-        $partie = $em->getRepository(Partie::class)->find($idPartie);
+        $partie = $this->partieRepository->find($idPartie);
         shuffle($idsPoints);
         $points = array_slice($idsPoints, 0, 10);
         foreach ($points as $point) {
@@ -51,7 +60,7 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         }
         return $coupJoue;
     }
-    public function calculerNbCoupsRestant(int $idPartie) : int
+    public function calculerNbCoupsRestant(int $idPartie): int
     {
         $coups = $this->getEntityManager()->getRepository(CoupJoue::class)->findBy(['partie' => $idPartie, 'lat' => null]);
         return count($coups);
@@ -65,7 +74,7 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         return $coups;
     }
 
-    public function modifCoupDateJoue(int $idPartie):void
+    public function modifCoupDateJoue(int $idPartie): void
     {
         $coup = $this->getCoupByIdPartie($idPartie);
         if($coup->getDateJoue() != null) {
@@ -86,4 +95,3 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
             'lat' => null], ['id' => 'ASC']);
     }
 }
-

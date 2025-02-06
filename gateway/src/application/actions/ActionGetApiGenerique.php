@@ -44,6 +44,9 @@ class ActionGetApiGenerique
         if ($rq->hasHeader("Authorization")) {
             $headers['Authorization'] = $rq->getHeader("Authorization")[0];
         }
+        if ($rq->hasHeader("PartieAuthorization")) {
+            $headers['PartieAuthorization'] = $rq->getHeader("PartieAuthorization")[0];
+        }
         $headers['content-type'] = $rq->hasHeader('content-type') ? $rq->getHeader('content-type')[0] : 'application/json';
         $headers['accept'] = $rq->hasHeader('accept') ? $rq->getHeader('accept')[0] : 'application/json';
 

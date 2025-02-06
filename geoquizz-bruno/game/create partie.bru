@@ -16,3 +16,7 @@ body:json {
     "difficulte":1
   }
 }
+
+script:post-response {
+  bru.setVar('partie-token',res.body.token)
+}

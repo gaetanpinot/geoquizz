@@ -1,0 +1,43 @@
+<?php
+
+namespace Geoquizz\Game\middlewares;
+
+use Geoquizz\Game\application\authprovider\AuthInvalidException;
+use Geoquizz\Game\application\authprovider\PartieAuthProviderInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Exception\HttpUnauthorizedException;
+
+class AuthJouerCoupPartie extends MiddlewareInterface
+{
+    private PartieAuthProviderInterface $partieAuth;
+
+    public function __construct(PartieAuthProviderInterface $partieRepository)
+    {
+        $this->partieAuth = $partieRepository;
+    }
+
+    public function process(ServerRequestInterface $rq, RequestHandlerInterface $handler): ResponseInterface
+    {
+        if(!$rq->hasHeader('PartieAuthorization')) {
+            throw new HttpUnauthorizedException($rq, "Token manquant");
+        }
+        $token = $rq->getHeader('PartieAuthorization')[0];
+
+        try {
+            $id_partie_token = $this->partieAuth->getPartieById($token);
+        } catch(AuthInvalidException $e) {
+            throw new HttpUnauthorizedException($rq, "Token invalide");
+        }
+
+        $id = $rq->getQueryParams['id'];
+        $partie = $this->partieAuth->getPartieById($id);
+        if ($partie->getToken() != $token) {
+            throw new ServicePartieException("Token invalide");
+        }
+        $response = $handler->handle($request);
+        return $response;
+    }
+}
