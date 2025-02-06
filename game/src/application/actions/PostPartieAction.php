@@ -7,6 +7,9 @@ use Geoquizz\Game\core\dto\InputPartieDTO;
 use Geoquizz\Game\core\services\interfaces\PartieServiceInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Respect\Validation\Exceptions\NestedValidationException;
+use Respect\Validation\Validator;
+use Slim\Exception\HttpBadRequestException;
 
 class PostPartieAction extends AbstractAction
 {
@@ -20,16 +23,16 @@ class PostPartieAction extends AbstractAction
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
         $data = $rq->getParsedBody();
-//        $data['id_joueur'] = JWT::decode(...
 
-        //test data
-//        $data = [
-//            "id_serie" => 1,
-//            "id_joueur" => "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
-//            "status" => 0,
-//            "difficulte" => 1,
-//            "score" => 0
-//        ];
+        $validation = Validator::key("id_serie", Validator::intType()->notEmpty())
+        ->key("difficulte", Validator::intType()->notEmpty());
+
+        try {
+            $validation->assert($data);
+        } catch(NestedValidationException $e) {
+            throw new HttpBadRequestException($rq, $e->getMessage());
+        }
+        $data['id_joueur'] = $rq->getAttribute('id_utilisateur');
 
         $partieDto = new InputPartieDTO($data);
 
@@ -38,3 +41,4 @@ class PostPartieAction extends AbstractAction
         return JsonRenderer::render($rs, 201, $res);
     }
 }
+

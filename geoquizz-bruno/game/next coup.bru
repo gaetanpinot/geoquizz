@@ -1,0 +1,15 @@
+meta {
+  name: next coup
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{gateway}}/parties/:id/next
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 10
+}

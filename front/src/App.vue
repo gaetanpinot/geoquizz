@@ -20,9 +20,14 @@ export default {
       isConnected: false
     }
   },
-  computed: {
-    accountName() {
-      return (localStorage.getItem('token') ? "Déconnexion" : "Connexion");
+  mounted() {
+    if (localStorage.getItem('token')) {
+      this.isConnected = true;
+      document.getElementById('Acount').innerText = 'Deconnexion';
+      localStorage.removeItem('token');
+    }else{
+      this.isConnected = false;
+      document.getElementById('Acount').innerText = 'Connexion';
     }
   }
 }
@@ -48,8 +53,11 @@ export default {
   }
   nav h1 {
     font-size: 30px;
-    padding: 6px 12px;
     border-radius: 20px;
+  }
+  nav h1:hover {
+    color: darkorange;
+    transition: all 0.3s;
   }
   nav a {
     color: white;

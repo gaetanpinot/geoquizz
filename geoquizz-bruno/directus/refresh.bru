@@ -1,19 +1,18 @@
 meta {
-  name: login directus
+  name: refresh
   type: http
-  seq: 9
+  seq: 2
 }
 
 post {
-  url: {{directus}}/auth/login
+  url: {{directus}}/auth/refresh
   body: json
   auth: none
 }
 
 body:json {
   {
-    "email":"back@mail.com",
-    "password":"1234"
+    "refresh_token":"{{refresh-token-directus}}" 
   }
 }
 

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Geoquizz\Game\core\dto\JouerCoupDTO;
 use Geoquizz\Game\infrastructure\entities\CoupJoue;
 use Geoquizz\Game\infrastructure\entities\Partie;
+use Geoquizz\Game\infrastructure\exceptions\InfraPartieTermineException;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 
 /**
@@ -34,8 +35,8 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
     {
         $coupJoue = $this->getCoupByIdPartie($jCoup->getIdPartie());
 
-        if($coupJoue == null){
-            throw new \Exception("Partie terminée");
+        if($coupJoue == null) {
+            throw new InfraPartieTermineException("Partie terminée");
         }
         $coupJoue->setLat($jCoup->getLat());
         $coupJoue->setLong($jCoup->getLon());
@@ -43,23 +44,30 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         return $coupJoue;
     }
 
-    public function prochainCoup(string $idPartie){
+    public function prochainCoup(string $idPartie)
+    {
         $coupJoue = $this->getCoupByIdPartie($idPartie);
-        if($coupJoue == null){
-            throw new \Exception("Partie terminée");
+        if($coupJoue == null) {
+            throw new InfraPartieTermineException("Partie terminée");
         }
         return $coupJoue;
     }
 
-    public function getAllCoupsFromPartie($idPartie){
+    public function getAllCoupsFromPartie($idPartie)
+    {
         $em = $this->getEntityManager();
         $coups = $em->getRepository(CoupJoue::class)->findBy(['partie' => $idPartie]);
 
         return $coups;
     }
 
-    private function getCoupByIdPartie($idPartie) : object
+    private function getCoupByIdPartie($idPartie): ?object
     {
-        return $coupJoue = $this->getEntityManager()->getRepository(CoupJoue::class)->findOneBy(['partie' => $idPartie, 'lat' => null], ['id' => 'ASC']);
+        return $coupJoue = $this->
+            getEntityManager()->
+            getRepository(CoupJoue::class)->
+            findOneBy(['partie' => $idPartie,
+            'lat' => null], ['id' => 'ASC']);
     }
 }
+

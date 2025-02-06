@@ -1,0 +1,22 @@
+meta {
+  name: jouer Coup
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{gateway}}/parties/:id/confirmer
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 11
+}
+
+body:json {
+  {
+    "lat":"-23",
+    "long":"10"
+  }
+}

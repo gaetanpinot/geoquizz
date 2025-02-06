@@ -49,13 +49,21 @@ export default {
     background: rgba(24, 24, 24, 0.85);
     padding: 50px 100px;
     border-radius: 20px;
+    box-shadow: 0 0 20px black;
+    transition: all 0.3s ease-in-out;
+  }
+  @media screen and (max-width: 700px) {
+    .info {
+      height: 100%;
+      border-radius: 0px;
+    }
+    
+  }
+  .info:hover {
+    transform: translatey(-20px);
   }
 
-  main h1 {
-    font-size: 50px;
-  }
-
-  main p {
+   p {
     font-size: 20px;
   }
 
@@ -69,6 +77,8 @@ export default {
     text-transform: uppercase;
     border-radius: 20px;
     margin: 20px 10px;
+    font-weight: bold;
+
   }
 
   main button:hover {
