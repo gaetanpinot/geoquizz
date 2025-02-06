@@ -28,6 +28,5 @@ class SerieService implements SerieServiceInterface
             $series[] = new SerieDTO($serie);
         }
         return $series;
-
     }
 }

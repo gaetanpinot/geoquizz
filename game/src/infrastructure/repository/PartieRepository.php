@@ -39,29 +39,15 @@ class PartieRepository extends EntityRepository implements PartieInfraInterface
         return $partie;
     }
 
-    //    /**
-    //     * @return Partie[] Returns an array of Partie objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Partie
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function updatePartieScore(int $id, int $score): Partie
+    {
+        $partie = $this->find($id);
+        if ($partie == null) {
+            throw new InfraEntityNotFoundException("Partie not found");
+        }
+        $partie->setScore($score + $partie->getScore());
+        $this->getEntityManager()->flush();
+        return $partie;
+    }
 }
 
