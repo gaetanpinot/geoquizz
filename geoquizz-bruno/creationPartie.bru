@@ -1,0 +1,19 @@
+meta {
+  name: creationPartie
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{gateway}}/parties
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id_serie":"1",
+    "id_joueur" :"e6047a2b-5c07-3568-9a7f-8751c9a1de3f",
+    "difficulte" : "1"
+  }
+}

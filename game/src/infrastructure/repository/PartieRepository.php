@@ -4,7 +4,9 @@ namespace Geoquizz\Game\infrastructure\repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Geoquizz\Game\core\dto\NewPartieDTO;
 use Geoquizz\Game\infrastructure\entities\Partie;
+use Geoquizz\Game\infrastructure\interfaces\InfraEntityNotFoundException;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 
 /**
@@ -12,7 +14,6 @@ use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
  */
 class PartieRepository extends EntityRepository implements PartieInfraInterface
 {
-
     public function __construct(EntityManagerInterface $entityManager)
     {
         parent::__construct($entityManager, $entityManager->getClassMetadata(Partie::class));
@@ -24,13 +25,18 @@ class PartieRepository extends EntityRepository implements PartieInfraInterface
     }
     public function getPartieById(int $id): Partie
     {
+        $partie = $this->find($id);
+        if ($partie == null) {
+            throw new InfraEntityNotFoundException("Partie not found");
+        }
         return $this->find($id);
     }
-    public function createPartie(Partie $partie): void
+    public function createPartie(Partie $partie): Partie
     {
         $em = $this->getEntityManager();
         $em->persist($partie);
         $em->flush();
+        return $partie;
     }
 
     //    /**
@@ -58,3 +64,4 @@ class PartieRepository extends EntityRepository implements PartieInfraInterface
     //        ;
     //    }
 }
+

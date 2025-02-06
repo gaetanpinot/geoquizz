@@ -4,7 +4,7 @@
       <router-link to="/"><h1>GEOQUIZZ</h1></router-link>
       <span>
          <router-link to="/"><button>Accueil</button></router-link>
-         <router-link  to="/Connexion"><button id="Acount"></button></router-link>
+         <router-link  to="/Connexion"><button id="Acount">{{ accountName }}</button></router-link>
          <router-link to="/game"><button id="Game">Jouer</button></router-link>
       </span>
     </nav>
@@ -29,7 +29,6 @@ export default {
       this.isConnected = false;
       document.getElementById('Acount').innerText = 'Connexion';
     }
-    console.log(this.isConnected);
   }
 }
 </script>
@@ -85,15 +84,9 @@ export default {
     color: white;
     border: 0;
     border-radius: 20px;
-    border: 2px solid white;
     color: white;
   }
-  nav button:hover {
-    background: white;
-    transition: 0.3s;
-    color: darkorange;
-    border: 2px solid darkorange;
-  }
+
   nav #Game {
     padding: 6px 12px;
     font-size: 14px;
@@ -109,5 +102,9 @@ export default {
     background: darkorange;
     transition: 0.3s;
     color: white;
+  }
+
+  button {
+    cursor: pointer;
   }
 </style>

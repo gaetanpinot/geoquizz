@@ -1,0 +1,22 @@
+meta {
+  name: refresh
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{directus}}/auth/refresh
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "refresh_token":"{{refresh-token-directus}}" 
+  }
+}
+
+script:post-response {
+  bru.setVar("access-token-directus",res.body.data.access_token);
+  bru.setVar("refresh-token-directus",res.body.data.refresh_token);
+}

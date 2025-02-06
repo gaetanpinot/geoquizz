@@ -26,10 +26,14 @@ class PostCommencerPartieAction extends AbstractAction
         //tmp val
         $uuidUser = "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11";
 
-        $data = $rq->getParsedBody();
-        $idPartie = $data['id_partie'];
+//        $data = $rq->getParsedBody();
+//        $idPartie = $data['id_partie'];
+        //get id from url
+        $idPartie = $args['id'];
+
 
         $res = $this->coupJoueService->commencerPartie(new CommencerJeuDTO($idPartie, $uuidUser));
-        return JsonRenderer::render($rs, 200, ['partie' => $res]);
+
+        return JsonRenderer::render($rs, 200, $res);
     }
 }

@@ -29,7 +29,7 @@ class ValidateTokenAction extends AbstractAction
             $token = $rq->getHeader("Authorization")[0];
             $token = sscanf($token, "Bearer %s");
             if($token == null) {
-                throw new \Exception("Mauvais token");
+                return JsonRenderer::render($rs, 400, ['error' => "Votre authentification n'est pas valide, veuillez vous reconnecter"]);
             }
             $token = $token[0];
             $user = $this->authProvider->getSignedInUser($token);

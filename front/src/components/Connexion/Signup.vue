@@ -3,6 +3,8 @@
     <h2>Inscription</h2>
     <form @submit.prevent="sInscrire">
       <input v-model="email" type="email" placeholder="Email" required>
+      <input v-model="nom" type="text" placeholder="Nom" required>
+      <input v-model="prenom" type="text" placeholder="Prénom" required>
       <input v-model="motDePasse" type="password" placeholder="Mot de passe" required>
       <input v-model="motDePasseConfirmation" type="password" placeholder="Confirmer le mot de passe" required>
       <button type="submit">S'inscrire</button>
@@ -11,26 +13,46 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 export default {
   name: 'Signup',
   data() {
     return {
       email: '',
       motDePasse: '',
-      motDePasseConfirmation: ''
+      motDePasseConfirmation: '',
+      nom: '',
+      prenom: ''
     }
   },
   methods: {
     sInscrire() {
       if (this.motDePasse !== this.motDePasseConfirmation) {
-        alert("Les mots de passe ne correspondent pas.");
+        toast("Les mots de passe ne correspondent pas.", {
+          autoClose: 1000,
+          type: "error"
+        });
         return;
       }
       this.$api.post("/signup", {
         email: this.email,
-        password: this.motDePasse
+        password: this.motDePasse,
+        nom: this.nom,
+        prenom: this.prenom
       }).then(res => {
-        console.log(res);
+        if (res.status === 201) {
+          localStorage.setItem("token", res.data.data.access_token);
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 500);
+        } else {
+          toast("Adresse email déjà existante.", {
+            autoClose: 1000,
+            type: "error"
+          });
+        }
       })
     }
   }
@@ -68,8 +90,7 @@ export default {
   transition: 0.3s;
   color: black;
 }
-.signup input[type="email"],
-.signup input[type="password"] {
+.signup input {
   width: 80%;
   border: 2px solid darkorange;
   border-radius: 20px;

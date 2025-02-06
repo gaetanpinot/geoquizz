@@ -2,11 +2,11 @@
 
 namespace Geoquizz\Game\infrastructure\repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Geoquizz\Game\core\dto\CommencerJeuDTO;
-use Geoquizz\Game\core\dto\CoupResponseDTO;
+use Geoquizz\Game\core\dto\CoupNextResponseDTO;
+use Geoquizz\Game\core\dto\CoupConfirmeResponseDTO;
+use Geoquizz\Game\core\dto\JouerCoupDTO;
 use Geoquizz\Game\infrastructure\entities\CoupJoue;
 use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
@@ -16,31 +16,68 @@ use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
  */
 class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryInterface
 {
-//    public function __construct(ManagerRegistry $registry)
-//    {
-//        parent::__construct($registry, CoupJoue::class);
+    public function coupsInit(int $idPartie, array $idsPoints): void
+    {
+        //create 10 coupjoue with idpartie + random image from serie(idserie)
+        $em = $this->getEntityManager();
+        $partie = $em->getRepository(Partie::class)->find($idPartie);
+        shuffle($idsPoints);
+        $points = array_slice($idsPoints, 0, 10);
+        foreach ($points as $point) {
+            $coupJoue = new CoupJoue();
+            $coupJoue->setPartie($partie);
+            $coupJoue->setIdPoint($point);
+            $em->persist($coupJoue);
+        }
+
+        $em->flush();
+    }
+
+//    public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupNextResponseDTO{
+//        $em = $this->getEntityManager();
+//
+//        //sort all coups by id, get the first one (findOne) with lat = null
+//        $coupJoue = $em->getRepository(CoupJoue::class)->findOneBy(['partie' => $commencerJeuDTO->getIdPartie(), 'lat' => null], ['id' => 'ASC']);
+//        if($coupJoue == null){
+//            throw new \Exception("Partie terminée");
+//        }
+////        $em->flush();
+//        return new CoupNextResponseDTO($coupJoue->getId(), $coupJoue->getIdPoint());
 //    }
 
-    public function coupsInit(){
-        //create 10 void coupjoue with idpartie
+    public function joueCoup(JouerCoupDTO $jCoup)
+    {
 
+        $coupJoue = $this->getCoupByIdPartie($jCoup->getIdPartie());
 
+        if($coupJoue == null){
+            throw new \Exception("Partie terminée");
+        }
+        $coupJoue->setLat($jCoup->getLat());
+        $coupJoue->setLong($jCoup->getLon());
+        $this->getEntityManager()->flush();
+        return $coupJoue;
     }
 
+    public function prochainCoup(string $idPartie){
+        $coupJoue = $this->getCoupByIdPartie($idPartie);
+        if($coupJoue == null){
+            throw new \Exception("Partie terminée");
+        }
+        return $coupJoue;
+    }
 
-    public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupResponseDTO{
-        //create 10 void coupjoue with idpartie
-        //return score (0)  image
-
+    public function getAllCoupsFromPartie($idPartie){
         $em = $this->getEntityManager();
-        $partie = $em->getRepository(Partie::class)->find($commencerJeuDTO->getIdPartie());
-
-
-
-
+        $coups = $em->getRepository(CoupJoue::class)->findBy(['partie' => $idPartie]);
+        //return array of CoupsJoue
+        return $coups;
     }
 
-
+    private function getCoupByIdPartie($idPartie) : object
+    {
+        return $coupJoue = $this->getEntityManager()->getRepository(CoupJoue::class)->findOneBy(['partie' => $idPartie, 'lat' => null], ['id' => 'ASC']);
+    }
 
     //    /**
     //     * @return CoupJoue[] Returns an array of CoupJoue objects

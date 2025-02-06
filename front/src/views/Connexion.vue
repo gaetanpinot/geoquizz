@@ -18,8 +18,9 @@
       <component v-if="isConnected" :is="vueActive" key="vueActive"></component>
     </transition>
   </div>
-  <div v-else class="deconnexion">
-    <button @click="logout" id="Logout">Déconnexion</button>
+  <div v-else class="deconnexion" style="height: auto;">
+    <p>Etes vous sur de vous déconnecter du site ?</p>
+    <button @click="logout" id="Logout">Oui je veux</button>
   </div>
 </template>
 

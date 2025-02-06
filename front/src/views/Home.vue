@@ -2,11 +2,11 @@
   <main>
    <div class="bg"></div>
     <div class="info">
-      <h2>📌 GEOQUIZZ</h2>
+      <h1>📌 GEOQUIZZ</h1>
       <p>Devinez l'endroit d'ou se situe l'image et gagnez des points en faissant appel a votre rapidité!</p>
       <span>
-        <router-link  to="/Connexion"><button>S'inscrire / Se connecter</button></router-link>
-        <router-link to="/game"><button class="create">Créer une partie</button></router-link>
+        <button>S'inscrire</button>
+        <button class="create">Créer une partie</button>
       </span>
     </div>
   </main>
@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   main {
     height: calc(100vh - 70px);
     position: relative;
@@ -41,13 +41,8 @@ export default {
     background-position: center;
     filter: brightness(0.5);
   }
-  h2{
-    font-size: 50px;
-  }
-  .info:hover h2 {
-    color: darkorange;
-  }
-  .info {
+
+  main div.info {
     position: relative;
     text-align: center;
     max-width: 700px;
@@ -72,7 +67,7 @@ export default {
     font-size: 20px;
   }
 
-   button {
+  main button {
     margin-top: 16px;
     padding: 10px 20px;
     background: none;
@@ -86,12 +81,12 @@ export default {
 
   }
 
-   button:hover {
+  main button:hover {
     background: darkorange;
     color: black;
   }
 
-   button.create {
+  main button.create {
     border: 3px solid cadetblue;
     background: cadetblue;
     color: black;

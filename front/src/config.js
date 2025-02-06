@@ -1,1 +1,1 @@
-export const BASE_GAME_API = 'http://localhost:3002';  
+export const GATEWAY_API = 'http://localhost:4000';

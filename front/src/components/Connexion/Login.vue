@@ -10,6 +10,9 @@
   </template>
 
   <script>
+  import { toast } from 'vue3-toastify';
+  import 'vue3-toastify/dist/index.css';
+
   export default {
     name: 'Login',
     data() {
@@ -25,11 +28,17 @@
           email: this.email,
           password: this.motDePasse
         }).then(res => {
-          if (res.status === 200) {
-            localStorage.setItem("token", res.data.token);
-            this.$router.go();
+          if (res.status === 201) {
+            console.log(res.data.data.access_token)
+            localStorage.setItem("token", res.data.data.access_token);
+            setTimeout(() => {
+              this.$router.push("/");
+            }, 500);
           } else {
-
+            toast("Email ou mot de passe incorrect.", {
+              autoClose: 1000,
+              type: "error"
+            });
           }
         })
       }
