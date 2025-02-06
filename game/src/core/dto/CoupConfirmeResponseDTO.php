@@ -4,23 +4,23 @@ namespace Geoquizz\Game\core\dto;
 
 class CoupConfirmeResponseDTO extends DTO
 {
-    protected int $idCoup;
+    protected int $nbCoupRestant;
     protected float $lat;
     protected float $lon;
 
     protected int $score;
 
-    public function __construct(int $idCoup, float $lat, float $lon, int $score)
+    public function __construct(int $nbCoupRestant, float $lat, float $lon, int $score)
     {
-        $this->idCoup = $idCoup;
+        $this->nbCoupRestant = $nbCoupRestant;
         $this->lat = $lat;
         $this->lon = $lon;
         $this->score = $score;
     }
 
-    public function getIdCoup(): int
+    public function getNbCoup(): int
     {
-        return $this->idCoup;
+        return $this->nbCoupRestant;
     }
 
     public function getLat(): float

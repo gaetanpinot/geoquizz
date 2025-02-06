@@ -64,33 +64,44 @@ import {GATEWAY_API} from "@/config.js";
     methods: {
       async recupererDonneesCible() {
         try {
-          this.$api.get("/parties/" + ID_PARTIE + "/next")
-          if (!reponse.ok)
-            throw new Error("Erreur de récupération")
-          const donnees = await reponse.json()
-          this.currentImageUrl = `${GATEWAY_API}/assets/${donnees.urlImage}`;
-          this.coordCible = {
-            lat: donnees.lat,
-            lon: donnees.lon
-          }
-        } catch {
-          this.coordCible = {lat: 48.692054, lon: 6.184417}
+          this.$api.get("/parties/" + this.ID_PARTIE + "/next", {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          }).then(res => {
+            this.currentImageUrl = `${GATEWAY_API}/assets/${res.data.coup.idImage}`;
+          })
+        } catch(error) {
+          console.error(error);
         }
       },
       mettreAJourEstimation(coord) {
         this.marqueurEstimation = coord
       },
-      confirmerEstimation() {
-        if (!this.marqueurEstimation) return
-        this.confirme = true
-        this.$refs.gameMap.afficherResultats(this.coordCible, this.marqueurEstimation)
-        this.distance = this.$refs.gameMap.calculerDistance(this.coordCible, this.marqueurEstimation)
+      confirmerEstimation(timeout = false) {
+        this.$api.post("/parties/" + this.ID_PARTIE + "/confirmer", {
+          lat: timeout ? 0 : this.marqueurEstimation?.lat,
+          long: timeout ? 0 : this.marqueurEstimation?.lon
+        }, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        }).then(res => {
+          console.log(res.data);
 
-        const maxPoints = 1000
-        const maxDistance = 1000000
-        const ratio = Math.min(this.distance / maxDistance, 1)
-        this.pointsManche = Math.round(maxPoints * (1 - ratio))
-        this.freeze = true;
+          this.coordCible = {lat: res.data.lat, lon: res.data.lon}
+
+          this.confirme = true
+
+          if(!timeout) {
+            this.$refs.gameMap.afficherResultats(this.coordCible, this.marqueurEstimation)
+            this.distance = this.$refs.gameMap.calculerDistance(this.coordCible, this.marqueurEstimation)
+          }
+
+          this.pointsManche = res.data.score - this.scoreGlobal;
+          this.freeze = true;
+        })
+
       },
       mancheSuivante() {
         this.scoreGlobal += this.pointsManche
@@ -105,23 +116,21 @@ import {GATEWAY_API} from "@/config.js";
         }
       },
       terminerJeu() {
-        this.scoreGlobal += this.pointsManche
+        alert(this.scoreGlobal);
       }
     },
     mounted() {
-      this.$api.post("/parties").then(res => {
-        console.log(res);
-        if(res.status == 201) {
-          this.ID_PARTIE = res.data.data.id;
-          this.recupererDonneesCible();
-        }
-      })
+      this.ID_PARTIE = localStorage.getItem("currentGameId");
+      this.recupererDonneesCible();
       this.timeInterval = setInterval(() => {
-        if(!this.freeze) {
-          this.time--;
-        }
-        if (this.time <= 0)
-          clearInterval(this.timeInterval);
+        if (!this.freeze) {
+          if(this.time > 0) {
+            this.time--;
+          } else {
+            this.freeze = true;
+            this.confirmerEstimation(true);
+          }
+      }
       }, 1000);
     }
   }

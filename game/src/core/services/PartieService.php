@@ -12,8 +12,6 @@ use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 use Geoquizz\Game\infrastructure\interfaces\InfraNotifInterface;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
-use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
-use Psr\Container\ContainerInterface;
 
 class PartieService implements PartieServiceInterface
 {

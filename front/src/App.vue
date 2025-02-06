@@ -4,30 +4,37 @@
       <router-link to="/"><h1>GEOQUIZZ</h1></router-link>
       <span>
          <router-link to="/"><button>Accueil</button></router-link>
-         <router-link  to="/Connexion"><button id="Acount">{{ accountName }}</button></router-link>
-         <router-link to="/game"><button id="Game">Jouer</button></router-link>
+         <router-link  to="/Historique">
+            <button v-if="isAuthenticated">Historique</button>
+         </router-link>
+         <router-link  to="/Connexion">
+            <button v-if="!isAuthenticated">Connexion</button>
+            <button v-else>Déconnexion</button>
+         </router-link>
+         <button @click="createGame()" id="Game">Jouer</button>
       </span>
     </nav>
+    <CreateGame ref="popup" />
     <router-view />
   </div>
 </template>
 
 <script>
+import CreateGame from './views/CreateGame.vue';
+
 export default {
   name: 'App',
-  data () {
-    return {
-      isConnected: false
+  components: {
+    CreateGame
+  },
+  computed: {
+    isAuthenticated() {
+      return localStorage.getItem('token') !== null;
     }
   },
-  mounted() {
-    if (localStorage.getItem('token')) {
-      this.isConnected = true;
-      document.getElementById('Acount').innerText = 'Deconnexion';
-      localStorage.removeItem('token');
-    }else{
-      this.isConnected = false;
-      document.getElementById('Acount').innerText = 'Connexion';
+  methods: {
+    createGame() {
+      this.$refs.popup.openPopup();
     }
   }
 }
@@ -39,9 +46,11 @@ export default {
     box-sizing: border-box;
     margin: 0;
   }
-  html{
+
+  html {
     background: #f1f1f1;
   }
+
   nav {
     background: #181818;
     padding: 0 20px;
@@ -50,15 +59,20 @@ export default {
     align-items: center;
     justify-content: space-between;
     color: white;
+    position: relative;
+    z-index: 500;
   }
+
   nav h1 {
     font-size: 30px;
     border-radius: 20px;
   }
+
   nav h1:hover {
     color: darkorange;
     transition: all 0.3s;
   }
+
   nav a {
     color: white;
     text-decoration: none;
@@ -77,6 +91,7 @@ export default {
     gap: 14px;
     align-items: center;
   }
+
   nav button {
     padding: 6px 12px;
     font-size: 14px;

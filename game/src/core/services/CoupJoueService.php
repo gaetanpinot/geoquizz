@@ -7,12 +7,10 @@ use Geoquizz\Game\core\dto\CoupNextResponseDTO;
 use Geoquizz\Game\core\dto\JouerCoupDTO;
 use Geoquizz\Game\core\services\exceptions\ServicePartieTermineException;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
-use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\exceptions\InfraPartieTermineException;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 use Geoquizz\Game\infrastructure\interfaces\PointRepositoryInterface;
-use Geoquizz\Game\infrastructure\repository\PartieRepository;
 
 class CoupJoueService implements CoupJoueServiceInterface
 {
@@ -31,21 +29,32 @@ class CoupJoueService implements CoupJoueServiceInterface
 
     public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO{
         try {
+
+            $dateTime = new \DateTime();
             $coupJoue = $this->coupsJoueRepository->joueCoup($jouerCoupDTO);
+
+            $coeffHeure = $this->calculerCoeffHeure($this->calculerHeureCoup($coupJoue->getDateJoue(), $dateTime));
+
+
 
             $point = $this->pointRepository->getPoint($coupJoue->getIdPoint());
 
             $d = self::DISTANCE_BASE * $coupJoue->getPartie()->getDifficulte();
             $scoreDistance = $this->calculerScoreDistance($jouerCoupDTO->getLat(), $jouerCoupDTO->getLon(), $point['lat'], $point['long'], $d);
-            $coeffHeure = 1;
+
 
             $scoreIncrem =  $scoreDistance * $coeffHeure;
 
             $scoreTotal = $this->partieRepository->updatePartieScore($coupJoue->getPartie()->getId(), $scoreIncrem)->getScore();
+
+            $nbCoupsRestant = $this->coupsJoueRepository->calculerNbCoupsRestant($coupJoue->getPartie()->getID());
+            if ($nbCoupsRestant == 0)
+                $this->partieRepository->terminerPartie($coupJoue->getPartie()->getID());
+
         } catch(InfraPartieTermineException $e) {
             throw new ServicePartieTermineException();
         }
-        return new CoupConfirmeResponseDTO($coupJoue->getId(), $point['lat'], $point['long'], $scoreTotal);
+        return new CoupConfirmeResponseDTO($nbCoupsRestant, $point['lat'], $point['long'], $scoreTotal);
     }
 
     public function nextCoup(int $idPartie): CoupNextResponseDTO
@@ -53,6 +62,8 @@ class CoupJoueService implements CoupJoueServiceInterface
         $res = $this->coupsJoueRepository->prochainCoup($idPartie);
 
         $idImage = $this->pointRepository->getPoint($res->getIdPoint())['image'];
+
+        $this->coupsJoueRepository->modifCoupDateJoue($idPartie);
 
         return new CoupNextResponseDTO($res->getId(), $idImage);
     }
@@ -73,8 +84,6 @@ class CoupJoueService implements CoupJoueServiceInterface
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         $distance = $earthRadius * $c;
 
-
-
         if ($distance < $d)
             return 5;
         if ($distance < 2 * $d)
@@ -85,8 +94,7 @@ class CoupJoueService implements CoupJoueServiceInterface
         return 0;
     }
 
-    private function calculerHeureCoup($dateCoup){
-        $dateNow = new \DateTime();
+    private function calculerHeureCoup($dateCoup, $dateNow){
         $diff = $dateNow->diff($dateCoup);
         return $diff->h;
     }
