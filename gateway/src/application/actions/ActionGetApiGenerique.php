@@ -63,10 +63,9 @@ class ActionGetApiGenerique
             //slim met sur certaine requete(liste praticiens) ce header et ça casse tout
             return $responseToubeelib->withoutHeader('Transfer-Encoding');
         } catch (ConnectException | ServerException $e) {
-
-            echo $e->getMessage();
-
-            return $rs;
+            /*echo $e->getMessage();*/
+            /*return $rs;*/
+            return $e->getResponse();
         } catch (ClientException $e) {
             return $e->getResponse();
 

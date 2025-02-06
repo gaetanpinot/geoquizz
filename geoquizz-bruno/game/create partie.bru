@@ -1,0 +1,18 @@
+meta {
+  name: create partie
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{gateway}}/parties
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id_serie":1,
+    "difficulte":1
+  }
+}

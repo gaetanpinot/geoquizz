@@ -6,7 +6,9 @@ use Geoquizz\Game\core\dto\CommencerJeuDTO;
 use Geoquizz\Game\core\dto\CoupConfirmeResponseDTO;
 use Geoquizz\Game\core\dto\CoupNextResponseDTO;
 use Geoquizz\Game\core\dto\JouerCoupDTO;
+use Geoquizz\Game\core\services\exceptions\ServicePartieTermineException;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
+use Geoquizz\Game\infrastructure\exceptions\InfraPartieTermineException;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
 use Geoquizz\Game\infrastructure\interfaces\PointRepositoryInterface;
 use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
@@ -22,20 +24,26 @@ class CoupJoueService implements CoupJoueServiceInterface
         $this->pointRepository = $pointRepository;
     }
 
-//    public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupNextResponseDTO{
-//
-//        $res = $this->coupsJoueRepository->commencerPartie($commencerJeuDTO);
-//        return $res;
-//    }
+    //    public function commencerPartie(CommencerJeuDTO $commencerJeuDTO): CoupNextResponseDTO{
+    //
+    //        $res = $this->coupsJoueRepository->commencerPartie($commencerJeuDTO);
+    //        return $res;
+    //    }
 
-    public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO{
-        $coupJoue = $this->coupsJoueRepository->joueCoup($jouerCoupDTO);
+    public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO
+    {
 
-        $point = $this->pointRepository->getPoint($coupJoue->getIdPoint());
+        try {
+            $coupJoue = $this->coupsJoueRepository->joueCoup($jouerCoupDTO);
+            $point = $this->pointRepository->getPoint($coupJoue->getIdPoint());
+        } catch(InfraPartieTermineException $e) {
+            throw new ServicePartieTermineException();
+        }
         return new CoupConfirmeResponseDTO($coupJoue->getId(), $point['lat'], $point['long'], 0);
     }
 
-    public function nextCoup(int $idPartie): CoupNextResponseDTO{
+    public function nextCoup(int $idPartie): CoupNextResponseDTO
+    {
         $res = $this->coupsJoueRepository->prochainCoup($idPartie);
 
         $idImage = $this->pointRepository->getPoint($res->getIdPoint())['image'];
@@ -43,3 +51,4 @@ class CoupJoueService implements CoupJoueServiceInterface
         return new CoupNextResponseDTO($res->getId(), $idImage);
     }
 }
+

@@ -33,12 +33,17 @@ class AuthzPartie implements MiddlewareInterface
         [, $payload_b64] = explode('.', $token);
         $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($payload_b64));
 
+        $rq = $rq->withAttribute('id_utilisateur', $payload->sub);
         try {
+            if($idPartie === null) {
+                return $next->handle($rq);
+            }
             if($this->authPartieService->isGranted($payload->sub, $idPartie)) {
                 return $next->handle($rq);
             } else {
                 throw new HttpUnauthorizedException($rq, "Accès à la partie $idPartie non authorisé");
             }
+
         } catch(ServiceEntityNotFoundException $e) {
             throw new HttpNotFoundException($rq, $e->getMessage());
         }

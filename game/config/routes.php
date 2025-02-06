@@ -36,7 +36,7 @@ return function (\Slim\App $app): \Slim\App {
 
         $group->get("/{id}/coups", GetCoupsPartieAction::class);
 
-        $group->post("[/]", PostPartieAction::class);
+        $group->post("[/]", PostPartieAction::class)->add(AuthzPartie::class);
 
         $group->post("/{id}/confirmer", PostConfirmePointAction::class);
     });

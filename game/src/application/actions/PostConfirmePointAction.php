@@ -4,6 +4,7 @@ namespace Geoquizz\Game\application\actions;
 
 use Geoquizz\Game\application\renderer\JsonRenderer;
 use Geoquizz\Game\core\dto\JouerCoupDTO;
+use Geoquizz\Game\core\services\exceptions\ServicePartieTermineException;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -26,12 +27,17 @@ class PostConfirmePointAction extends AbstractAction
 
         $data = $rq->getParsedBody();
         $lat = $data['lat'];
-        $lon = $data['lon'];
-//        $idCoup = $data['id_coup'];
+        $lon = $data['long'];
+        //        $idCoup = $data['id_coup'];
 
-        $dto = new JouerCoupDTO($idPartie,  $lat, $lon);
-        $res = $this->coupJoueService->joueCoup($dto);
+        $dto = new JouerCoupDTO($idPartie, $lat, $lon);
+        try {
+            $res = $this->coupJoueService->joueCoup($dto);
+        } catch(ServicePartieTermineException $e) {
+            return JsonRenderer::render($rs, 400, ['error' => 'Partie terminée']);
+        }
         return JsonRenderer::render($rs, 200, $res);
 
     }
 }
+
