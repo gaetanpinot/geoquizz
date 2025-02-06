@@ -87,7 +87,7 @@ import {GATEWAY_API} from "@/config.js";
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         }).then(res => {
-          console.log(res);
+          console.log(res.data);
 
           this.coordCible = {lat: res.data.lat, lon: res.data.lon}
 
@@ -98,7 +98,7 @@ import {GATEWAY_API} from "@/config.js";
             this.distance = this.$refs.gameMap.calculerDistance(this.coordCible, this.marqueurEstimation)
           }
 
-          this.pointsManche = res.data.score - this.pointsManche;
+          this.pointsManche = res.data.score - this.scoreGlobal;
           this.freeze = true;
         })
 

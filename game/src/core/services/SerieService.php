@@ -5,7 +5,6 @@ namespace Geoquizz\Game\core\services;
 use Geoquizz\Game\core\dto\SerieDTO;
 use Geoquizz\Game\core\services\interfaces\SerieServiceInterface;
 use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
-use Geoquizz\Game\infrastructure\repository\SerieRepository;
 
 class SerieService implements SerieServiceInterface
 {

@@ -11,4 +11,6 @@ interface CoupJoueRepositoryInterface
 {
     public function coupsInit(int $idPartie, array $idsPoints): void;
     public function joueCoup(JouerCoupDTO $jouerCoupDTO);
+    public function modifCoupDateJoue(int $idPartie):void;
+    public function calculerNbCoupsRestant(int $idPartie) : int;
 }

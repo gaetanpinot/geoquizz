@@ -49,5 +49,15 @@ class PartieRepository extends EntityRepository implements PartieInfraInterface
         $this->getEntityManager()->flush();
         return $partie;
     }
+
+    public function terminerPartie($idPartie){
+        $partie = $this->find($idPartie);
+        if ($partie == null) {
+            throw new InfraEntityNotFoundException("Partie not found");
+        }
+        $partie->setStatus(0);
+        $this->getEntityManager()->flush();
+        return $partie;
+    }
 }
 

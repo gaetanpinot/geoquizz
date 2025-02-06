@@ -19,8 +19,6 @@ class GetPartieAction extends AbstractAction
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
         $partie = $this->partieService->getPartieById((int)$args["id"]);
-        return JsonRenderer::render($rs, 200, ['partie' => $partie]);
-
+        return JsonRenderer::render($rs, 200, compact('partie'));
     }
-
 }
