@@ -43,14 +43,18 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         $this->getEntityManager()->flush();
         return $coupJoue;
     }
-
-    public function prochainCoup(string $idPartie)
+    public function prochainCoup(int $idPartie)
     {
         $coupJoue = $this->getCoupByIdPartie($idPartie);
         if($coupJoue == null) {
             throw new InfraPartieTermineException("Partie terminée");
         }
         return $coupJoue;
+    }
+    public function calculerNbCoupsRestant(int $idPartie) : int
+    {
+        $coups = $this->getEntityManager()->getRepository(CoupJoue::class)->findBy(['partie' => $idPartie, 'lat' => null]);
+        return count($coups);
     }
 
     public function getAllCoupsFromPartie($idPartie)
@@ -61,7 +65,19 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         return $coups;
     }
 
-    private function getCoupByIdPartie($idPartie): ?object
+    public function modifCoupDateJoue(int $idPartie):void
+    {
+        $coup = $this->getCoupByIdPartie($idPartie);
+        if($coup->getDateJoue() != null) {
+            return;
+        }
+
+        $dateTime = new \DateTime();
+        $coup->setDateJoue($dateTime);
+        $this->getEntityManager()->flush();
+    }
+
+    private function getCoupByIdPartie(int $idPartie): ?object
     {
         return $coupJoue = $this->
             getEntityManager()->
