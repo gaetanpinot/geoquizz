@@ -5,8 +5,10 @@
       <h1>📌 GEOQUIZZ</h1>
       <p>Devinez l'endroit d'ou se situe l'image et gagnez des points en faissant appel a votre rapidité!</p>
       <span>
-        <button>S'inscrire</button>
-        <button class="create">Créer une partie</button>
+        <router-link to="/Connexion">
+          <button>S'inscrire</button>
+        </router-link>
+        <button @click="createGame()" class="create">Créer une partie</button>
       </span>
     </div>
   </main>
@@ -57,7 +59,7 @@ export default {
       height: 100%;
       border-radius: 0px;
     }
-    
+
   }
   .info:hover {
     transform: translatey(-20px);
