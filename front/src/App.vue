@@ -4,6 +4,9 @@
       <router-link to="/"><h1>GEOQUIZZ</h1></router-link>
       <span>
          <router-link to="/"><button>Accueil</button></router-link>
+         <router-link  to="/Historique">
+            <button v-if="isAuthenticated">Historique</button>
+         </router-link>
          <router-link  to="/Connexion">
             <button v-if="!isAuthenticated">Connexion</button>
             <button v-else>Déconnexion</button>
