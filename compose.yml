@@ -1,10 +1,18 @@
 services:
+  front-web:
+    build:
+      context: ./build
+      dockerfile: nginx.Dockerfile
+    volumes:
+      - ./front/dist:/www/web
+    ports:
+      - $PORT_FRONT:80
+
   front:
     image: node:latest
     volumes:
       - ./front:/app
-    ports:
-      - $PORT_FRONT:3000
+    working_dir: /app
   
   directus:
     image: directus/directus
