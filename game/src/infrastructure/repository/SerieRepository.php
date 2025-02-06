@@ -23,7 +23,6 @@ class SerieRepository implements SerieRepositoryInterface
 
     }
 
-
     public function findById($id)
     {
         $response = $this->guzzle->get(
