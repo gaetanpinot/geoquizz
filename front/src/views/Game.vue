@@ -70,6 +70,8 @@ import {GATEWAY_API} from "@/config.js";
             }
           }).then(res => {
             this.currentImageUrl = `${GATEWAY_API}/assets/${res.data.coup.idImage}`;
+            //this.time = res.data.coup.tempsRestant;
+            //this.manche = this.totalManches - res.data.coup.nbCoupsRestants;
           })
         } catch(error) {
           console.error(error);
@@ -87,8 +89,6 @@ import {GATEWAY_API} from "@/config.js";
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         }).then(res => {
-          console.log(res.data);
-
           this.coordCible = {lat: res.data.lat, lon: res.data.lon}
 
           this.confirme = true
