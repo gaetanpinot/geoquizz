@@ -15,6 +15,8 @@ use Geoquizz\Game\infrastructure\interfaces\PointRepositoryInterface;
 class CoupJoueService implements CoupJoueServiceInterface
 {
     private const DISTANCE_BASE = 1000;
+    private const NB_SECONDES = 30;
+
     protected CoupJoueRepositoryInterface $coupsJoueRepository;
     protected PointRepositoryInterface $pointRepository;
 
@@ -35,37 +37,38 @@ class CoupJoueService implements CoupJoueServiceInterface
 
             $coeffHeure = $this->calculerCoeffHeure($this->calculerHeureCoup($coupJoue->getDateJoue(), $dateTime));
 
-
-
             $point = $this->pointRepository->getPoint($coupJoue->getIdPoint());
 
             $d = self::DISTANCE_BASE * $coupJoue->getPartie()->getDifficulte();
             $scoreDistance = $this->calculerScoreDistance($jouerCoupDTO->getLat(), $jouerCoupDTO->getLon(), $point['lat'], $point['long'], $d);
 
-
             $scoreIncrem =  $scoreDistance * $coeffHeure;
 
             $scoreTotal = $this->partieRepository->updatePartieScore($coupJoue->getPartie()->getId(), $scoreIncrem)->getScore();
 
-            $nbCoupsRestant = $this->coupsJoueRepository->calculerNbCoupsRestant($coupJoue->getPartie()->getID());
-            if ($nbCoupsRestant == 0)
-                $this->partieRepository->terminerPartie($coupJoue->getPartie()->getID());
-
         } catch(InfraPartieTermineException $e) {
             throw new ServicePartieTermineException();
         }
-        return new CoupConfirmeResponseDTO($nbCoupsRestant, $point['lat'], $point['long'], $scoreTotal);
+        return new CoupConfirmeResponseDTO($point['lat'], $point['long'], $scoreTotal);
     }
 
     public function nextCoup(int $idPartie): CoupNextResponseDTO
     {
+        $now = new \DateTime();
+        $date = $this->coupsJoueRepository->modifCoupDateJoue($idPartie);
+
+        //diff en secondes
+        $diff =  ($date->getTimestamp() + self::NB_SECONDES) - $now->getTimestamp();
+
         $res = $this->coupsJoueRepository->prochainCoup($idPartie);
 
         $idImage = $this->pointRepository->getPoint($res->getIdPoint())['image'];
 
-        $this->coupsJoueRepository->modifCoupDateJoue($idPartie);
+        $nbCoupsRestant = $this->coupsJoueRepository->calculerNbCoupsRestant($idPartie);
+        if ($nbCoupsRestant == 0)
+            $this->partieRepository->terminerPartie($idPartie);
 
-        return new CoupNextResponseDTO($res->getId(), $idImage);
+        return new CoupNextResponseDTO($nbCoupsRestant, $idImage, $diff);
     }
 
 
@@ -95,12 +98,12 @@ class CoupJoueService implements CoupJoueServiceInterface
     }
 
     private function calculerHeureCoup($dateCoup, $dateNow){
-        $diff = $dateNow->diff($dateCoup);
-        return $diff->h;
+        //diff en secondes
+        $diff =  $dateNow->getTimestamp() - $dateCoup->getTimestamp();
+        return $diff;
     }
 
     private function calculerCoeffHeure($heureCoup){
-
         if ($heureCoup < 5)
             $coeff = 4;
         else if ($heureCoup < 10)

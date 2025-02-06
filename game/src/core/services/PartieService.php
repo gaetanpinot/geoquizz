@@ -15,6 +15,7 @@ use Geoquizz\Game\infrastructure\interfaces\SerieRepositoryInterface;
 
 class PartieService implements PartieServiceInterface
 {
+    private const NB_MANCHES = 10;
     protected PartieInfraInterface $partieRepository;
     protected CoupJoueRepositoryInterface $coupJoueRepository;
     protected InfraNotifInterface $notif;
@@ -68,12 +69,12 @@ class PartieService implements PartieServiceInterface
         $partie->setStatus($partieDTO->status);
         $partie->setDifficulte($partieDTO->difficulte);
         $partie->setScore($partieDTO->score);
+        $partie->setNbCoupsTotal(floor(self::NB_MANCHES / $partieDTO->difficulte));
 
         $this->partieRepository->createPartie($partie);
 
-
         $serie = $this->serieRepository->findById($partieDTO->id_serie);
-        $this->coupJoueRepository->coupsInit($partie->getId(), $serie->getPointSerie());
+        $this->coupJoueRepository->coupsInit($partie->getId(), $serie->getPointSerie(), $partie->getNbCoupsTotal());
         $this->notif->notifCreationPartie($partie);
 
         return new NewPartieDTO($partie->getId());

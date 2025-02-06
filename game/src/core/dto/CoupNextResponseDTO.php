@@ -2,20 +2,29 @@
 
 namespace Geoquizz\Game\core\dto;
 
+use Respect\Validation\Rules\DateTime;
+
 class CoupNextResponseDTO extends DTO
 {
-    protected int $idCoup;
+    protected int $nbCoupsRestants;
     protected string $idImage;
 
-    public function __construct(int $idCoup,string $idImage)
+    protected int $secondesRestantes;
+    public function __construct(int $nbCoupsRestants,string $idImage, $secondesRestantes)
     {
-        $this->idCoup = $idCoup;
+        $this->nbCoupsRestants = $nbCoupsRestants;
         $this->idImage = $idImage;
+        $this->secondesRestantes = $secondesRestantes;
     }
 
-    public function getIdCoup(): int
+    public function getSecondesRestantes(): int
     {
-        return $this->idCoup;
+        return $this->secondesRestantes;
+    }
+
+    public function getNbCoupRestants(): int
+    {
+        return $this->nbCoupsRestants;
     }
 
     public function getIdImage(): string
