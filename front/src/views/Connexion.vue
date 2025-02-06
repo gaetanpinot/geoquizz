@@ -103,6 +103,10 @@ export default {
   flex-wrap: wrap;
 }
 
+.deconnexion p {
+  color: white;
+}
+
 button {
   margin: 0 10px;
   padding: 8px 16px;
