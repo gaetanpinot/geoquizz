@@ -21,7 +21,6 @@ export default {
       marqueurCible: null,
       ligne: null,
       isFullscreen: false,
-      isMobile: window.innerWidth <= 768
     }
   },
   mounted() {
@@ -52,9 +51,13 @@ export default {
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
   },
+  computed: {
+    isMobile() {
+      return window.innerWidth <= 768;
+    }
+  },
   methods: {
     handleResize() {
-      this.isMobile = window.innerWidth <= 768;
       if (this.isMobile && !this.isFullscreen) {
         this.carte.dragging.disable();
         this.carte.touchZoom.disable();
