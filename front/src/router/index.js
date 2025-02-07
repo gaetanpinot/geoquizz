@@ -5,6 +5,7 @@ import Connexion from '@/views/Connexion.vue'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import Historique from "@/views/Historique.vue";
+import {useAuthStore} from "@/stores/pinia.js";
 
 const router = createRouter({
     history: createWebHistory(

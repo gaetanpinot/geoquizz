@@ -5,7 +5,7 @@
       <div>
         <div v-for="game in games" :key="game.id" class="game-item">
           <p>
-            {{ new Date(game.created_at) || "Date inconnue" }} - Série {{ series.filter(item => item.id === game.id_serie)[0].nom }} - {{ game.score }} points
+            {{ new Date(game.created_at * 1000) || "Date inconnue" }} - Série {{ series?.filter(item => item.id === game.id_serie)[0].nom }} - {{ game.score }} points
             <button v-if="game.status === 1" @click="replayGame(game)">Continuer</button>
             <button v-else @click="replayGame(game)">Rejouer</button>
           </p>
@@ -16,7 +16,6 @@
     <div class="history">
       <h2>Meilleurs Scores par Série</h2>
       <div v-for="(score, serieId) in highScoresPerSeries" :key="serieId">
-        {{ series.filter(serie => serie.id === serieId)}}
         <p>Série {{ serieId }} : {{ score }} points</p>
       </div>
     </div>
@@ -59,6 +58,7 @@ export default {
           scores[game.id_serie] = game.score;
         }
       });
+      console.log(scores)
       return scores;
     },
   },
@@ -74,9 +74,8 @@ export default {
         });
     },
     fetchSeries() {
-      this.$api.get('/series').then(res => {
-        this.series = res.data.series;
-
+      this.$api.get('/items/serie').then(res => {
+        this.series = res.data.data;
       });
     },
     replayGame(game) {
