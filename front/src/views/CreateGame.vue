@@ -10,7 +10,7 @@
         </select>
       </div>
       <div>
-        <p>Niveau de difficulté: {{difficulty}}</p>
+        <p>Niveau de difficulté: {{getDifficulty}}</p>
         <input v-model="difficulty" type="range" min="1" max="5"/>
       </div>
       <button @click="createGame()">Créer</button>
@@ -71,6 +71,21 @@ export default {
     this.$api.get("/series").then(res => {
       this.series = res.data.series;
     })
+  },
+  computed: {
+    getDifficulty() {
+      if(this.difficulty === "1")
+        return "Difficile";
+      else if(this.difficulty === "2")
+        return "Moyen";
+      else if(this.difficulty === "3")
+        return "Intermédiere";
+      else if(this.difficulty === "4")
+        return "Facile";
+
+      return "Débutant";
+
+    }
   }
 };
 </script>

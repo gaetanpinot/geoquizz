@@ -38,7 +38,8 @@
         <p>Score Total: {{ scoreGlobal }}</p>
         <p>Manches: {{ totalManches }}</p>
         <p>Score par Manche: {{ scoreGlobal / totalManches }}</p>
-        <button>Quitter</button>
+        <button @click="$router.push('/')">Quitter</button>
+        <button>Rejouer</button>
       </div>
     </section>
   </template>
@@ -69,7 +70,9 @@ import {GATEWAY_API} from "@/config.js";
         timeInterval: null,
         freeze: false,
         currentImageUrl: "",
-        partieFini: false
+        partieFini: false,
+        difficulte: 1,
+        serieId: 1
       }
     },
     methods: {
@@ -81,10 +84,11 @@ import {GATEWAY_API} from "@/config.js";
               'PartieAuthorization': `${this.TOKEN_PARTIE}`
             }
           }).then(res => {
+            console.log(res.data);
             this.currentImageUrl = `${GATEWAY_API}/assets/${res.data.coup.idImage}`;
+            this.totalManches = res.data.coup.nbCoupsTotal;
             this.time = res.data.coup.secondesRestantes;
-            this.manche = this.totalManches - res.data.coup.nbCoupsRestants;
-            this.totalManches = res.data.nbCoupsTotal;
+            this.manche = this.totalManches - res.data.coup.nbCoupsRestants + 1;
           })
         } catch(error) {
           console.error(error);
@@ -223,13 +227,14 @@ section {
   color: white;
   border: 0;
   border-radius: 20px;
-  border: 2px solid #ff0000;
-  color: #ff0000;
+  border: 2px solid darkorange;
+  color: darkorange;
   margin-top: 20px;
+  margin-right: 10px;
 }
 
 .result button:hover {
-  background: #ff0000;
+  background: darkorange;
   color: black;
 }
 

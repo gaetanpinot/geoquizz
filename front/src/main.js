@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import apiPlugin from './plugins/api';
 
 import {GATEWAY_API} from './config.js';
