@@ -5,8 +5,8 @@
       <div>
         <div v-for="game in games" :key="game.id" class="game-item">
           <p>
-            {{ new Date(game.created_at * 1000) || "Date inconnue" }} - Série {{ series?.filter(item => item.id === game.id_serie)[0].nom }} - {{ game.score }} points
-            <button v-if="game.status === 1" @click="replayGame(game)">Continuer</button>
+            {{ new Date(game.created_at * 1000).toLocaleString() || "Date inconnue" }} - Série {{ series?.filter(item => item.id === game.id_serie)[0].nom }} - {{ game.score }} points
+            <button v-if="game.status === 1" @click="continueGame(game)">Continuer</button>
             <button v-else @click="replayGame(game)">Rejouer</button>
           </p>
         </div>
@@ -93,6 +93,19 @@ export default {
         }
       }).then(res => {
         this.authStore.setIdPartie(res.data.id);
+        this.authStore.setTokenPartie(res.data.token);
+        setTimeout(() => {
+          this.$router.push("/game");
+        }, 500);
+      })
+    },
+    continueGame(game) {
+      this.$api.get("/parties/" + game.id + "/continuer", {
+        headers: {
+          'Authorization': `Bearer ${this.authStore.tokenUser}`
+        }
+      }).then(res => {
+        this.authStore.setIdPartie(game.id);
         this.authStore.setTokenPartie(res.data.token);
         setTimeout(() => {
           this.$router.push("/game");
