@@ -16,7 +16,7 @@
     <div class="history">
       <h2>Meilleurs Scores par Série</h2>
       <div v-for="(score, serieId) in highScoresPerSeries" :key="serieId">
-        <p>Série {{ serieId }} : {{ score }} points</p>
+        <p>Série {{  seriesMap[serieId] || "Série inconnue"  }} : {{ score }} points</p>
       </div>
     </div>
     <br>
@@ -51,6 +51,13 @@ export default {
     authStore() {
       return useAuthStore();
     },
+    seriesMap() {
+      const map = {};
+      this.series.forEach(item => {
+        map[item.id] = item.nom;
+      });
+      return map;
+    },
     highScoresPerSeries() {
       const scores = {};
       this.games.forEach((game) => {
@@ -58,8 +65,7 @@ export default {
           scores[game.id_serie] = game.score;
         }
       });
-      console.log(scores)
-      return scores;
+    return scores;
     },
   },
   methods: {
@@ -70,7 +76,6 @@ export default {
           },
         }).then(res => {
           this.games = res.data;
-          console.log(this.games)
         });
     },
     fetchSeries() {

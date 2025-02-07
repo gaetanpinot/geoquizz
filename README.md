@@ -1,7 +1,7 @@
 # SAE Geoquizz
 ## Groupe
 - Sasha DAZA
-- Mathis PERROT
+- Mathis PEROT
 - Gaëtan PINOT
 - Yehor PRYKHODKO
 
@@ -23,6 +23,3 @@ mailer.env
 
 Executer `./install.bash`  
 Puis créer la base de donnée avec `./db.sh`
-
-
-
