@@ -26,7 +26,7 @@ return function (\Slim\App $app): \Slim\App {
     $app->get('/historique[/]', ApiGameAction::class)->add(AuthnMiddleware::class);
 
     $app->group('/parties', function (RouteCollectorProxy $group) {
-        $group->get('/{id}', ApiGameAction::class)->add(AuthnMiddleware::class);
+        $group->get('/{id}', ApiGameAction::class);
         $group->map(['GET','POST','PUT','DELETE','PATCH'], '{routes:.*}', ApiGameAction::class);
     });
 

@@ -19,7 +19,7 @@ class Partie
     #[ORM\Column]
     private ?int $id_serie = null;
 
-    #[ORM\Column(type: Types::GUID)]
+    #[ORM\Column(type: Types::GUID, nullable: true)]
     private ?string $id_joueur = null;
 
     #[ORM\Column]
@@ -85,7 +85,7 @@ class Partie
         return $this->id_joueur;
     }
 
-    public function setIdJoueur(string $id_joueur): static
+    public function setIdJoueur(?string $id_joueur): static
     {
         $this->id_joueur = $id_joueur;
 
