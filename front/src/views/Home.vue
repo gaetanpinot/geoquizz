@@ -12,11 +12,22 @@
       </span>
     </div>
   </main>
+  <CreateGame ref="popup" />
 </template>
 
 <script>
+import CreateGame from "@/views/CreateGame.vue";
+
 export default {
-  name: 'Home'
+  name: 'Home',
+  components: {
+    CreateGame
+  },
+  methods: {
+    createGame() {
+      this.$refs.popup.openPopup();
+    }
+  }
 }
 </script>
 
