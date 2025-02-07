@@ -29,6 +29,15 @@ export default {
       attribution: ''
     }).addTo(this.carte)
 
+    const iconeBleue = L.icon({
+      iconUrl:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    })
 
     this.carte.on('click', e => {
       if (this.confirme || window.innerWidth < 768) return;
@@ -36,7 +45,7 @@ export default {
       if (this.marqueurEstimation) {
         this.marqueurEstimation.setLatLng([lat, lng]);
       } else {
-        this.marqueurEstimation = L.marker([lat, lng]).addTo(this.carte);
+        this.marqueurEstimation = L.marker([lat, lng], { icon: iconeBleue }).addTo(this.carte);
       }
       this.$emit('marqueur-place', { lat, lon: lng })
     })
