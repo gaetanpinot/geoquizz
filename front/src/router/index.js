@@ -7,6 +7,8 @@ import 'vue3-toastify/dist/index.css';
 import Historique from "@/views/Historique.vue";
 import { useAuthStore } from '@/stores/pinia';
 
+import { useAuthStore } from '@/stores/pinia';
+
 const router = createRouter({
     history: createWebHistory(
         import.meta.env.BASE_URL),
@@ -22,9 +24,7 @@ export default router
 
 router.beforeEach((to, from, next) => {
   const store = useAuthStore();
-  const token = store.tokenUser
-  console.log(store.tokenUser);
-
+  const token = store.tokenUser;
   if (to.meta.requiresAuth && !token) {
     toast("Veuillez vous connecter pour accéder ici.", {
       autoClose: 1000,
