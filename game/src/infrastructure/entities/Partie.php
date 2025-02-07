@@ -130,12 +130,12 @@ class Partie
 
     public function getCoupsTotal(): ?int
     {
-        return $this->nbCoupsTotal;
+        return $this->nb_coups_total;
     }
 
-    public function setCoupsTotal(int $nbCoupsTotal): static
+    public function setCoupsTotal(int $nb_coups_total): static
     {
-        $this->nbCoupsTotal = $nbCoupsTotal;
+        $this->nb_coups_total = $nb_coups_total;
 
         return $this;
     }
