@@ -20,7 +20,6 @@ class GetPartiesUserAction extends AbstractAction
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
         $user =  $rq->getAttribute('id_utilisateur');
-        var_dump($user);
         $parties = $this->partieService->getPartiesByUser($user);
 
         return JsonRenderer::render($rs, 200, $parties);

@@ -25,9 +25,9 @@ return function (\Slim\App $app): \Slim\App {
         return JsonRenderer::render($response, 200, ["message" => "Api game"]);
     });
 
-    $app->group("/series", function (RouteCollectorProxy $group) {
-        $group->get("[/]", GetAllSeriesAction::class);
-    });
+    /*$app->group("/series", function (RouteCollectorProxy $group) {*/
+    /*    $group->get("[/]", GetAllSeriesAction::class);*/
+    /*});*/
 
     $app->group("/parties", function (RouteCollectorProxy $group) {
         $group->get("[/]", GetAllPartiesAction::class);
