@@ -7,12 +7,14 @@ services:
       - ./front/dist:/www/web
     ports:
       - $PORT_FRONT:80
+    restart: always
 
   front:
     image: node:latest
     volumes:
       - ./front:/app
     working_dir: /app
+    restart: always
   
   directus:
     image: directus/directus
@@ -23,6 +25,7 @@ services:
       - ./uploads:/directus/uploads
       - ./extensions:/directus/extensions
     env_file: directus.env
+    restart: always
 
   gateway:
     image: canals/php:8.3
@@ -33,11 +36,12 @@ services:
       - ./gateway:/var/www
       - ./sql:/var/sql
     working_dir: /var/www
+    restart: always
 
   auth:
     image: canals/php:8.3
     ports:
-      - $PORT_AUTH:80
+      # - $PORT_AUTH:80
     volumes:
       - ./auth/public:/var/www/html
       - ./auth:/var/www
@@ -46,11 +50,12 @@ services:
     env_file: 
       - db.env
       - auth.env
+    restart: always
 
   game:
     image: canals/php:8.3
     ports:
-      - $PORT_GAME:80
+      # - $PORT_GAME:80
     volumes:
       - ./game/public:/var/www/html
       - ./game:/var/www
@@ -60,6 +65,7 @@ services:
       - db.env
       - ./amqp.env
       - ./back.env
+    restart: always
 
   auth.db:
     image: 'postgres:latest'
@@ -68,6 +74,7 @@ services:
     volumes:
       - ./sql:/var/sql'
     env_file: db.env
+    restart: always
 
   game.db:
     image: 'postgres:latest'
@@ -76,11 +83,12 @@ services:
     volumes:
       - ./sql:/var/sql'
     env_file: db.env
+    restart: always
 
   queue:
     image: rabbitmq:4-management
     ports:
-      - $PORT_QUEUE:15672
+      # - $PORT_QUEUE:15672
     environment:
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=toto
@@ -89,6 +97,7 @@ services:
       interval: 8s
       timeout: 30s
       retries: 3
+    restart: always
 
   mailer:
     image: canals/php:8.3
@@ -102,6 +111,7 @@ services:
     depends_on:
       queue:
         condition: service_healthy
+    restart: always
 
   mailcatcher:
     build:
@@ -109,4 +119,5 @@ services:
       dockerfile: mailcatcher.Dockerfile
     ports:
       - $PORT_MAILCATCHER:1080
-      - 1025:1025
+      # - 1025:1025
+    restart: always
