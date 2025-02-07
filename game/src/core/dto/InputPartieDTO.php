@@ -5,7 +5,7 @@ namespace Geoquizz\Game\core\dto;
 class InputPartieDTO extends DTO
 {
     protected int $id_serie;
-    protected string $id_joueur;
+    protected ?string $id_joueur;
     protected int $status;
     protected int $difficulte;
     protected int $score;
@@ -24,3 +24,4 @@ class InputPartieDTO extends DTO
         return property_exists($this, $name) ? $this->$name : throw new \Exception(static::class . ": Property $name does not exist");
     }
 }
+

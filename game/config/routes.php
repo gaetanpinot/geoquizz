@@ -31,7 +31,7 @@ return function (\Slim\App $app): \Slim\App {
     $app->group("/parties", function (RouteCollectorProxy $group) {
         $group->get("[/]", GetAllPartiesAction::class);
 
-        $group->get("/{id}[/]", GetPartieAction::class)->add(AuthzPartie::class);
+        $group->get("/{id}[/]", GetPartieAction::class);
 
         $group->get("/{id}/next", GetProchainCoupAction::class)->add(AuthJouerCoupPartie::class);
 
