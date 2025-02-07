@@ -1,7 +1,7 @@
 <template>
    <div class="bg"></div>
-  <div v-if="isConnected" class="connexion">
-    <div  class="switch">
+  <div v-if="!authStore.isAuthenticated" class="connexion">
+    <div class="switch">
       <button
         :class="{ active: vueActive === 'Login' }"
         @click="switchView('Login')">
@@ -15,7 +15,7 @@
     </div>
 
     <transition name="fade-slide" mode="out-in">
-      <component v-if="isConnected" :is="vueActive" key="vueActive"></component>
+      <component v-if="!authStore.isAuthenticated" :is="vueActive" key="vueActive"></component>
     </transition>
   </div>
   <div v-else class="deconnexion" style="height: auto;">
@@ -27,6 +27,7 @@
 <script>
 import Login from '@/components/Connexion/Login.vue';
 import Signup from '@/components/Connexion/Signup.vue';
+import { useAuthStore } from '@/stores/pinia';
 
 export default {
   name: 'Connexion',
@@ -34,7 +35,6 @@ export default {
   data() {
     return {
       vueActive: 'Login',
-      isConnected: false
     };
   },
   mounted() {
@@ -42,23 +42,23 @@ export default {
     if (vueFromQuery === 'Signup' || vueFromQuery === 'Login') {
       this.vueActive = vueFromQuery;
     }
-    if (!localStorage.getItem('token')) {
-      this.isConnected = true;
-    }else {
-      this.isConnected = false;
-    }
   },
   methods: {
     switchView(view) {
       this.vueActive = view;
     },
     logout() {
-      localStorage.removeItem('token');
+      this.authStore.logout();
       this.isLoggedIn = false;
       this.vueActive = 'Login';
       this.$router.push({ name: 'Home' });
     }
-  }
+  },
+  computed: {
+      authStore() {
+        return useAuthStore();
+      }
+  },
 };
 </script>
 

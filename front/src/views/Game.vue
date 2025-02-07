@@ -39,6 +39,8 @@ import GameMap from '@/components/Game/GameMap.vue';
 import GameControls from '@/components/Game/GameControls.vue';
 import GameResult from '@/components/Game/GameResult.vue';
 import {GATEWAY_API} from "@/config.js";
+import { useAuthStore } from '@/stores/pinia';
+
   export default {
     name: 'Game',
     components: {GameMap, GameControls, GameResult},
@@ -66,7 +68,7 @@ import {GATEWAY_API} from "@/config.js";
         try {
           this.$api.get("/parties/" + this.ID_PARTIE + "/next", {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
+              'Authorization': `Bearer ${this.authStore.tokenUser}`
             }
           }).then(res => {
             this.currentImageUrl = `${GATEWAY_API}/assets/${res.data.coup.idImage}`;
@@ -86,7 +88,7 @@ import {GATEWAY_API} from "@/config.js";
           long: timeout ? 0 : this.marqueurEstimation?.lon
         }, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${this.authStore.tokenUser}`
           }
         }).then(res => {
           this.coordCible = {lat: res.data.lat, lon: res.data.lon}
@@ -119,8 +121,13 @@ import {GATEWAY_API} from "@/config.js";
         alert(this.scoreGlobal);
       }
     },
+    computed: {
+      authStore() {
+       return useAuthStore();
+      }
+    },
     mounted() {
-      this.ID_PARTIE = localStorage.getItem("currentGameId");
+      this.ID_PARTIE = this.authStore.idPartie;
       this.recupererDonneesCible();
       this.timeInterval = setInterval(() => {
         if (!this.freeze) {
