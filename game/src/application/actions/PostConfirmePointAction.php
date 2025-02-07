@@ -4,6 +4,7 @@ namespace Geoquizz\Game\application\actions;
 
 use Geoquizz\Game\application\renderer\JsonRenderer;
 use Geoquizz\Game\core\dto\JouerCoupDTO;
+use Geoquizz\Game\core\services\exceptions\ServiceEntityNotFoundException;
 use Geoquizz\Game\core\services\exceptions\ServicePartieTermineException;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -34,6 +35,8 @@ class PostConfirmePointAction extends AbstractAction
             $res = $this->coupJoueService->joueCoup($dto);
         } catch(ServicePartieTermineException $e) {
             return JsonRenderer::render($rs, 400, ['error' => 'Partie terminée']);
+        } catch(ServiceEntityNotFoundException $e) {
+            return JsonRenderer::render($rs, 404, ['error' => $e->getMessage()]);
         }
         return JsonRenderer::render($rs, 200, $res);
 
