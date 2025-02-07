@@ -91,11 +91,6 @@ return [
     EntityManager::class => DI\autowire()->constructor(get(Connection::class), get('doctrine.config')),
 
 
-    SerieServiceInterface::class => DI\get(SerieService::class),
-    SerieService::class => DI\autowire(),
-
-    SerieRepositoryInterface::class => DI\get(SerieRepository::class),
-
     InfraNotifInterface::class => DI\get(NotifAMQP::class),
 
     NotifAMQP::class => function (ContainerInterface $c) {
@@ -118,8 +113,6 @@ return [
             $c->get('amqp.password')
         );
     },
-
-    CorsMiddleware::class => DI\autowire(),
 
     AuthzPartie::class => DI\autowire(),
     AuthzPartieServiceInterface::class => DI\get(AuthzPartieService::class),

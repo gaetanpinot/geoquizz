@@ -53,7 +53,5 @@ class PostSignIn extends AbstractAction
             echo $e->getTraceAsString();
             throw new HttpInternalServerErrorException($rq, $e->getMessage());
         }
-
-
     }
 }

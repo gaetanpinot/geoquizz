@@ -27,9 +27,8 @@ class Partie
 
     #[ORM\Column]
     private ?int $difficulte = null;
-
     #[ORM\Column]
-    private ?int $nbCoupsTotal = null;
+    private ?int $nb_coups_total = null;
 
     #[ORM\Column]
     private ?int $score = null;
@@ -59,12 +58,12 @@ class Partie
 
     public function getNbCoupsTotal(): ?int
     {
-        return $this->nbCoupsTotal;
+        return $this->nb_coups_total;
     }
 
-    public function setNbCoupsTotal(int $nbCoupsTotal): static
+    public function setNbCoupsTotal(int $nb_coups_total): static
     {
-        $this->nbCoupsTotal = $nbCoupsTotal;
+        $this->nb_coups_total = $nb_coups_total;
 
         return $this;
     }
@@ -129,13 +128,18 @@ class Partie
         return $this;
     }
 
-    /**
-     * @return Collection<int, CoupJoue>
-     */
-    public function getIdImage(): Collection
+    public function getCoupsTotal(): ?int
     {
-        return $this->coups_joue;
+        return $this->nbCoupsTotal;
     }
+
+    public function setCoupsTotal(int $nbCoupsTotal): static
+    {
+        $this->nbCoupsTotal = $nbCoupsTotal;
+
+        return $this;
+    }
+
 
     public function addIdImage(CoupJoue $idImage): static
     {

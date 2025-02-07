@@ -74,11 +74,7 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         return $coups;
     }
 
-<<<<<<< HEAD
-    public function modifCoupDateJoue(int $idPartie): void
-=======
     public function modifCoupDateJoue(int $idPartie)
->>>>>>> 6ec779ce8aa89835c0742a17572bcfe628c087ca
     {
         $dateTime = new \DateTime();
 

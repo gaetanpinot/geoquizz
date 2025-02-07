@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250205141116 extends AbstractMigration
+final class Version20250207092358 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,7 +22,7 @@ final class Version20250205141116 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE coup_joue (id SERIAL NOT NULL, partie_id INT NOT NULL, id_point INT NOT NULL, date_joue TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, lat DOUBLE PRECISION DEFAULT NULL, long DOUBLE PRECISION DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_FD9D3291E075F7A4 ON coup_joue (partie_id)');
-        $this->addSql('CREATE TABLE partie (id SERIAL NOT NULL, id_serie INT NOT NULL, id_joueur UUID NOT NULL, status INT NOT NULL, difficulte INT NOT NULL, score INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE partie (id SERIAL NOT NULL, id_serie INT NOT NULL, id_joueur UUID NOT NULL, status INT NOT NULL, difficulte INT NOT NULL, nb_coups_total INT NOT NULL, score INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE coup_joue ADD CONSTRAINT FK_FD9D3291E075F7A4 FOREIGN KEY (partie_id) REFERENCES partie (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 

@@ -42,7 +42,7 @@ return function (\Slim\App $app): \Slim\App {
         $group->post("/{id}/confirmer", PostConfirmePointAction::class)->add(AuthJouerCoupPartie::class);
     });
 
-    $app->get("/historique[/]", GetPartiesUserAction::class)->add(AuthzPartie::class)
+    $app->get("/historique[/]", GetPartiesUserAction::class)->add(AuthzPartie::class);
 
     $app->options('/{routes:.+}', function ($request, $response, $args) {
         return $response;

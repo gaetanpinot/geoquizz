@@ -14,7 +14,7 @@ class PartieFixture extends Fixture
             $partie = new Partie();
             $partie->setScore(40 + $i*10);
             $partie->setIdSerie($i);
-
+            $partie->setNbCoupsTotal(10);
             $partie->setIdJoueur('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11');
             $partie->setStatus(1);
             $partie->setDifficulte(1);
