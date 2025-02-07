@@ -5,10 +5,10 @@
       <span>
          <router-link to="/"><button>Accueil</button></router-link>
          <router-link  to="/Historique">
-            <button v-if="isAuthenticated">Historique</button>
+            <button v-if="authStore.isAuthenticated">Historique</button>
          </router-link>
          <router-link  to="/Connexion">
-            <button v-if="!isAuthenticated">Connexion</button>
+            <button v-if="!authStore.isAuthenticated">Connexion</button>
             <button v-else>Déconnexion</button>
          </router-link>
          <button @click="createGame()" id="Game">Jouer</button>
@@ -21,16 +21,16 @@
 
 <script>
 import CreateGame from './views/CreateGame.vue';
-
+import { useAuthStore } from './stores/pinia';
 export default {
   name: 'App',
   components: {
     CreateGame
   },
   computed: {
-    isAuthenticated() {
-      return localStorage.getItem('token') !== null;
-    }
+      authStore() {
+       return useAuthStore();
+      }
   },
   methods: {
     createGame() {

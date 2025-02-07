@@ -44,12 +44,13 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
     {
         $coupJoue = $this->getCoupByIdPartie($jCoup->getIdPartie());
 
-        if($coupJoue->getDateJoue() === null) {
-            throw new InfraEntityNotFoundException("Pas de coup à jouer, (appelez la route de coup suivant)");
+
+        if($coupJoue === null) {
+            throw new InfraPartieTermineException("Partie terminée");
         }
 
-        if($coupJoue == null) {
-            throw new InfraPartieTermineException("Partie terminée");
+        if($coupJoue->getDateJoue() === null) {
+            throw new InfraEntityNotFoundException("Pas de coup à jouer, (appelez la route de coup suivant)");
         }
         $coupJoue->setLat($jCoup->getLat());
         $coupJoue->setLong($jCoup->getLon());
@@ -83,6 +84,9 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         $dateTime = new \DateTime();
 
         $coup = $this->getCoupByIdPartie($idPartie);
+        if($coup == null) {
+            throw new InfraPartieTermineException("Partie terminée");
+        }
         if($coup->getDateJoue() != null) {
             return $coup->getDateJoue();
         }

@@ -140,7 +140,6 @@ class Partie
         return $this;
     }
 
-
     public function addIdImage(CoupJoue $idImage): static
     {
         if (!$this->coups_joue->contains($idImage)) {

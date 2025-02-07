@@ -49,13 +49,13 @@ import GameMap from '@/components/Game/GameMap.vue';
 import GameControls from '@/components/Game/GameControls.vue';
 import GameResult from '@/components/Game/GameResult.vue';
 import {GATEWAY_API} from "@/config.js";
+import { useAuthStore } from '@/stores/pinia';
+
   export default {
     name: 'Game',
     components: {GameMap, GameControls, GameResult},
     data() {
       return {
-        ID_PARTIE: -1,
-        TOKEN_PARTIE: "",
         manche: 1,
         totalManches: 10,
         imageCible: '',
@@ -78,10 +78,10 @@ import {GATEWAY_API} from "@/config.js";
     methods: {
       async recupererDonneesCible() {
         try {
-          this.$api.get("/parties/" + this.ID_PARTIE + "/next", {
+          this.$api.get("/parties/" + this.authStore.idPartie + "/next", {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`,
-              'PartieAuthorization': `${this.TOKEN_PARTIE}`
+              'Authorization': `Bearer ${this.authStore.tokenUser}`,
+              'PartieAuthorization': `${this.authStore.tokenPartie}`
             }
           }).then(res => {
             console.log(res.data);
@@ -98,13 +98,13 @@ import {GATEWAY_API} from "@/config.js";
         this.marqueurEstimation = coord
       },
       confirmerEstimation(timeout = false) {
-        this.$api.post("/parties/" + this.ID_PARTIE + "/confirmer", {
+        this.$api.post("/parties/" + this.authStore.idPartie + "/confirmer", {
           lat: timeout ? 0 : this.marqueurEstimation?.lat,
           long: timeout ? 0 : this.marqueurEstimation?.lon
         }, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'PartieAuthorization': `${this.TOKEN_PARTIE}`
+            'Authorization': `Bearer ${this.authStore.tokenUser}`,
+            'PartieAuthorization': `${this.authStore.tokenPartie}`
           }
         }).then(res => {
           this.coordCible = {lat: res.data.lat, lon: res.data.lon}
@@ -137,9 +137,12 @@ import {GATEWAY_API} from "@/config.js";
         this.partieFini = true;
       }
     },
+    computed: {
+      authStore() {
+       return useAuthStore();
+      }
+    },
     mounted() {
-      this.ID_PARTIE = localStorage.getItem("currentGameId");
-      this.TOKEN_PARTIE = localStorage.getItem("currentGameToken");
       this.recupererDonneesCible();
       this.timeInterval = setInterval(() => {
         if (!this.freeze) {
