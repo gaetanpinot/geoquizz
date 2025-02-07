@@ -5,22 +5,17 @@
 - Gaëtan PINOT
 - Yehor PRYKHODKO
 
+## URLS:
+- [Frontend](http://docketu.iutnc.univ-lorraine.fr:12100)
+- [Mailcatcher](http://docketu.iutnc.univ-lorraine.fr:12107)
+
 ## Installation
 
-```bash
-docker compose up -d
-docker compose exec game composer install
-docker compose exec auth composer install
-```
+`./install.bash`
 
 ### Remplir la base de donnée
 
-```bash
-docker compose exec game php bin/console doctrine:migrations:migrate
-docker compose exec game php bin/console doctrine:fixture:load
-docker compose exec auth php bin/console doctrine:migrations:migrate
-docker compose exec auth php bin/console doctrine:fixture:load
-```
+`./db.sh`
 
 
 ## TODO:
