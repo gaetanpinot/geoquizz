@@ -1,17 +1,19 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/"><h1>GEOQUIZZ</h1></router-link>
+      <router-link to="/">
+        <h1>GEOQUIZZ</h1>
+      </router-link>
       <span>
-         <router-link to="/"><button>Accueil</button></router-link>
-         <router-link  to="/Historique">
-            <button v-if="authStore.isAuthenticated">Historique</button>
-         </router-link>
-         <router-link  to="/Connexion">
-            <button v-if="!authStore.isAuthenticated">Connexion</button>
-            <button v-else>Déconnexion</button>
-         </router-link>
-         <button @click="createGame()" id="Game">Jouer</button>
+        <router-link to="/"><button>Accueil</button></router-link>
+        <router-link to="/Historique">
+          <button v-if="authStore.isAuthenticated">Historique</button>
+        </router-link>
+        <router-link to="/Connexion">
+          <button v-if="!authStore.isAuthenticated">Connexion</button>
+          <button v-else>Déconnexion</button>
+        </router-link>
+        <button v-if="$route.name !== 'Game'" @click="createGame()" id="Game">Jouer</button>
       </span>
     </nav>
     <CreateGame ref="popup" />
@@ -28,9 +30,9 @@ export default {
     CreateGame
   },
   computed: {
-      authStore() {
-       return useAuthStore();
-      }
+    authStore() {
+      return useAuthStore();
+    }
   },
   methods: {
     createGame() {
@@ -41,85 +43,88 @@ export default {
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-  * {
-    box-sizing: border-box;
-    margin: 0;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-  html {
-    background: #f1f1f1;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
 
-  nav {
-    background: #181818;
-    padding: 0 20px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
-    position: relative;
-    z-index: 500;
-  }
+html {
+  background: #f1f1f1;
+}
 
-  nav h1 {
-    font-size: 30px;
-    border-radius: 20px;
-  }
+nav {
+  background: #181818;
+  padding: 0 20px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  position: relative;
+  z-index: 500;
+}
 
-  nav h1:hover {
-    color: darkorange;
-    transition: all 0.3s;
-  }
+nav h1 {
+  font-size: 30px;
+  border-radius: 20px;
+}
 
-  nav a {
-    color: white;
-    text-decoration: none;
-  }
+nav h1:hover {
+  color: darkorange;
+  transition: all 0.3s;
+}
 
-  html, body, button {
-    margin: 0;
-    padding: 0;
-    font-family: "Kanit", serif;
-    font-weight: 400;
-    font-style: normal;
-  }
+nav a {
+  color: white;
+  text-decoration: none;
+}
 
-  nav span {
-    display:  flex;
-    gap: 14px;
-    align-items: center;
-  }
+html,
+body,
+button {
+  margin: 0;
+  padding: 0;
+  font-family: "Kanit", serif;
+  font-weight: 400;
+  font-style: normal;
+}
 
-  nav button {
-    padding: 6px 12px;
-    font-size: 14px;
-    background: none;
-    color: white;
-    border: 0;
-    border-radius: 20px;
-    color: white;
-  }
+nav span {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
 
-  nav #Game {
-    padding: 6px 12px;
-    font-size: 14px;
-    background: none;
-    color: white;
-    border: 0;
-    border-radius: 20px;
-    border: 2px solid darkorange;
-    color: orange;
-  }
+nav button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background: none;
+  color: white;
+  border: 0;
+  border-radius: 20px;
+  color: white;
+}
 
-  nav #Game:hover {
-    background: darkorange;
-    transition: 0.3s;
-    color: white;
-  }
+nav #Game {
+  padding: 6px 12px;
+  font-size: 14px;
+  background: none;
+  color: white;
+  border: 0;
+  border-radius: 20px;
+  border: 2px solid darkorange;
+  color: orange;
+}
 
-  button {
-    cursor: pointer;
-  }
+nav #Game:hover {
+  background: darkorange;
+  transition: 0.3s;
+  color: white;
+}
+
+button {
+  cursor: pointer;
+}
 </style>

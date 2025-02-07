@@ -1,179 +1,167 @@
 <template>
-    <section v-if="!partieFini">
-      <header>
-        <div class="info-cible">
-          <h2>Manche {{ manche }} / {{ totalManches }}</h2>
-          <p>Score global : {{ scoreGlobal }}</p>
-          <h3>Déterminez l'emplacement de l'image à droite :</h3>
-          <GameControls
-            :marqueurEstimation="marqueurEstimation"
-            :confirme="confirme"
-            :manche="manche"
-            :totalManches="totalManches"
-            :disabled="marqueurEstimation == null"
-            @confirmer="confirmerEstimation"
-            @suivant="mancheSuivante"
-            @terminer="terminerJeu"
-          />
-          <div v-if="!freeze" class="timer-bg">
-            <div class="timer" :style="{ width: (time / maxTime) * 100  + '%'}"></div>
-          </div>
-          <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
+  <section v-if="!partieFini">
+    <header>
+      <div class="info-cible">
+        <h2>Manche {{ manche }} / {{ totalManches }}</h2>
+        <p>Score global : {{ scoreGlobal }}</p>
+        <h3>Déterminez l'emplacement de l'image à droite :</h3>
+        <GameControls :marqueurEstimation="marqueurEstimation" :confirme="confirme" :manche="manche"
+          :totalManches="totalManches" :disabled="marqueurEstimation == null" @confirmer="confirmerEstimation"
+          @suivant="mancheSuivante" @terminer="terminerJeu" />
+        <div v-if="!freeze" class="timer-bg">
+          <div class="timer" :style="{ width: (time / maxTime) * 100 + '%' }"></div>
         </div>
-        <GameMap
-          :coordCible="coordCible"
-          :confirme="confirme"
-          @marqueur-place="mettreAJourEstimation"
-          ref="gameMap"
-        />
-      </header>
-
-      <div class="game" :style="{ backgroundImage: 'url( ' + currentImageUrl + ' )'}">
-
+        <GameResult v-if="confirme && distance !== null" :distance="distance" :pointsManche="pointsManche" />
       </div>
-    </section>
-    <section v-if="partieFini" :style="{backgroundImage: 'url(' + this.currentImageUrl + ')'}">
-      <div class="result">
-        <h2>Resultat de la partie</h2>
-        <p>Score Total: {{ scoreGlobal }}</p>
-        <p>Manches: {{ totalManches }}</p>
-        <p>Score Moyen/Manche: {{ scoreGlobal / totalManches }}</p>
-        <button @click="$router.push('/')">Quitter</button>
-      </div>
-    </section>
-  </template>
+      <GameMap :coordCible="coordCible" :confirme="confirme" @marqueur-place="mettreAJourEstimation" ref="gameMap" />
+    </header>
+
+    <div class="game" :style="{ backgroundImage: 'url( ' + currentImageUrl + ' )' }">
+
+    </div>
+  </section>
+  <section v-if="partieFini" :style="{ backgroundImage: 'url(' + this.currentImageUrl + ')' }">
+    <div class="result">
+      <h2>Resultat de la partie</h2>
+      <p>Score Total: {{ scoreGlobal }}</p>
+      <p>Manches: {{ totalManches }}</p>
+      <p>Score Moyen/Manche: {{ scoreGlobal / totalManches }}</p>
+      <button @click="$router.push('/')">Quitter</button>
+    </div>
+  </section>
+</template>
 
 <script>
 import GameMap from '@/components/Game/GameMap.vue';
 import GameControls from '@/components/Game/GameControls.vue';
 import GameResult from '@/components/Game/GameResult.vue';
-import {GATEWAY_API} from "@/config.js";
+import { GATEWAY_API } from "@/config.js";
 import { useAuthStore } from '@/stores/pinia';
 
-  export default {
-    name: 'Game',
-    components: {GameMap, GameControls, GameResult},
-    data() {
-      return {
-        manche: 1,
-        totalManches: 10,
-        imageCible: '',
-        coordCible: null,
-        marqueurEstimation: null,
-        confirme: false,
-        distance: null,
-        pointsManche: 0,
-        scoreGlobal: 0,
-        maxTime: 30,
-        time: 30,
-        timeInterval: null,
-        freeze: false,
-        currentImageUrl: "",
-        partieFini: false,
-        difficulte: 1,
-        serieId: 1
-      }
-    },
-    methods: {
-      async recupererDonneesCible() {
-        try {
-          this.$api.get("/parties/" + this.authStore.idPartie + "/next", {
-            headers: {
-              'Authorization': `Bearer ${this.authStore.tokenUser}`,
-              'PartieAuthorization': `${this.authStore.tokenPartie}`
-            }
-          }).then(res => {
-            console.log(res.data);
-            this.currentImageUrl = `${GATEWAY_API}/assets/${res.data.coup.idImage}`;
-            this.totalManches = res.data.coup.nbCoupsTotal;
-            this.time = res.data.coup.secondesRestantes;
-            this.manche = this.totalManches - res.data.coup.nbCoupsRestants + 1;
-          })
-        } catch(error) {
-          console.error(error);
-        }
-      },
-      mettreAJourEstimation(coord) {
-        this.marqueurEstimation = coord
-      },
-      confirmerEstimation(timeout = false) {
-        this.$api.post("/parties/" + this.authStore.idPartie + "/confirmer", {
-          lat: timeout ? 0 : this.marqueurEstimation?.lat,
-          long: timeout ? 0 : this.marqueurEstimation?.lon
-        }, {
+export default {
+  name: 'Game',
+  components: { GameMap, GameControls, GameResult },
+  data() {
+    return {
+      manche: 1,
+      totalManches: 10,
+      imageCible: '',
+      coordCible: null,
+      marqueurEstimation: null,
+      confirme: false,
+      distance: null,
+      pointsManche: 0,
+      scoreGlobal: 0,
+      maxTime: 30,
+      time: 30,
+      timeInterval: null,
+      freeze: false,
+      currentImageUrl: "",
+      partieFini: false,
+      difficulte: 1,
+      serieId: 1
+    }
+  },
+  methods: {
+    async recupererDonneesCible() {
+      try {
+        this.$api.get("/parties/" + this.authStore.idPartie + "/next", {
           headers: {
             'Authorization': `Bearer ${this.authStore.tokenUser}`,
             'PartieAuthorization': `${this.authStore.tokenPartie}`
           }
         }).then(res => {
-          this.coordCible = {lat: res.data.lat, lon: res.data.lon}
-
-          this.confirme = true
-
-          if(!timeout) {
-            this.$refs.gameMap.afficherResultats(this.coordCible, this.marqueurEstimation)
-            this.distance = this.$refs.gameMap.calculerDistance(this.coordCible, this.marqueurEstimation)
-          }
-
-          this.pointsManche = res.data.score - this.scoreGlobal;
-          this.freeze = true;
+          console.log(res.data);
+          this.currentImageUrl = `${GATEWAY_API}/assets/${res.data.coup.idImage}`;
+          this.totalManches = res.data.coup.nbCoupsTotal;
+          this.time = res.data.coup.secondesRestantes;
+          this.manche = this.totalManches - res.data.coup.nbCoupsRestants + 1;
         })
-
-      },
-      mancheSuivante() {
-        this.scoreGlobal += this.pointsManche
-        if (this.manche < this.totalManches) {
-          this.manche++
-          this.confirme = false
-          this.recupererDonneesCible()
-          this.$refs.gameMap.reinitialiserCarte()
-          this.time = this.maxTime;
-          this.freeze = false;
-          this.marqueurEstimation = null;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    mettreAJourEstimation(coord) {
+      this.marqueurEstimation = coord
+    },
+    confirmerEstimation(timeout = false) {
+      this.$api.post("/parties/" + this.authStore.idPartie + "/confirmer", {
+        lat: timeout ? 0 : this.marqueurEstimation?.lat,
+        long: timeout ? 0 : this.marqueurEstimation?.lon
+      }, {
+        headers: {
+          'Authorization': `Bearer ${this.authStore.tokenUser}`,
+          'PartieAuthorization': `${this.authStore.tokenPartie}`
         }
-      },
-      terminerJeu() {
-        this.partieFini = true;
+      }).then(res => {
+        this.coordCible = { lat: res.data.lat, lon: res.data.lon }
+
+        this.confirme = true
+
+        if (!timeout) {
+          this.$refs.gameMap.afficherResultats(this.coordCible, this.marqueurEstimation)
+          this.distance = this.$refs.gameMap.calculerDistance(this.coordCible, this.marqueurEstimation)
+        }
+
+        this.pointsManche = res.data.score - this.scoreGlobal;
+        this.freeze = true;
+      })
+
+    },
+    mancheSuivante() {
+      this.scoreGlobal += this.pointsManche
+      if (this.manche < this.totalManches) {
+        this.manche++
+        this.confirme = false
+        this.recupererDonneesCible()
+        this.$refs.gameMap.reinitialiserCarte()
+        this.time = this.maxTime;
+        this.freeze = false;
+        this.marqueurEstimation = null;
       }
     },
-    computed: {
-      authStore() {
-       return useAuthStore();
-      }
-    },
-    mounted() {
-      this.recupererDonneesCible();
-      this.timeInterval = setInterval(() => {
-        if (!this.freeze) {
-          if(this.time > 0) {
-            this.time--;
-          } else {
-            this.freeze = true;
-            this.confirmerEstimation(true);
-          }
-      }
-      }, 1000);
+    terminerJeu() {
+      this.partieFini = true;
     }
+  },
+  computed: {
+    authStore() {
+      return useAuthStore();
+    }
+  },
+  mounted() {
+    this.recupererDonneesCible();
+    this.timeInterval = setInterval(() => {
+      if (!this.freeze) {
+        if (this.time > 0) {
+          this.time--;
+        } else {
+          this.freeze = true;
+          this.confirmerEstimation(true);
+        }
+      }
+    }, 1000);
   }
+}
 </script>
 
 <style scoped>
 header {
-    background: #181818;
-    width: 30%;
-    height: 100vh;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    border-right: 3px solid #181818;
-    transition: all 0.3s ease;
-    font-size: larger;
-  }
+  height: calc(100vh - 70px);
+  background: #181818;
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  border-right: 3px solid #181818;
+  transition: all 0.3s ease;
+  font-size: larger;
+}
 
 section {
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
+  height: calc(100vh - 70px);
   color: white;
   background-size: cover;
   background-position: center;
@@ -189,8 +177,10 @@ section {
 }
 
 .game {
-  width: 70%;
-  background-size: cover;
+  width: 60%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #181818;
   background-position: center;
   transition: all 0.3s ease;
 }
@@ -290,6 +280,7 @@ section {
 
 /* Très petits écrans */
 @media (max-width: 480px) {
+
   .info-cible h2,
   .info-cible h3,
   .info-cible p {
@@ -304,5 +295,4 @@ section {
     height: 6px;
   }
 }
-
-  </style>
+</style>

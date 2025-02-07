@@ -150,7 +150,7 @@ export default {
 }
 
 .carte {
-  height: 400px;
+  height: 500px;
   width: 100%;
   transition: all 0.5s ease;
   transform-origin: bottom left;
