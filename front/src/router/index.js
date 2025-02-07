@@ -5,6 +5,7 @@ import Connexion from '@/views/Connexion.vue'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import Historique from "@/views/Historique.vue";
+import { useAuthStore } from '@/stores/pinia';
 
 const router = createRouter({
     history: createWebHistory(
@@ -20,7 +21,9 @@ const router = createRouter({
 export default router
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  const store = useAuthStore();
+  const token = store.tokenUser
+  console.log(store.tokenUser);
 
   if (to.meta.requiresAuth && !token) {
     toast("Veuillez vous connecter pour accéder ici.", {
