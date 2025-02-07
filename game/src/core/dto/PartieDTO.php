@@ -8,7 +8,7 @@ class PartieDTO extends DTO
 {
     protected int $id;
     protected int $id_serie;
-    protected string $id_joueur;
+    protected ?string $id_joueur;
     protected int $status;
     protected int $difficulte;
     protected int $score;

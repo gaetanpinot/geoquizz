@@ -35,7 +35,10 @@ class PostPartieAction extends AbstractAction
         } catch(NestedValidationException $e) {
             throw new HttpBadRequestException($rq, $e->getMessage());
         }
-        $data['id_joueur'] = $rq->getAttribute('id_utilisateur');
+
+
+        /*$data['id_joueur'] = $rq->getAttribute('id_utilisateur');*/
+        $data['id_joueur'] = null;
 
         $partieDto = new InputPartieDTO($data);
 

@@ -8,13 +8,16 @@ class CoupNextResponseDTO extends DTO
 {
     protected int $nbCoupsRestants;
     protected string $idImage;
-
     protected int $secondesRestantes;
-    public function __construct(int $nbCoupsRestants,string $idImage, $secondesRestantes)
+
+    protected int $nbCoupsTotal;
+
+    public function __construct(int $nbCoupsRestants, string $idImage, int $secondesRestantes, int $nbCoupsTotal)
     {
         $this->nbCoupsRestants = $nbCoupsRestants;
         $this->idImage = $idImage;
         $this->secondesRestantes = $secondesRestantes;
+        $this->nbCoupsTotal = $nbCoupsTotal;
     }
 
     public function getSecondesRestantes(): int
