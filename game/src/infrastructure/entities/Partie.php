@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Geoquizz\Game\infrastructure\repository\PartieRepository;
 
 #[ORM\Entity(repositoryClass: PartieRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Partie
 {
     #[ORM\Id]
@@ -19,6 +20,8 @@ class Partie
     #[ORM\Column]
     private ?int $id_serie = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $created_at = null;
     #[ORM\Column(type: Types::GUID, nullable: true)]
     private ?string $id_joueur = null;
 
@@ -42,6 +45,19 @@ class Partie
     public function __construct()
     {
         $this->coups_joue = new ArrayCollection();
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->created_at === null) {
+            $this->created_at = new \DateTime();
+        }
     }
 
     public function getId(): ?int
