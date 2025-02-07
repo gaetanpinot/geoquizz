@@ -1,7 +1,7 @@
 # SAE Geoquizz
 ## Groupe
 - Sasha DAZA
-- Mathis PERROT
+- Mathis PEROT
 - Gaëtan PINOT
 - Yehor PRYKHODKO
 
