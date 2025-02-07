@@ -37,9 +37,8 @@
         <h2>Resultat de la partie</h2>
         <p>Score Total: {{ scoreGlobal }}</p>
         <p>Manches: {{ totalManches }}</p>
-        <p>Score par Manche: {{ scoreGlobal / totalManches }}</p>
+        <p>Score Moyen/Manche: {{ scoreGlobal / totalManches }}</p>
         <button @click="$router.push('/')">Quitter</button>
-        <button>Rejouer</button>
       </div>
     </section>
   </template>

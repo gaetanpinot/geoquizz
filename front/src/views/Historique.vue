@@ -2,13 +2,12 @@
   <section>
     <div class="history">
       <h2>Historique des parties</h2>
-      <div v-if="loading">Chargement...</div>
-      <div v-else-if="error">{{ error.message }}</div>
-      <div v-else>
+      <div>
         <div v-for="game in games" :key="game.id" class="game-item">
           <p>
-            {{ game.date || "Date inconnue" }} - Série {{ game.id_serie }} - {{ game.score }} points
-            <button @click="replayGame(game)">Rejouer</button>
+            {{ new Date(game.created_at) || "Date inconnue" }} - Série {{ series.filter(item => item.id === game.id_serie)[0].nom }} - {{ game.score }} points
+            <button v-if="game.status === 1" @click="replayGame(game)">Continuer</button>
+            <button v-else @click="replayGame(game)">Rejouer</button>
           </p>
         </div>
       </div>
@@ -17,6 +16,7 @@
     <div class="history">
       <h2>Meilleurs Scores par Série</h2>
       <div v-for="(score, serieId) in highScoresPerSeries" :key="serieId">
+        {{ series.filter(serie => serie.id === serieId)}}
         <p>Série {{ serieId }} : {{ score }} points</p>
       </div>
     </div>
@@ -24,13 +24,13 @@
     <div class="profile">
       <h2>Votre Profil</h2>
       <div>
-        <p>Nom : {{ authStore.user ? authStore.user.nom : 'N/A' }}</p>
+        <p>Nom : {{ userLastName }}</p>
       </div>
       <div>
-        <p>Prénom : {{ authStore.user ? authStore.user.prenom : 'N/A' }}</p>
+        <p>Prénom : {{ userName }}</p>
       </div>
       <div>
-        <p>Email : {{ authStore.user ? authStore.user.email : 'N/A' }}</p>
+        <p>Email : {{ userEmail }}</p>
       </div>
     </div>
   </section>
@@ -42,8 +42,10 @@ export default {
   data() {
     return {
       games: [],
-      loading: false,
-      error: null,
+      series: [],
+      userName: "N/A",
+      userLastName: "N/A",
+      userEmail: "N/A"
     };
   },
   computed: {
@@ -52,7 +54,6 @@ export default {
     },
     highScoresPerSeries() {
       const scores = {};
-      console.log(this.games)
       this.games.forEach((game) => {
         if (!scores[game.id_serie] || game.score > scores[game.id_serie]) {
           scores[game.id_serie] = game.score;
@@ -62,36 +63,54 @@ export default {
     },
   },
   methods: {
-    async fetchGames() {
-      this.loading = true;
-      try {
-        const res = await this.$api.get('/historique', {
+    fetchGames() {
+        this.$api.get('/historique', {
           headers: {
             'Authorization': `Bearer ${this.authStore.tokenUser}`,
           },
+        }).then(res => {
+          this.games = res.data;
+          console.log(this.games)
         });
-        console.log(res);
-        this.games = res.data.parties;
-      } catch (err) {
-        this.error = err;
-        console.error("Erreur de récupération des parties", err);
-      } finally {
-        this.loading = false;
-      }
     },
-    replayGame(game) {
-      this.$router.push({
-        name: 'Game',
-        query: {
-          mode: 'replay',
-          gameId: game.id,
-          difficulty: game.difficulte,
-        },
+    fetchSeries() {
+      this.$api.get('/series').then(res => {
+        this.series = res.data.series;
+
       });
     },
+    replayGame(game) {
+      this.$api.post("/parties", {
+        "id_serie": game.id_serie,
+        "difficulte": game.difficulte
+      }, {
+        headers: {
+          'Authorization': `Bearer ${this.authStore.tokenUser}`
+        }
+      }).then(res => {
+        this.authStore.setIdPartie(res.data.id);
+        this.authStore.setTokenPartie(res.data.token);
+        setTimeout(() => {
+          this.$router.push("/game");
+        }, 500);
+      })
+    },
+    getProfile() {
+    this.$api.get("/utilisateur", {
+      headers: {
+        'Authorization': `Bearer ${this.authStore.tokenUser}`
+      }
+    }).then(res => {
+      this.userName = res.data.utilisateur.prenom;
+      this.userLastName = res.data.utilisateur.nom;
+      this.userEmail = res.data.utilisateur.email;
+    })
+    }
   },
   mounted() {
     this.fetchGames();
+    this.getProfile();
+    this.fetchSeries();
   },
 };
 </script>
@@ -116,4 +135,19 @@ section {
   background: #323232;
   border-radius: 8px;
 }
+
+button:hover {
+  background: darkorange;
+  transition: 0.3s;
+  color: white;
+}
+button {
+   padding: 6px 12px;
+   font-size: 14px;
+   background: none;
+   border-radius: 20px;
+   border: 2px solid darkorange;
+   color: orange;
+  margin-left: 5px;
+ }
 </style>
