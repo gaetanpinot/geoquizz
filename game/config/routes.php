@@ -33,7 +33,7 @@ return function (\Slim\App $app): \Slim\App {
 
         $group->get("/{id}[/]", GetPartieAction::class)->add(AuthzPartie::class);
 
-        $group->get("/{id}/next", GetProchainCoupAction::class);
+        $group->get("/{id}/next", GetProchainCoupAction::class)->add(AuthJouerCoupPartie::class);
 
         $group->get("/{id}/coups", GetCoupsPartieAction::class);
 

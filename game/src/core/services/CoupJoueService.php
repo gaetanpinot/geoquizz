@@ -5,10 +5,12 @@ namespace Geoquizz\Game\core\services;
 use Geoquizz\Game\core\dto\CoupConfirmeResponseDTO;
 use Geoquizz\Game\core\dto\CoupNextResponseDTO;
 use Geoquizz\Game\core\dto\JouerCoupDTO;
+use Geoquizz\Game\core\services\exceptions\ServiceEntityNotFoundException;
 use Geoquizz\Game\core\services\exceptions\ServicePartieTermineException;
 use Geoquizz\Game\core\services\interfaces\CoupJoueServiceInterface;
 use Geoquizz\Game\infrastructure\exceptions\InfraPartieTermineException;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
+use Geoquizz\Game\infrastructure\interfaces\InfraEntityNotFoundException;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 use Geoquizz\Game\infrastructure\interfaces\PointRepositoryInterface;
 
@@ -34,7 +36,11 @@ class CoupJoueService implements CoupJoueServiceInterface
         try {
 
             $dateTime = new \DateTime();
-            $coupJoue = $this->coupsJoueRepository->joueCoup($jouerCoupDTO);
+            try {
+                $coupJoue = $this->coupsJoueRepository->joueCoup($jouerCoupDTO);
+            } catch(InfraEntityNotFoundException $e) {
+                throw new ServiceEntityNotFoundException($e->getMessage());
+            }
 
             $coeffHeure = $this->calculerCoeffHeure($this->calculerHeureCoup($coupJoue->getDateJoue(), $dateTime));
 
