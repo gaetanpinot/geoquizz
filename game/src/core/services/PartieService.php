@@ -44,6 +44,16 @@ class PartieService implements PartieServiceInterface
         return $partiesDTO;
     }
 
+    public function getPartiesByUser($idUser): array
+    {
+        $parties = $this->partieRepository->getPartiesByUser($idUser);
+        $partiesDTO = [];
+        foreach ($parties as $partie) {
+            $partiesDTO[] = new PartieDTO($partie);
+        }
+        return $partiesDTO;
+    }
+
     public function getPartieById(int $id): PartieDTO
     {
         $partie = $this->partieRepository->getPartieById($id);

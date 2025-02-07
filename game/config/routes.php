@@ -6,7 +6,7 @@ use Geoquizz\Game\application\actions\GetAllPartiesAction;
 use Geoquizz\Game\application\actions\GetAllSeriesAction;
 use Geoquizz\Game\application\actions\GetCoupsPartieAction;
 use Geoquizz\Game\application\actions\GetPartieAction;
-use Geoquizz\Game\application\actions\PostCommencerPartieAction;
+use Geoquizz\Game\application\actions\GetPartiesUserAction;
 use Geoquizz\Game\application\actions\GetProchainCoupAction;
 use Geoquizz\Game\application\actions\PostConfirmePointAction;
 use Geoquizz\Game\application\actions\PostPartieAction;
@@ -40,6 +40,8 @@ return function (\Slim\App $app): \Slim\App {
 
         $group->post("/{id}/confirmer", PostConfirmePointAction::class);
     });
+
+    $app->get("/historique[/]", GetPartiesUserAction::class)->add(AuthzPartie::class)
 
     $app->options('/{routes:.+}', function ($request, $response, $args) {
         return $response;
