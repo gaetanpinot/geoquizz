@@ -57,6 +57,7 @@ export default {
         console.log(res);
         if(res.status === 201) {
           this.authStore.setIdPartie(res.data.id);
+          this.authStore.setTokenPartie(res.data.token);
           this.isVisible = false;
           setTimeout(() => {
             this.$router.push("/game");

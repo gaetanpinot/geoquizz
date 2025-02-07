@@ -76,9 +76,14 @@ class CoupJoueService implements CoupJoueServiceInterface
             $this->partieRepository->terminerPartie($idPartie);
         }
 
-        $partieNbCoupsTotal = $this->partieRepository->getPartieById($idPartie)->getNbCoupsTotal();
+        $partie = $this->partieRepository->getPartieById($idPartie);
 
-        return new CoupNextResponseDTO($nbCoupsRestant, $idImage, $diff, $partieNbCoupsTotal);
+        $partieNbCoupsTotal = $partie->getNbCoupsTotal();
+        $difficulte = $partie->getDifficulte();
+        $serie = $partie->getIdSerie();
+
+
+        return new CoupNextResponseDTO($nbCoupsRestant, $idImage, $diff, $partieNbCoupsTotal, $difficulte, $serie);
     }
 
 
