@@ -12,6 +12,7 @@ class PartieDTO extends DTO
     protected int $status;
     protected int $difficulte;
     protected int $score;
+    protected int $created_at;
 
     public function __construct(Partie $partie)
     {
@@ -21,5 +22,6 @@ class PartieDTO extends DTO
         $this->status = $partie->getStatus();
         $this->difficulte = $partie->getDifficulte();
         $this->score = $partie->getScore();
+        $this->created_at = $partie->getCreatedAt()->getTimestamp();
     }
 }

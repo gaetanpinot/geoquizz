@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Geoquizz\Game\application\actions\ContinuerPartieAction;
 use Geoquizz\Game\application\actions\GetAllPartiesAction;
 use Geoquizz\Game\application\actions\GetAllSeriesAction;
 use Geoquizz\Game\application\actions\GetCoupsPartieAction;
@@ -24,9 +25,9 @@ return function (\Slim\App $app): \Slim\App {
         return JsonRenderer::render($response, 200, ["message" => "Api game"]);
     });
 
-    $app->group("/series", function (RouteCollectorProxy $group) {
-        $group->get("[/]", GetAllSeriesAction::class);
-    });
+    /*$app->group("/series", function (RouteCollectorProxy $group) {*/
+    /*    $group->get("[/]", GetAllSeriesAction::class);*/
+    /*});*/
 
     $app->group("/parties", function (RouteCollectorProxy $group) {
         $group->get("[/]", GetAllPartiesAction::class);
@@ -40,6 +41,8 @@ return function (\Slim\App $app): \Slim\App {
         $group->post("[/]", PostPartieAction::class)->add(AuthzPartie::class);
 
         $group->post("/{id}/confirmer", PostConfirmePointAction::class)->add(AuthJouerCoupPartie::class);
+
+        $group->get("/{id}/continuer[/]", ContinuerPartieAction::class)->add(AuthzPartie::class);
     });
 
     $app->get("/historique[/]", GetPartiesUserAction::class)->add(AuthzPartie::class);
