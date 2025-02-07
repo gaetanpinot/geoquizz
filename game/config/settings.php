@@ -14,4 +14,8 @@ return [
     'amqp.user' => getenv('USER'),
     'amqp.password' => getenv('PASSWORD'),
     'amqp.port' => getenv('PORT'),
+
+
+    'jwt.key' => getenv('JWT_PARTIE_KEY'),
+    'jwt.algo' => 'HS512',
 ];

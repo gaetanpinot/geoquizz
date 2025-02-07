@@ -11,6 +11,7 @@ use Geoquizz\Game\application\actions\GetProchainCoupAction;
 use Geoquizz\Game\application\actions\PostConfirmePointAction;
 use Geoquizz\Game\application\actions\PostPartieAction;
 use Geoquizz\Game\application\renderer\JsonRenderer;
+use Geoquizz\Game\middlewares\AuthJouerCoupPartie;
 use Geoquizz\Game\middlewares\AuthzPartie;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
@@ -38,7 +39,7 @@ return function (\Slim\App $app): \Slim\App {
 
         $group->post("[/]", PostPartieAction::class)->add(AuthzPartie::class);
 
-        $group->post("/{id}/confirmer", PostConfirmePointAction::class);
+        $group->post("/{id}/confirmer", PostConfirmePointAction::class)->add(AuthJouerCoupPartie::class);
     });
 
     $app->get("/historique[/]", GetPartiesUserAction::class)->add(AuthzPartie::class)

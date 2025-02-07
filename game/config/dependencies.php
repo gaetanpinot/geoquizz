@@ -3,6 +3,9 @@
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use Geoquizz\Game\application\authprovider\JWTAuthnProvider;
+use Geoquizz\Game\application\authprovider\JWTManager;
+use Geoquizz\Game\application\authprovider\PartieAuthProviderInterface;
 use Geoquizz\Game\core\authz\AuthzPartieService;
 use Geoquizz\Game\core\authz\AuthzPartieServiceInterface;
 use Geoquizz\Game\core\services\CoupJoueService;
@@ -23,6 +26,7 @@ use Geoquizz\Game\infrastructure\repository\CoupJoueRepository;
 use Geoquizz\Game\infrastructure\repository\PartieRepository;
 use Geoquizz\Game\infrastructure\repository\PointRepository;
 use Geoquizz\Game\infrastructure\repository\SerieRepository;
+use Geoquizz\Game\middlewares\AuthJouerCoupPartie;
 use Geoquizz\Game\middlewares\AuthzPartie;
 use Geoquizz\Game\middlewares\CorsMiddleware;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -30,6 +34,7 @@ use Psr\Container\ContainerInterface;
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
 
+use function DI\autowire;
 use function DI\create;
 use function DI\get;
 
@@ -59,7 +64,9 @@ return [
 
     CoupJoueRepositoryInterface::class => DI\get(CoupJoueRepository::class),
     CoupJoueRepository::class => function ($c) {
-        return $c->get(EntityManager::class)->getRepository(CoupJoue::class);
+        $repo =  $c->get(EntityManager::class)->getRepository(CoupJoue::class);
+        $repo->setPartieInfra($c->get(PartieInfraInterface::class));
+        return $repo;
     },
 
     PointRepositoryInterface::class => get(PointRepository::class),
@@ -118,6 +125,9 @@ return [
     AuthzPartieServiceInterface::class => DI\get(AuthzPartieService::class),
     AuthzPartieService::class => DI\autowire(),
 
-
+    PartieAuthProviderInterface::class => get(JWTAuthnProvider::class),
+    JWTAuthnProvider::class => DI\autowire(),
+    JWTManager::class => create()->constructor(get('jwt.key'), get('jwt.algo')),
+AuthJouerCoupPartie::class => autowire()
 
 ];

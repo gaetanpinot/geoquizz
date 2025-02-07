@@ -2,6 +2,7 @@
 
 namespace Geoquizz\Game\application\actions;
 
+use Geoquizz\Game\application\authprovider\PartieAuthProviderInterface;
 use Geoquizz\Game\application\renderer\JsonRenderer;
 use Geoquizz\Game\core\dto\InputPartieDTO;
 use Geoquizz\Game\core\services\interfaces\PartieServiceInterface;
@@ -14,10 +15,12 @@ use Slim\Exception\HttpBadRequestException;
 class PostPartieAction extends AbstractAction
 {
     protected PartieServiceInterface $partieService;
+    protected PartieAuthProviderInterface $partieAuthProvider;
 
-    public function __construct(PartieServiceInterface $partieService)
+    public function __construct(PartieServiceInterface $partieService, PartieAuthProviderInterface $partieAuthProvider)
     {
         $this->partieService = $partieService;
+        $this->partieAuthProvider = $partieAuthProvider;
     }
 
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
@@ -37,6 +40,9 @@ class PostPartieAction extends AbstractAction
         $partieDto = new InputPartieDTO($data);
 
         $res = $this->partieService->createPartie($partieDto);
+
+        $token = $this->partieAuthProvider->createPartie($res->id);
+        $res->setToken($token);
 
         return JsonRenderer::render($rs, 201, $res);
     }
