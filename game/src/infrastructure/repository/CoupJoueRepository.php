@@ -5,9 +5,9 @@ namespace Geoquizz\Game\infrastructure\repository;
 use Doctrine\ORM\EntityRepository;
 use Geoquizz\Game\core\dto\JouerCoupDTO;
 use Geoquizz\Game\infrastructure\entities\CoupJoue;
-use Geoquizz\Game\infrastructure\entities\Partie;
 use Geoquizz\Game\infrastructure\exceptions\InfraPartieTermineException;
 use Geoquizz\Game\infrastructure\interfaces\CoupJoueRepositoryInterface;
+use Geoquizz\Game\infrastructure\interfaces\InfraEntityNotFoundException;
 use Geoquizz\Game\infrastructure\interfaces\PartieInfraInterface;
 
 /**
@@ -44,6 +44,10 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
     {
         $coupJoue = $this->getCoupByIdPartie($jCoup->getIdPartie());
 
+        if($coupJoue->getDateJoue() === null) {
+            throw new InfraEntityNotFoundException("Pas de coup à jouer, (appelez la route de coup suivant)");
+        }
+
         if($coupJoue == null) {
             throw new InfraPartieTermineException("Partie terminée");
         }
@@ -74,11 +78,7 @@ class CoupJoueRepository extends EntityRepository implements CoupJoueRepositoryI
         return $coups;
     }
 
-<<<<<<< HEAD
-    public function modifCoupDateJoue(int $idPartie): void
-=======
     public function modifCoupDateJoue(int $idPartie)
->>>>>>> 6ec779ce8aa89835c0742a17572bcfe628c087ca
     {
         $dateTime = new \DateTime();
 

@@ -29,7 +29,8 @@ class CoupJoueService implements CoupJoueServiceInterface
         $this->partieRepository = $partieRepository;
     }
 
-    public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO{
+    public function joueCoup(JouerCoupDTO $jouerCoupDTO): CoupConfirmeResponseDTO
+    {
         try {
 
             $dateTime = new \DateTime();
@@ -65,8 +66,9 @@ class CoupJoueService implements CoupJoueServiceInterface
         $idImage = $this->pointRepository->getPoint($res->getIdPoint())['image'];
 
         $nbCoupsRestant = $this->coupsJoueRepository->calculerNbCoupsRestant($idPartie);
-        if ($nbCoupsRestant == 0)
+        if ($nbCoupsRestant == 0) {
             $this->partieRepository->terminerPartie($idPartie);
+        }
 
         return new CoupNextResponseDTO($nbCoupsRestant, $idImage, $diff);
     }
@@ -87,32 +89,40 @@ class CoupJoueService implements CoupJoueServiceInterface
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         $distance = $earthRadius * $c;
 
-        if ($distance < $d)
+        if ($distance < $d) {
             return 5;
-        if ($distance < 2 * $d)
+        }
+        if ($distance < 2 * $d) {
             return 3;
-        if ($distance < 3 * $d)
+        }
+        if ($distance < 3 * $d) {
             return 1;
+        }
 
         return 0;
     }
 
-    private function calculerHeureCoup($dateCoup, $dateNow){
+    private function calculerHeureCoup($dateCoup, $dateNow)
+    {
         //diff en secondes
-        $diff =  $dateNow->getTimestamp() - $dateCoup->getTimestamp();
+        $diff =  $dateNow->getTimestamp()
+            - $dateCoup->getTimestamp();
         return $diff;
     }
 
-    private function calculerCoeffHeure($heureCoup){
-        if ($heureCoup < 5)
+    private function calculerCoeffHeure($heureCoup)
+    {
+        if ($heureCoup < 5) {
             $coeff = 4;
-        else if ($heureCoup < 10)
+        } elseif ($heureCoup < 10) {
             $coeff = 2;
-        else if ($heureCoup < 20)
+        } elseif ($heureCoup < 20) {
             $coeff = 1;
-        else
+        } else {
             $coeff = 0;
+        }
 
         return $coeff;
     }
 }
+

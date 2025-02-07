@@ -28,7 +28,7 @@ class Partie
     #[ORM\Column]
     private ?int $difficulte = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true, name: "nb_coups_total")]
     private ?int $nbCoupsTotal = null;
 
     #[ORM\Column]

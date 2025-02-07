@@ -128,6 +128,6 @@ return [
     PartieAuthProviderInterface::class => get(JWTAuthnProvider::class),
     JWTAuthnProvider::class => DI\autowire(),
     JWTManager::class => create()->constructor(get('jwt.key'), get('jwt.algo')),
-AuthJouerCoupPartie::class => autowire()
+    AuthJouerCoupPartie::class => autowire()
 
 ];
