@@ -40,7 +40,7 @@ services:
 
   auth:
     image: canals/php:8.3
-    ports:
+    # ports:
       # - $PORT_AUTH:80
     volumes:
       - ./auth/public:/var/www/html
@@ -54,7 +54,7 @@ services:
 
   game:
     image: canals/php:8.3
-    ports:
+    # ports:
       # - $PORT_GAME:80
     volumes:
       - ./game/public:/var/www/html
@@ -87,7 +87,7 @@ services:
 
   queue:
     image: rabbitmq:4-management
-    ports:
+    # ports:
       # - $PORT_QUEUE:15672
     environment:
       - RABBITMQ_DEFAULT_USER=user
