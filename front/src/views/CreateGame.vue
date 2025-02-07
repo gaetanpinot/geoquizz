@@ -21,7 +21,7 @@
 
 <script>
 import {toast} from "vue3-toastify";
-
+import { useAuthStore } from "@/stores/pinia";
 export default {
   data() {
     return {
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     openPopup() {
-      if(localStorage.getItem('token') == null) {
+      if(this.authStore.tokenUser == null) {
         toast("Veuillez vous connecter pour créer une partie.", {
           autoClose: 1000,
           type: "error"
@@ -51,12 +51,13 @@ export default {
         "difficulte": parseInt(this.difficulty)
       }, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${this.authStore.tokenUser}`
         }
       }).then(res => {
         console.log(res);
         if(res.status === 201) {
-          localStorage.setItem("currentGameId", res.data.id);
+          this.authStore.setIdPartie(res.data.id);
+          this.authStore.setTokenPartie(res.data.token);
           this.isVisible = false;
           setTimeout(() => {
             this.$router.push("/game");
@@ -64,6 +65,11 @@ export default {
         }
       })
     }
+  },
+  computed: {
+      authStore() {
+       return useAuthStore();
+      }
   },
   mounted() {
     this.$api.get("/series").then(res => {

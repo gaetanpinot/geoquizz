@@ -23,6 +23,7 @@ export const useAuthStore = defineStore('auth', {
       this.tokenPartie = null;
       this.tokenUser = null;
       this.idPartie = null;
+      console.log(this);
     },
     quitPartie() {
       this.tokenPartie = null;

@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section v-if="!partieFini">
       <header>
         <div class="info-cible">
           <h2>Manche {{ manche }} / {{ totalManches }}</h2>
@@ -32,6 +32,15 @@
 
       </div>
     </section>
+    <section v-if="partieFini" :style="{backgroundImage: 'url(' + this.currentImageUrl + ')'}">
+      <div class="result">
+        <h2>Resultat de la partie</h2>
+        <p>Score Total: {{ scoreGlobal }}</p>
+        <p>Manches: {{ totalManches }}</p>
+        <p>Score par Manche: {{ scoreGlobal / totalManches }}</p>
+        <button>Quitter</button>
+      </div>
+    </section>
   </template>
 
 <script>
@@ -39,12 +48,13 @@ import GameMap from '@/components/Game/GameMap.vue';
 import GameControls from '@/components/Game/GameControls.vue';
 import GameResult from '@/components/Game/GameResult.vue';
 import {GATEWAY_API} from "@/config.js";
+import { useAuthStore } from '@/stores/pinia';
+
   export default {
     name: 'Game',
     components: {GameMap, GameControls, GameResult},
     data() {
       return {
-        ID_PARTIE: -1,
         manche: 1,
         totalManches: 10,
         imageCible: '',
@@ -58,20 +68,23 @@ import {GATEWAY_API} from "@/config.js";
         time: 30,
         timeInterval: null,
         freeze: false,
-        currentImageUrl: ""
+        currentImageUrl: "",
+        partieFini: false
       }
     },
     methods: {
       async recupererDonneesCible() {
         try {
-          this.$api.get("/parties/" + this.ID_PARTIE + "/next", {
+          this.$api.get("/parties/" + this.authStore.idPartie + "/next", {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
+              'Authorization': `Bearer ${this.authStore.tokenUser}`,
+              'PartieAuthorization': `${this.authStore.tokenPartie}`
             }
           }).then(res => {
             this.currentImageUrl = `${GATEWAY_API}/assets/${res.data.coup.idImage}`;
-            //this.time = res.data.coup.tempsRestant;
-            //this.manche = this.totalManches - res.data.coup.nbCoupsRestants;
+            this.time = res.data.coup.secondesRestantes;
+            this.manche = this.totalManches - res.data.coup.nbCoupsRestants;
+            this.totalManches = res.data.nbCoupsTotal;
           })
         } catch(error) {
           console.error(error);
@@ -81,12 +94,13 @@ import {GATEWAY_API} from "@/config.js";
         this.marqueurEstimation = coord
       },
       confirmerEstimation(timeout = false) {
-        this.$api.post("/parties/" + this.ID_PARTIE + "/confirmer", {
+        this.$api.post("/parties/" + this.authStore.idPartie + "/confirmer", {
           lat: timeout ? 0 : this.marqueurEstimation?.lat,
           long: timeout ? 0 : this.marqueurEstimation?.lon
         }, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${this.authStore.tokenUser}`,
+            'PartieAuthorization': `${this.authStore.tokenPartie}`
           }
         }).then(res => {
           this.coordCible = {lat: res.data.lat, lon: res.data.lon}
@@ -116,11 +130,15 @@ import {GATEWAY_API} from "@/config.js";
         }
       },
       terminerJeu() {
-        alert(this.scoreGlobal);
+        this.partieFini = true;
+      }
+    },
+    computed: {
+      authStore() {
+       return useAuthStore();
       }
     },
     mounted() {
-      this.ID_PARTIE = localStorage.getItem("currentGameId");
       this.recupererDonneesCible();
       this.timeInterval = setInterval(() => {
         if (!this.freeze) {
@@ -153,6 +171,18 @@ section {
   display: flex;
   flex-direction: row;
   min-height: 100vh;
+  color: white;
+  background-size: cover;
+  background-position: center;
+}
+
+.result {
+  display: inline-block;
+  background: #181818;
+  padding: 40px 80px;
+  height: auto;
+  text-align: center;
+
 }
 
 .game {
@@ -187,6 +217,23 @@ section {
   top: 0;
   background: darkorange;
   transition: width 0.3s ease;
+}
+
+.result button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background: none;
+  color: white;
+  border: 0;
+  border-radius: 20px;
+  border: 2px solid #ff0000;
+  color: #ff0000;
+  margin-top: 20px;
+}
+
+.result button:hover {
+  background: #ff0000;
+  color: black;
 }
 
 /* Responsive Design */

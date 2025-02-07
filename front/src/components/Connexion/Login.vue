@@ -12,6 +12,7 @@
   <script>
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
+  import { useAuthStore } from '@/stores/pinia';
 
   export default {
     name: 'Login',
@@ -30,7 +31,7 @@
         }).then(res => {
           if (res.status === 201) {
             console.log(res.data.data.access_token)
-            localStorage.setItem("token", res.data.data.access_token);
+            this.authStore.setTokenUser(res.data.data.access_token);
             setTimeout(() => {
               this.$router.push("/");
             }, 500);
@@ -42,7 +43,12 @@
           }
         })
       }
-    }
+    },
+    computed: {
+      authStore() {
+       return useAuthStore();
+      }
+    },
   }
   </script>
 
