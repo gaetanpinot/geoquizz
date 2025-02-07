@@ -37,8 +37,7 @@ class PostPartieAction extends AbstractAction
         }
 
 
-        /*$data['id_joueur'] = $rq->getAttribute('id_utilisateur');*/
-        $data['id_joueur'] = null;
+        $data['id_joueur'] = $rq->getAttribute('id_utilisateur');
 
         $partieDto = new InputPartieDTO($data);
 

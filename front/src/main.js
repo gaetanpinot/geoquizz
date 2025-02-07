@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import apiPlugin from './plugins/api';
 
 import {GATEWAY_API} from './config.js';
@@ -15,6 +14,7 @@ const apiConfig = {
 
 import App from './App.vue'
 import router from './router'
+import {createPinia} from "pinia";
 
 const app = createApp(App)
 
