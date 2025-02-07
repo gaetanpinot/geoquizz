@@ -21,10 +21,11 @@ return function (\Slim\App $app): \Slim\App {
 
     $app->get('/utilisateur[/]', ApiAuthAction::class)->add(AuthnMiddleware::class);
 
-    $app->get('/series[/]', ApiGameAction::class);
+    /*$app->get('/series[/]', ApiGameAction::class);*/
 
     $app->group('/parties', function (RouteCollectorProxy $group) {
         $group->get('/{id}', ApiGameAction::class);
+        $group->get('/{id}/continuer[/]', ApiGameAction::class)->add(AuthnMiddleware::class);
         $group->map(['GET','POST','PUT','DELETE','PATCH'], '{routes:.*}', ApiGameAction::class);
     });
 
