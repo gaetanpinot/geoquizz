@@ -53,6 +53,12 @@ class CoupJoueService implements CoupJoueServiceInterface
 
             $scoreTotal = $this->partieRepository->updatePartieScore($coupJoue->getPartie()->getId(), $scoreIncrem)->getScore();
 
+            $nbCoupsRestant = $this->coupsJoueRepository->calculerNbCoupsRestant($coupJoue->getPartie()->getId());
+            if ($nbCoupsRestant == 0) {
+                $this->partieRepository->terminerPartie($coupJoue->getPartie()->getId());
+            }
+
+
         } catch(InfraPartieTermineException $e) {
             throw new ServicePartieTermineException();
         }
@@ -72,9 +78,6 @@ class CoupJoueService implements CoupJoueServiceInterface
         $idImage = $this->pointRepository->getPoint($res->getIdPoint())['image'];
 
         $nbCoupsRestant = $this->coupsJoueRepository->calculerNbCoupsRestant($idPartie);
-        if ($nbCoupsRestant == 0) {
-            $this->partieRepository->terminerPartie($idPartie);
-        }
 
         $partie = $this->partieRepository->getPartieById($idPartie);
 
