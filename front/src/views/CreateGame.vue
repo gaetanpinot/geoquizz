@@ -66,17 +66,16 @@ export default {
       })
     }
   },
-  computed: {
-      authStore() {
-       return useAuthStore();
-      }
-  },
   mounted() {
     this.$api.get("/series").then(res => {
       this.series = res.data.series;
     })
+    this.difficulty = 5;
   },
   computed: {
+    authStore() {
+      return useAuthStore();
+    },
     getDifficulty() {
       if(this.difficulty === "1")
         return "Difficile";
