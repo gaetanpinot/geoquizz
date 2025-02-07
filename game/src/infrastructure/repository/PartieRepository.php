@@ -41,6 +41,7 @@ class PartieRepository extends EntityRepository implements PartieInfraInterface
 
     public function getPartiesByUser($idUser): array
     {
+        var_dump($idUser);
         return $this->findBy(['id_joueur' => $idUser]);
     }
 
