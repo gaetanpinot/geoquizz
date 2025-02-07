@@ -56,7 +56,9 @@ export default {
       }).then(res => {
         console.log(res);
         if(res.status === 201) {
+          console.log(res.data);
           localStorage.setItem("currentGameId", res.data.id);
+          localStorage.setItem("currentGameToken", res.data.token);
           this.isVisible = false;
           setTimeout(() => {
             this.$router.push("/game");
