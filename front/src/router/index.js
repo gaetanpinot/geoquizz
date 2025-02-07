@@ -7,8 +7,6 @@ import 'vue3-toastify/dist/index.css';
 import Historique from "@/views/Historique.vue";
 import { useAuthStore } from '@/stores/pinia';
 
-import { useAuthStore } from '@/stores/pinia';
-
 const router = createRouter({
     history: createWebHistory(
         import.meta.env.BASE_URL),

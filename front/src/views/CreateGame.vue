@@ -67,8 +67,8 @@ export default {
     }
   },
   mounted() {
-    this.$api.get("/series").then(res => {
-      this.series = res.data.series;
+    this.$api.get("/items/serie").then(res => {
+      this.series = res.data.data;
     })
     this.difficulty = 5;
   },
