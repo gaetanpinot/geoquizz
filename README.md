@@ -32,7 +32,7 @@
 
 ## Installation
 Il faut copier les fichiers `*env.dist` en `*env`  
-Il y a un script `cpenv.sh` qui copie les fichiers `.env nécéssaire pour un fonctionnement basique.
+Il y a un script `cpenv.sh` qui copie les fichiers `.env` nécéssaire pour un fonctionnement basique.
 Le fichier `.env` contient les ports sur lequel seront déployé l'application.  
 Certain fichier d'env contienne des secret pour encoder du jwt ou des tokens pour acceder a des application.
 Il serat peut être nécéssaire de modifier certaines valeurs pour que l'application fonctionne bien.
