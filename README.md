@@ -5,6 +5,25 @@
 - Gaëtan PINOT
 - Yehor PRYKHODKO
 
+## Fonctionnalités
+- Frontend 
+    - Style : Sasha et Mathis
+    - Fonctionnalités : Mathis
+        - Gestion de la création d'une partie : Mathis
+        - Jouer un coup et voir la différence entre l'estimation et la réalite : Mathis
+        - Voir l'historique du joueur connécté : Mathis
+- Backend 
+    - Gateway : Gaëtan
+    - Auth : Gaëtan 
+    - Directus : Gaëtan
+    - Service de mailer + file de message : Gaëtan
+    - Fonctionnalités de jeux : Yehor
+        - Token unique à la partie : Gaëtan
+        - Création des parties : Yehor
+        - Jouer une partie : Yehor
+        - Historique des parties d'un joueur : Yehor
+- Deployment sur Docketu: Gaëtan
+
 ## URLS:
 - [Frontend](http://docketu.iutnc.univ-lorraine.fr:12100)
 - [Mailcatcher](http://docketu.iutnc.univ-lorraine.fr:12107)
