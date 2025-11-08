@@ -30,7 +30,7 @@ qui fait des requêtes à la gateway.
 
 ### Contexte
 Réalisé pour une SAE (projet de groupe noté) en 3ème année de BUT Informatique Développement Web et Mobile.
-L'un des buts était de pratiquer l'utilisation de microservices, même si pas forcément utile ou pratique.
+L'un des buts était de pratiquer l'utilisation de microservices, même si pas forcément tous utile ou pratique pour ce projet.
 
 ## Images
 
